@@ -1,7 +1,9 @@
 <template>
     <main class="max-w-[820px] mx-4 md:mx-auto space-y-4">
         <ResumeHeader name="Lukas Grimm" role="Software Engineer from Berlin, Germany" />
-        <ResumeSection title="Experience" />
+        <ResumeSection title="Experience">
+            <ResumeExperienceList :experiences="list" />
+        </ResumeSection>
         <ResumeSection title="Education" />
         <ResumeSection title="Skills" />
         <ResumeSection title="Tech Stack" />
@@ -9,3 +11,12 @@
         <ResumeSection title="Biography" />
     </main>
 </template>
+
+<script setup lang="ts">
+import type { ExperienceItemModel } from '~/components/resume/models';
+
+    const list = [
+        { start: new Date(2023, 8), company: 'Some Company Ltd', role: 'Software Engineer', description: 'Lorem Ipsum' },
+        { start: new Date(2023, 7), end: new Date(2021, 9), company: 'Some Company GmbH', role: 'Software Engineer', description: 'Lorem Ipsum' },
+    ] satisfies ExperienceItemModel[]
+</script>

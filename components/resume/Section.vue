@@ -1,6 +1,6 @@
 <template>
     <section>
-        <h2 class="text-xl md:text-2xl font-medium underline decoration-rose-300">
+        <h2 class="text-xl md:text-2xl font-medium underline decoration-rose-300 mb-4">
             {{ title }}
         </h2>
         <slot />
