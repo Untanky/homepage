@@ -9,19 +9,19 @@
             {{ content!.role }}
         </h2>
         <div class="bento-card rounded-xl">
-            <div class="text-zinc-700 dark:text-zinc-400">Experience</div>
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Experience</div>
             <div class="text-xl">
                 {{ content!.experience }}
             </div>
         </div>
         <div class="bento-card rounded-xl md:col-span-2">
-            <div class="text-zinc-700 dark:text-zinc-400">Education</div>
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Education</div>
             <div class="text-xl">
                 {{ content!.education }}
             </div>
         </div>
         <div class="relative md:col-span-3 rounded-xl md:row-span-2 bg-[url('/map.png')] bg-cover">
-            <div class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-white text-xl">
+            <div class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-black text-xl">
                 {{ content!.location }}
             </div>
         </div>
@@ -55,7 +55,7 @@ type BiograhphyContent = {
     linkedIn: string
 };
 
-const { data: content } = await useAsyncData('biography', () => queryContent<BiograhphyContent>('biography').findOne())
+const { data: content } = await useAsyncData(() => queryContent<BiograhphyContent>('biography').findOne())
 
 useHead({
     title: `${content.value?.name} - ${content.value?.role}`,
