@@ -1,5 +1,5 @@
 <template>
-    <ol class="ml-8 space-y-2">
+    <ol class="ml-6 space-y-2 list-disc">
         <li v-for="experience in experiences">
             <ResumeExperienceItem :experience="experience" />
         </li>
