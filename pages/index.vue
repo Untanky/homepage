@@ -55,17 +55,26 @@
         </LandingCard>
         <LandingCard class="md:col-start-1 md:col-span-2 md:row-span-1 !p-0">
             <a :href="content!.github" class="block px-4 py-2">
-                GitHub
+                <IconGitHub class="mr-2" />
+                <span class="align-middle">
+                    GitHub
+                </span>
             </a>
         </LandingCard>
         <LandingCard class="md:col-span-2 md:row-span-1 !p-0">
             <a :href="content!.linkedIn" class="block px-4 py-2">
-                LinkedIn
+                <IconLinkedIn class="mr-2" />
+                <span class="align-middle">
+                    LinkedIn
+                </span>
             </a>
         </LandingCard>
         <LandingCard class="md:col-span-2 md:row-span-1 !p-0">
             <a :href="content!.x" class="block px-4 py-2">
-                X
+                <IconTwitter class="mr-2" />
+                <span class="align-middle">
+                    X
+                </span>
             </a>
         </LandingCard>
     </div>
