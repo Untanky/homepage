@@ -1,11 +1,11 @@
 <template>
-    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-rows-[auto_auto_1fr_auto_auto] grid-cols-6 gap-4">
-        <div class="min-h-[400px] relative col-span-3 rounded-xl row-span-3 bg-[url('/profile.jpg')] bg-cover">
-            <h1 class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-white text-6xl font-bold">
+    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-cols-1 grid-rows-[400px_auto_auto_auto_300px_auto_auto_auto_auto] md:grid-rows-[auto_auto_1fr_auto_auto] md:grid-cols-6 gap-4">
+        <div class="relative md:min-h-[400px] md:col-span-3 rounded-xl md:row-span-3 bg-[url('/profile.jpg')] bg-cover bg-center">
+            <h1 class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-white text-4xl md:text-6xl font-bold">
                 {{ content!.name }}
             </h1>
         </div>
-        <h2 class="border border-rose-200 p-4 rounded-xl text-4xl font-medium col-span-3">
+        <h2 class="border border-rose-200 p-4 rounded-xl text-2xl md:text-4xl font-medium md:col-span-3">
             {{ content!.role }}
         </h2>
         <div class="border border-rose-200 p-4 rounded-xl">
@@ -14,18 +14,18 @@
                 {{ content!.experience }}
             </div>
         </div>
-        <div class="border border-rose-200 p-4 rounded-xl col-span-2">
+        <div class="border border-rose-200 p-4 rounded-xl md:col-span-2">
             <div class="text-gray-700">Education</div>
             <div class="text-xl">
                 {{ content!.education }}
             </div>
         </div>
-        <div class="relative col-span-3 rounded-xl row-span-2 bg-[url('/map.png')] bg-cover">
+        <div class="relative md:col-span-3 rounded-xl md:row-span-2 bg-[url('/map.png')] bg-cover">
             <div class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-white text-xl">
                 {{ content!.location }}
             </div>
         </div>
-        <div class="border border-rose-200 p-4 rounded-xl col-span-3 row-span-2">
+        <div class="border border-rose-200 p-4 rounded-xl md:col-span-3 md:row-span-2">
             <div class="text-gray-700 mb-2">About me</div>
             <div>
                 {{ content!.about }}
