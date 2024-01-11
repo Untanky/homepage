@@ -1,6 +1,6 @@
 <template>
     <p>{{ biography.about }}</p>
-    <ul>
+    <ul class="mt-2 space-y-2">
         <li>{{ biography.location }}</li>
         <li>
             <a :href="biography.github">Github</a>
