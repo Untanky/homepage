@@ -12,6 +12,6 @@
 
 <script setup lang="ts">
     defineProps<{
-        links: { to: string, name: string }
+        links: Array<{ to: string, name: string }>
     }>();
 </script>
