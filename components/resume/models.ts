@@ -14,3 +14,21 @@ export type EducationItemModel = {
     grade: string;
     description: string;
 };
+
+export type SkillItemModel = {
+    name: string;
+    value: number;
+};
+
+export type StrengthItemModel = {
+    name: string;
+    description: string;
+};
+
+export type BiographyModel = {
+    about: string;
+    location: string;
+    github: string;
+    linkedIn: string;
+    x: string;
+};
