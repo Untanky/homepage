@@ -1,45 +1,49 @@
 <template>
-    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-cols-1 grid-rows-[400px_auto_auto_auto_300px_auto_auto_auto_auto] md:grid-rows-[auto_auto_1fr_auto_auto] md:grid-cols-6 gap-4">
-        <div class="relative md:min-h-[400px] md:col-span-3 rounded-xl md:row-span-3 bg-[url('/profile.jpg')] bg-cover bg-center">
-            <h1 class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-white text-4xl md:text-6xl font-bold">
-                {{ content!.name }}
-            </h1>
-        </div>
-        <h2 class="bento-card rounded-xl text-2xl md:text-4xl font-medium md:col-span-3">
-            {{ content!.role }}
-        </h2>
-        <div class="bento-card rounded-xl">
-            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Experience</div>
-            <div class="text-xl">
-                {{ content!.experience }}
-            </div>
-        </div>
-        <div class="bento-card rounded-xl md:col-span-2">
-            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Education</div>
-            <div class="text-xl">
-                {{ content!.education }}
-            </div>
-        </div>
-        <div class="relative md:col-span-3 rounded-xl md:row-span-2 bg-[url('/map.png')] bg-cover">
-            <div class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-black text-xl">
-                {{ content!.location }}
-            </div>
-        </div>
-        <div class="bento-card rounded-xl md:col-span-3 md:row-span-2">
+    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-cols-1 grid-rows-[400px_auto_auto_300px_auto_auto_auto_auto_auto] md:grid-rows-[auto_auto_auto_1fr_auto_auto] md:grid-cols-12 gap-4">
+        <LandingPicture class="md:col-span-6 md:row-span-4" :subtitle="content!.name" as="h1" />
+        <LandingCard class="md:col-span-6">
+            <h2 class="text-2xl md:text-4xl font-medium">
+                {{ content!.role }}
+            </h2>
+        </LandingCard>
+        <NuxtLink to="/resume" class="bento-card !px-4 !py-2 rounded-xl col-span-3">
+            See Resumé
+        </NuxtLink>
+        <NuxtLink to="/projects" class="bento-card !px-4 !py-2 rounded-xl col-span-3">
+            Explore Projects
+        </NuxtLink>
+        <LandingCard class="md:col-span-6">
             <div class="text-gray-700 dark:text-zinc-400 mb-2">About me</div>
             <div>
                 {{ content!.about }}
             </div>
+        </LandingCard>
+        <div class="relative md:col-start-7 md:col-span-6 rounded-xl md:row-span-3 bg-[url('/map.png')] bg-cover bg-center">
+            <div class="absolute bottom-0 left-0 right-0 text-center p-3 rounded-b-xl backdrop-blur-lg text-black text-xl">
+                {{ content!.location }}
+            </div>
         </div>
-        <a :href="content!.github" class="bento-card !px-4 !py-2 rounded-xl col-span-1 row-span-1">
+        <LandingCard class="md:col-span-3">
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Experience</div>
+            <div class="text-xl">
+                {{ content!.experience }}
+            </div>
+        </LandingCard>
+        <LandingCard class="md:col-span-3">
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Education</div>
+            <div class="text-xl">
+                {{ content!.education }}
+            </div>
+        </LandingCard>
+        <a :href="content!.github" class="bento-card !px-4 !py-2 rounded-xl col-start-1 col-span-2 row-span-1">
             GitHub
         </a>
-        <a :href="content!.linkedIn" class="bento-card !px-4 !py-2 rounded-xl col-span-1 row-span-1">
+        <a :href="content!.linkedIn" class="bento-card !px-4 !py-2 rounded-xl col-span-2 row-span-1">
             LinkedIn
         </a>
-        <NuxtLink to="/resume" class="bento-card !px-4 !py-2 rounded-xl col-span-1 row-span-1">
-            Resumé
-        </NuxtLink>
+        <a :href="content!.x" class="bento-card !px-4 !py-2 rounded-xl col-span-2 row-span-1">
+            X
+        </a>
     </div>
 </template>
 
@@ -52,7 +56,8 @@ type BiograhphyContent = {
     location: string;
     about: string;
     github: string;
-    linkedIn: string
+    linkedIn: string;
+    x: string;
 };
 
 const { data: content } = await useAsyncData(() => queryContent<BiograhphyContent>('biography').findOne())
