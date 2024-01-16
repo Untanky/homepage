@@ -4,11 +4,11 @@
         <div class="flex flex-col md:flex-row space-y-4 md:space-x-6 md:space-y-0">
             <div class="flex flex-col md:min-w-[240px] md:w-1/3 md:max-w-[360px] space-y-4">
                 <ResumeSection title="Biography">
-                    <ResumeBiography :biography="biography" />
+                    <ResumeBiography :biography="biography!" />
                 </ResumeSection>
                 <ResumeSection title="Strengths">
                     <ul class="flex flex-col space-y-2">
-                        <li v-for="strength in strengths">
+                        <li v-for="strength in resume?.strengths">
                             <ResumeStrengthItem :strength="strength" />
                         </li>
                     </ul>
@@ -16,14 +16,14 @@
             </div>
             <div class="flex flex-col space-y-4">
                 <ResumeSection title="Experience">
-                    <ResumeExperienceList :experiences="list" />
+                    <ResumeExperienceList :experiences="resume?.experience || []" />
                 </ResumeSection>
                 <ResumeSection title="Education">
-                    <ResumeEducationList :educations="edulist" />
+                    <ResumeEducationList :educations="resume?.education || []" />
                 </ResumeSection>
                 <ResumeSection title="Skills">
                     <ul class="grid grid-cols-3 gap-4">
-                        <li v-for="skill in skills">
+                        <li v-for="skill in resume?.skills">
                             <ResumeSkillItem :skill="skill" />
                         </li>
                     </ul>
@@ -36,33 +36,39 @@
 <script setup lang="ts">
     import type { BiographyModel, EducationItemModel, ExperienceItemModel, SkillItemModel, StrengthItemModel } from '~/components/resume/models';
 
-    const list = [
-        { start: new Date(2023, 8), company: 'Some Company Ltd', role: 'Software Engineer', description: 'Lorem Ipsum' },
-        { start: new Date(2023, 7), end: new Date(2021, 9), company: 'Some Company GmbH', role: 'Software Engineer', description: 'Lorem Ipsum' },
-    ] satisfies ExperienceItemModel[];
+    type ResumeModel = {
+        experience: ExperienceItemModel[];
+        education: EducationItemModel[];
+        skills: SkillItemModel[];
+        strengths: StrengthItemModel[];
+    }
 
-    const edulist = [
-        { start: new Date(2023, 8), school: 'Some Company Ltd', course: 'Software Engineer', grade: '', description: 'Lorem Ipsum' },
-        { start: new Date(2023, 7), end: new Date(2021, 9), school: 'Some Company GmbH', course: 'Software Engineer', grade: '', description: 'Lorem Ipsum' },
-    ] satisfies EducationItemModel[];
+    const { data: resume } = await useAsyncData('resume', () => queryContent<ResumeModel>('resume').findOne().then((data) => ({
+        ...data,
+    })));
+    
+    if (resume.value) {
+        resume.value.experience = resume.value?.experience?.map((experience) => ({
+            ...experience,
+            start: new Date(experience.start),
+            end: experience.end ? new Date(experience.end) : undefined
+        })) || [];
 
-    const skills = [
-        { name: 'Go', value: 1 },
-        { name: 'TypeScript', value: 1 },
-        { name: 'CI/CD', value: 0.9 },
-    ] satisfies SkillItemModel[];
+        resume.value.education = resume.value?.education?.map((education) => ({
+            ...education,
+            start: new Date(education.start),
+            end: education.end ? new Date(education.end) : undefined
+        })) || [];
 
-    const strengths = [
-        { name: 'Go', description: 'Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum' },
-        { name: 'TypeScript', description: 'Lorem Ipsum' },
-        { name: 'CI/CD', description: 'Lorem Ipsum' },
-    ] satisfies StrengthItemModel[];
+        console.log(resume.value)
+    }
 
-    const biography = {
-        about: 'Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum Lorem Ipsum',
-        location: 'Berlin, Germany',
-        github: 'https://github.com/Untanky',
-        linkedIn: 'https://linkedin.com/in/lukasgrimm',
-        x: 'https://twitter.com/Untanky'
-    } satisfies BiographyModel;
+    const { data: biography } = await useAsyncData('biography', () => queryContent<BiographyModel>('biography').findOne())
+
+    useHead({
+        title: `${biography.value?.name} - ${biography.value?.role}`,
+        meta: [
+            { name: 'description', content: biography.value?.about }
+        ],
+    });
 </script>

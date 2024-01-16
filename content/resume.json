@@ -1,0 +1,77 @@
+{
+    "experience": [
+        {
+            "company": "Some Company",
+            "role": "Some Role",
+            "start": "2023-09-01",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+        },
+        {
+            "company": "Other Company",
+            "role": "Other Role",
+            "start": "2021-10-01",
+            "end": "2023-08-01",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+        }
+    ],
+    "education": [
+        {
+            "school": "Some school",
+            "course": "Some course",
+            "grade": "1.0",
+            "start": "2021-02-01",
+            "end": "2017-10-01",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+        }
+    ],
+    "skills": [
+        {
+            "name": "Golang",
+            "value": 1
+        },
+        {
+            "name": "TypeScript",
+            "value": 1
+        },
+        {
+            "name": "AWS",
+            "value": 0.8
+        },
+        {
+            "name": "Terraform",
+            "value": 0.9
+        },
+        {
+            "name": "CI/CD",
+            "value": 0.9
+        }
+    ],
+    "strengths": [
+        {
+            "name": "Determination",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+        },
+        {
+            "name": "Leadership",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+        },
+        {
+            "name": "Analytical",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+        },
+        {
+            "name": "Strategic",
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+        }
+    ],
+    "language": [
+        {
+            "language": "German",
+            "level": "Native"
+        },
+        {
+            "language": "English",
+            "level": "C1"
+        }
+    ]
+}

@@ -26,6 +26,8 @@ export type StrengthItemModel = {
 };
 
 export type BiographyModel = {
+    name: string;
+    role: string;
     about: string;
     location: string;
     github: string;
