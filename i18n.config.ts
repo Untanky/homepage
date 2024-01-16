@@ -22,6 +22,7 @@ export default defineI18nConfig(() => ({
             projects: {
                 title: 'Projects',
                 subtitle: 'Take a look at the different projects I have worked on over the years.',
+                learnMore: 'Learn More'
             }
         },
         de: {
@@ -43,7 +44,8 @@ export default defineI18nConfig(() => ({
             },
             projects: {
                 title: 'Projekte',
-                subtitle: '',
+                subtitle: 'Schaue dir meine unterschiedlichen Projekte an. ',
+                learnMore: "Mehr erfahren"
             }
         }
     }
