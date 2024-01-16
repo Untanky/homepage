@@ -4,7 +4,7 @@
         <div class="flex flex-col md:flex-row space-y-4 md:space-x-6 md:space-y-0">
             <div class="flex flex-col md:min-w-[240px] md:w-1/3 md:max-w-[360px] space-y-4">
                 <ResumeSection title="Biography">
-                    <ResumeBiography :biography="biography!" />
+                    <ResumeBiography :biography="resume!.biography" />
                 </ResumeSection>
                 <ResumeSection title="Strengths">
                     <ul class="flex flex-col space-y-2">
@@ -43,32 +43,31 @@
         strengths: StrengthItemModel[];
     }
 
-    const { data: resume } = await useAsyncData('resume', () => queryContent<ResumeModel>('resume').findOne().then((data) => ({
-        ...data,
-    })));
-    
-    if (resume.value) {
-        resume.value.experience = resume.value?.experience?.map((experience) => ({
+    const { data: resume } = useAsyncData<ResumeModel & { biography: BiographyModel }>('resume', async () => {
+        const [ resume, biography ] = await Promise.all([
+            queryContent<ResumeModel>('resume').findOne(),
+            queryContent<BiographyModel>('biography').findOne(),
+        ]);
+
+        resume.experience = resume.experience?.map((experience) => ({
             ...experience,
             start: new Date(experience.start),
             end: experience.end ? new Date(experience.end) : undefined
         })) || [];
 
-        resume.value.education = resume.value?.education?.map((education) => ({
+        resume.education = resume.education?.map((education) => ({
             ...education,
             start: new Date(education.start),
             end: education.end ? new Date(education.end) : undefined
         })) || [];
 
-        console.log(resume.value)
-    }
-
-    const { data: biography } = await useAsyncData('biography', () => queryContent<BiographyModel>('biography').findOne())
+        return { ...resume, biography };
+    });
 
     useHead({
-        title: `${biography.value?.name} - ${biography.value?.role}`,
+        title: `${resume.value?.biography.name} - ${resume.value?.biography.role}`,
         meta: [
-            { name: 'description', content: biography.value?.about }
+            { name: 'description', content: resume.value?.biography.about }
         ],
     });
 </script>

@@ -8,5 +8,8 @@ export default defineNuxtConfig({
   ],
   tailwindcss: {
     exposeConfig: true
+  },
+  i18n: {
+    vueI18n: './i18n.config.ts'
   }
 })

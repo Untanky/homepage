@@ -93,7 +93,7 @@
         x: string;
     };
 
-    const { data: content } = await useAsyncData(() => queryContent<BiograhphyContent>('biography').findOne())
+    const { data: content } = await useAsyncData('biography', () => queryContent<BiograhphyContent>('biography').findOne())
 
     useHead({
         title: `${content.value?.name} - ${content.value?.role}`,
