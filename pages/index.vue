@@ -16,7 +16,7 @@
                     <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                 </svg>
                 <span class="align-middle">
-                    See Resumé
+                    {{ $t('landing.seeResume') }}
                 </span>
             </NuxtLink>
         </LandingCard>
@@ -26,12 +26,12 @@
                     <path fill-rule="evenodd" d="M8.22 5.22a.75.75 0 0 1 1.06 0l4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.75.75 0 0 1-1.06-1.06L11.94 10 8.22 6.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
                 </svg>
                 <span class="align-middle">
-                    Explore Projects
+                    {{ $t('landing.exploreProjects') }}
                 </span>
             </NuxtLink>
         </LandingCard>
         <LandingCard class="md:col-span-6">
-            <div class="text-gray-700 dark:text-zinc-400 mb-2">About me</div>
+            <div class="text-gray-700 dark:text-zinc-400 mb-2">{{ $t('landing.aboutMe') }}</div>
             <div>
                 {{ content!.about }}
             </div>
@@ -42,13 +42,13 @@
             </div>
         </LandingPicture>
         <LandingCard class="md:col-span-3">
-            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Experience</div>
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">{{ $t('landing.experience') }}</div>
             <div class="text-xl">
                 {{ content!.experience }}
             </div>
         </LandingCard>
         <LandingCard class="md:col-span-3">
-            <div class="text-zinc-700 dark:text-zinc-400 mb-2">Education</div>
+            <div class="text-zinc-700 dark:text-zinc-400 mb-2">{{ $t('landing.education') }}</div>
             <div class="text-xl">
                 {{ content!.education }}
             </div>

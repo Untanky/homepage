@@ -1,12 +1,15 @@
 <template>
     <main class="max-w-[820px] mx-4 md:mx-auto space-y-4">
-        <ResumeHeader name="Lukas Grimm" role="Software Engineer from Berlin, Germany" />
+        <ResumeHeader
+            :name="resume?.biography.name || ''"
+            :role="resume?.biography.role || ''"
+        />
         <div class="flex flex-col md:flex-row space-y-4 md:space-x-6 md:space-y-0">
             <div class="flex flex-col md:min-w-[240px] md:w-1/3 md:max-w-[360px] space-y-4">
-                <ResumeSection title="Biography">
+                <ResumeSection :title="$t('resume.biography')">
                     <ResumeBiography :biography="resume!.biography" />
                 </ResumeSection>
-                <ResumeSection title="Strengths">
+                <ResumeSection :title="$t('resume.strengths')">
                     <ul class="flex flex-col space-y-2">
                         <li v-for="strength in resume?.strengths">
                             <ResumeStrengthItem :strength="strength" />
@@ -15,13 +18,13 @@
                 </ResumeSection>
             </div>
             <div class="flex flex-col space-y-4">
-                <ResumeSection title="Experience">
+                <ResumeSection :title="$t('resume.experience')">
                     <ResumeExperienceList :experiences="resume?.experience || []" />
                 </ResumeSection>
-                <ResumeSection title="Education">
+                <ResumeSection :title="$t('resume.education')">
                     <ResumeEducationList :educations="resume?.education || []" />
                 </ResumeSection>
-                <ResumeSection title="Skills">
+                <ResumeSection :title="$t('resume.skills')">
                     <ul class="grid grid-cols-3 gap-4">
                         <li v-for="skill in resume?.skills">
                             <ResumeSkillItem :skill="skill" />
