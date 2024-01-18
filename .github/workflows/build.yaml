@@ -23,4 +23,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ghcr.io/${{ github.actor }}/homepage:latest
+          tags: ghcr.io/untanky/homepage:latest
