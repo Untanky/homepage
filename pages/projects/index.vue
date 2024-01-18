@@ -6,9 +6,12 @@
         <p>
             {{ $t('projects.subtitle') }}
         </p>
+        <div class="mt-8" v-if="projects?.length == 0">
+            {{ $t('project.noContent') }}
+        </div>
         <ol class="divide-y divide-rose-200 dark:divide-rose-300">
             <li
-                v-for="project in data"
+                v-for="project in projects"
                 class="space-y-4 py-8"
             >
                 <ProjectPreview
@@ -42,5 +45,5 @@
         }
     };
 
-    const { data } = await useAsyncData('projects', () => queryContent<ProjectContent>('projects').without('body').find().then(data => data.reverse()));
+    const { data: projects } = await useAsyncData('projects', () => queryContent<ProjectContent>('projects').without('body').find().then(data => data.reverse()));
 </script>
