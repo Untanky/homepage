@@ -1,27 +1,41 @@
 {
     "experience": [
         {
-            "company": "Some Company",
-            "role": "Some Role",
+            "company": "Empolis Solutions GmbH",
+            "role": "Solutions Engineer",
             "start": "2023-09-01",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+            "description": "At Empolis Solutions GmbH, I worked for different customers in the public sector. My main tasks involved designing, developing and maintaining solutions to manage knowledge in the organzation. I mainly worked with Java, JavaScript (Angular) and "
         },
         {
-            "company": "Other Company",
-            "role": "Other Role",
+            "company": "DIPKO GmbH",
+            "role": "Fullstack Developer",
             "start": "2021-10-01",
             "end": "2023-08-01",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+            "description": "DIPKO GmbH build solutions for German public service provider (Stadtwerke) to digitize their service portfolio. I was hired as the second internal developer and helped migrate the platform from a out-sourced to an in-house team. Day to day, I worked on many features of the platform designing the architecture, implementing the features in TypeScript (backend and frontend) and Angular. I also worked on the infrastructure of the platform, reducing AWS costs by 15%, implementing new microservices and implementing a CI/CD pipelin in GitHub Actions."
+        },
+        {
+            "company": "Pinuts digitial thinking GmbH",
+            "role": "Web Developer (Working Student)",
+            "start": "2020-09-01",
+            "end": "2021-09-01",
+            "description": "Pinuts is a multi-media agency, developing and maintaining digitial presences and experiences of their customers. As a web developer, I worked on two different projects. For the first project, I implemented a search feature over heterogenous data in a social media network. In the second project, I implemented a comment section for CMS-backed web page."
+        },
+        {
+            "company": "WBS Coding School",
+            "role": "Software Engineer (Intern)",
+            "start": "2020-05-01",
+            "end": "2020-02-01",
+            "description": "WBS Coding School is a leading coding bootcamp in Germany. I worked as Software Engineer, developing and mainting their Node.js and React based learning platform on AWS. I also created content for stundent of the bootcamp and build a dashboard to visiualize sign-ups to their program."
         }
     ],
     "education": [
         {
-            "school": "Some school",
-            "course": "Some course",
-            "grade": "1.0",
+            "school": "University of Applied Sciences Berlin (HTW Berlin)",
+            "course": "Applied Computer Science (B.Sc.)",
+            "grade": "1.7",
             "start": "2021-02-01",
             "end": "2017-10-01",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla. In hac habitasse platea dictumst. Nullam sit amet dignissim tellus, vel pharetra diam. Donec vitae leo sed ligula ornare vehicula ut et nunc. Duis condimentum neque dapibus augue viverra, in iaculis magna tempus. Nunc rhoncus felis eget ante eleifend, nec placerat ante scelerisque. Curabitur ultricies ac mauris in facilisis. Sed sodales facilisis augue. Integer urna diam, ornare sit amet dolor sed, mollis pretium velit. In fermentum enim erat, a sollicitudin neque feugiat et. Maecenas feugiat ex erat, a pulvinar est accumsan efficitur. Praesent."
+            "description": "My studies on HTW were incredibly practical. I worked on many different projects with other students. My focus was on multi-media and web development. With 7 other students, I implemented an app to where users could take a photo of an bike lane obstruction and upload it. In my thesis, I compared different programming languages and frameworks in relation to their performance regarding serving an HTTP API."
         }
     ],
     "skills": [
