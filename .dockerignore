@@ -1,0 +1,8 @@
+.dockerignore
+.git
+.gitignore
+.npmrc
+.nuxt
+.output
+Dockerfile
+node_modules
