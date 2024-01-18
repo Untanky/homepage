@@ -1,6 +1,6 @@
 <template>
-    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-cols-1 grid-rows-[400px_auto_auto_300px_auto_auto_auto_auto_auto] md:grid-rows-[auto_auto_auto_1fr_auto_auto] md:grid-cols-[8fr_12fr_1fr_19fr_6fr_8fr_7fr_8fr_4fr_15fr_8fr_6fr] gap-4">
-        <LandingPicture class="md:col-span-6 md:row-span-4 bg-[url('/profile.jpg')]">
+    <div class="max-w-[820px] mx-4 md:mx-auto grid grid-cols-1 md:grid-cols-[8fr_12fr_1fr_19fr_6fr_8fr_7fr_8fr_4fr_15fr_8fr_6fr] gap-4">
+        <LandingPicture class="md:col-span-6 md:row-span-4 min-h-[400px] bg-[url('/profile.jpg')]">
             <h1 class="text-white text-4xl md:text-6xl font-bold">
                 {{ content!.name }}
             </h1>

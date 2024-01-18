@@ -9,17 +9,17 @@
             :src="previewImage.source"
             :alt="previewImage.alt"
         >
-        <h2 class="text-white text-2xl md:text-4xl font-semibold">
+        <h2 class="text-white text-3xl md:text-4xl font-semibold">
             {{ title }}
         </h2>
-        <p>
+        <p class="text-zinc-800 dark:text-zinc-200">
             {{ description }}
         </p>
     </NuxtLink>
     <nav class="flex justify-between">
         <a :href="github" class="bg-white dark:bg-zinc-950 border border-rose-200 px-4 py-2 rounded-lg">
             <IconGitHub class="w-4 h-4"/>
-            <span class="ml-2 align-middle">GitHub</span>
+            <span class="hidden md:inline ml-2 align-middle">GitHub</span>
         </a>
         <NuxtLink
             :to="link"
