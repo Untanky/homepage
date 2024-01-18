@@ -1,8 +1,6 @@
 name: Build Homepage
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on:
-  push:
-    - main
+on: push
 jobs:
   build-docker:
     name: Build and push Docker image 
