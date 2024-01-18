@@ -1,7 +1,8 @@
 name: Build Homepage
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: push
 jobs:
+  permissions:
+    packages: write
   build-docker:
     name: Build and push Docker image 
     runs-on: ubuntu-latest
