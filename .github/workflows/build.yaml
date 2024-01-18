@@ -1,9 +1,9 @@
 name: Build Homepage
 on: push
 jobs:
-  permissions:
-    packages: write
   build-docker:
+    permissions:
+      packages: write
     name: Build and push Docker image 
     runs-on: ubuntu-latest
     steps:
