@@ -4,7 +4,7 @@
             "company": "Empolis Solutions GmbH",
             "role": "Solutions Engineer",
             "start": "2023-09-01",
-            "description": "At Empolis Solutions GmbH, I worked for different customers in the public sector. My main tasks involved designing, developing and maintaining solutions to manage knowledge in the organzation. I mainly worked with Java, JavaScript (Angular) and "
+            "description": "At Empolis Solutions GmbH, I worked for different customers in the public sector. My main tasks involved designing, developing and maintaining solutions to manage knowledge within the respective organzations. I mainly worked with Java and JavaScript (Angular)"
         },
         {
             "company": "DIPKO GmbH",
@@ -40,42 +40,62 @@
     ],
     "skills": [
         {
-            "name": "Golang",
-            "value": 1
-        },
-        {
             "name": "TypeScript",
             "value": 1
         },
         {
-            "name": "AWS",
+            "name": "Golang",
+            "value": 0.9
+        },
+        {
+            "name": "Java",
             "value": 0.8
         },
         {
             "name": "Terraform",
+            "value": 1
+        },
+        {
+            "name": "Docker",
             "value": 0.9
         },
         {
-            "name": "CI/CD",
-            "value": 0.9
+            "name": "AWS",
+            "value": 0.85
+        },
+        {
+            "name": "UI/UX",
+            "value": 0.8
+        },
+        {
+            "name": "CI/CD (GitHub)",
+            "value": 0.95
+        },
+        {
+            "name": "Unix",
+            "value": 0.8
+        },
+        {
+            "name": "Kubernetes",
+            "value": 0.7
         }
     ],
     "strengths": [
         {
             "name": "Determination",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+            "description": "in finding ideal solutions when facing unknown and complicated challenges."
         },
         {
             "name": "Leadership",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+            "description": "means taking responsibility and communicating effectively to build a strong team."
         },
         {
             "name": "Analytical",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+            "description": "thinking when it comes to solving difficult problems."
         },
         {
             "name": "Strategic",
-            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce vitae eros mollis, laoreet massa in, mattis nulla."
+            "description": "goal setting and keep the long-term in focus."
         }
     ],
     "language": [

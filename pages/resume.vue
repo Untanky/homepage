@@ -25,7 +25,7 @@
                     <ResumeEducationList :educations="resume?.education || []" />
                 </ResumeSection>
                 <ResumeSection :title="$t('resume.skills')">
-                    <ul class="grid grid-cols-3 gap-4">
+                    <ul class="grid grid-cols-3 gap-6">
                         <li v-for="skill in resume?.skills">
                             <ResumeSkillItem :skill="skill" />
                         </li>
