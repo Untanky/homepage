@@ -30,13 +30,13 @@
             to: '/resume',
             name: t('resume'),
         },
-        {
-            to: '/projects',
-            name: t('projects'),
-        },
-        {
-            to: '/blog',
-            name: t('blog'),
-        },
+        // {
+        //     to: '/projects',
+        //     name: t('projects'),
+        // },
+        // {
+        //     to: '/blog',
+        //     name: t('blog'),
+        // },
     ]);
 </script>
