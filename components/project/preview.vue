@@ -5,7 +5,7 @@
     >
         <img
             v-if="previewImage"
-            class="w-full rounded-xl"
+            class="w-full rounded-xl aspect-[4/1] object-cover object-center"
             :src="previewImage.source"
             :alt="previewImage.alt"
         >

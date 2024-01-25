@@ -1,6 +1,7 @@
 <template>
     <NavigationHeader :links="links" />
-    <slot></slot>
+    <slot />
+    <footer class="h-16" />
 </template>
 
 <script setup lang="ts">
@@ -40,10 +41,10 @@
             to: '/resume',
             name: t('resume'),
         },
-        // {
-        //     to: '/projects',
-        //     name: t('projects'),
-        // },
+        {
+            to: '/projects',
+            name: t('projects'),
+        },
         // {
         //     to: '/blog',
         //     name: t('blog'),

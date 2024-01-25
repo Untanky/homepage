@@ -2,12 +2,12 @@
     <main class="max-w-[820px] mx-4 md:mx-auto">
         <img
             v-if="project?.previewImage"
-            class="w-full rounded-xl"
+            class="w-full rounded-xl aspect-[4/1] object-cover object-center"
             :src="project?.previewImage.source"
             :alt="project?.previewImage.alt"
         >
         <ContentRenderer
-            class="mt-8 prose lg:prose-xl dark:prose-invert prose-zinc prose-a:decoration-rose-300"
+            class="max-w-[630px] mx-auto mt-8 prose lg:prose-xl dark:prose-invert prose-zinc prose-a:decoration-rose-300"
             :value="project!"
         />
     </main>
