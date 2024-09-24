@@ -23,7 +23,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${jost.variable}`}>
+      <body className={`${jost.variable} dark:bg-black dark:text-white`}>
         {children}
       </body>
     </html>
