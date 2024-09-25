@@ -1,0 +1,20 @@
+import React from 'react';
+import type { Biography as BiographyModel } from './model';
+
+export const Biography = ({ biography }: { biography: BiographyModel }) => {
+  return (
+    <>
+      <p>
+        {biography.description}
+      </p>
+      <ul>
+        <li>Berlin, Germany</li>
+        {biography.links.map((link) => (
+          <li key={link.href}>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+};
