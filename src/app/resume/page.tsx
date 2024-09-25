@@ -1,4 +1,6 @@
+import { loadJsonFile } from '@/lib/load-file';
 import React from 'react';
+import { Metadata } from 'next';
 import { ResumeSection } from './resume-section';
 import { ExperienceList } from './experience-list';
 import { EducationList } from './education-list';
@@ -7,62 +9,25 @@ import { Biography } from './biography';
 import { SkillList } from './skill-list';
 import { StrengthList } from './strength-list';
 
-const resume: Resume = {
-  biography: {
-    description: 'Bla bla',
-    links: [
-      { label: 'GitHub', href: 'https://github.com/untanky' },
-      { label: 'LinkedIn', href: 'https://linkedin.com/in/lukasgrimm' },
-    ],
-  },
-  experienceList: [
-    {
-      startDate: new Date('2024-11-1'),
-      company: 'Stealth Startup',
-      role: 'Fullstack Developer',
-      description: 'Development and maintenance of a social media platform hosted in the cloud.',
-    },
-    {
-      startDate: new Date('2024-10-31'),
-      endDate: new Date('2023-9-1'),
-      company: 'Empolis Solutions GmbH',
-      role: 'Fullstack Engineer',
-      description: 'Design, development and maintenance of large scale, on-premise enterprise application written in Java (Spring Boot), Angular and VueJS.',
-    },
-    {
-      startDate: new Date('2024-8-31'),
-      endDate: new Date('2021-10-1'),
-      company: 'DIPKO GmbH',
-      role: 'Fullstack Developer',
-      description: 'Design, development and maintenance of cloud platform with Angular and Express. ',
-    },
-    {
-      startDate: new Date('2021-9-30'),
-      endDate: new Date('2020-9-1'),
-      company: 'Pinuts media+science Multimedia Agentur GmbH',
-      role: 'Fullstack Engineer',
-      description: 'Development of applications',
-    },
-  ],
-  educationList: [
-    {
-      startDate: new Date('2017-10-01'),
-      endDate: new Date('2021-02-01'),
-      school: 'University of Applied Science Berlin (HTW)',
-      grade: '1.7',
-      course: 'Applied Computer Science',
-      description: 'Bla Bla',
-    },
-  ],
-  skills: [
-    { label: 'TypeScript', value: 1 },
-  ],
-  strengths: [
-    { label: 'Determination', description: 'Bla bla' },
-  ],
+export const metadata: Metadata = {
+  title: 'Resumé Lukas Grimm',
 };
 
-export default function Resume() {
+export default async function Resume() {
+  const resume = await loadJsonFile<Resume>('./data/resume.json').then((resume) => ({
+    ...resume,
+    experienceList: resume.experienceList.map((experience) => ({
+      ...experience,
+      startDate: new Date(experience.startDate),
+      endDate: experience.endDate && new Date(experience.endDate),
+    })),
+    educationList: resume.educationList.map((education) => ({
+      ...education,
+      startDate: new Date(education.startDate),
+      endDate: new Date(education.endDate),
+    })),
+  }));
+
   return (
     <main className="w-[400px] mx-4 grid grid-cols-1 grid-rows-[auto_min-content_min-content_auto] gap-4 grid-flow-dense mb-8 sm:mx-auto md:grid-cols-3 md:w-[800px]">
       <header className="mt-4 md:col-span-3">

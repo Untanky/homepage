@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Education } from './model';
 
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { day: undefined, month: 'long', year: 'numeric' });
+};
+
 export const EducationList = ({ educationList }: { educationList: Education[] }) => {
   return (
     <ul className="space-y-3">
@@ -15,11 +19,11 @@ export const EducationList = ({ educationList }: { educationList: Education[] })
             )
           </h4>
           <p>
-            {education.startDate.toDateString()}
+            {formatDate(education.startDate)}
             &nbsp;-&nbsp;
-            {education.endDate ? education.endDate.toDateString() : 'now'}
+            {formatDate(education.endDate)}
           </p>
-          <p>
+          <p className="text-zinc-700 dark:text-zinc-300">
             {education.description}
           </p>
         </li>

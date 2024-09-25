@@ -9,7 +9,7 @@ type ResumeSectionProps = {
 export const ResumeSection = (props: ResumeSectionProps) => {
   return (
     <section className={props.className}>
-      <h1 className="text-xl font-medium underline decoration-rose-500">
+      <h1 className="text-xl font-medium underline decoration-rose-500 mb-1">
         {props.title}
       </h1>
       {props.children}

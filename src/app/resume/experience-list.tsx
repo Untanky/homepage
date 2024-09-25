@@ -1,6 +1,10 @@
 import React from 'react';
 import type { Experience } from './model';
 
+const formatDate = (date: Date) => {
+  return date.toLocaleDateString('en-US', { day: undefined, month: 'long', year: 'numeric' });
+};
+
 export const ExperienceList = ({ experienceList }: { experienceList: Experience[] }) => {
   return (
     <ul className="space-y-3">
@@ -12,11 +16,11 @@ export const ExperienceList = ({ experienceList }: { experienceList: Experience[
             <span className="italic">{experience.company}</span>
           </h4>
           <p>
-            {experience.startDate.toDateString()}
+            {formatDate(experience.startDate)}
             &nbsp;-&nbsp;
-            {experience.endDate ? experience.endDate.toDateString() : 'now'}
+            {experience.endDate ? formatDate(experience.endDate) : 'now'}
           </p>
-          <p>
+          <p className="text-zinc-700 dark:text-zinc-300">
             {experience.description}
           </p>
         </li>
