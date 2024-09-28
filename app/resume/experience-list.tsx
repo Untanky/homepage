@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Experience } from '../models/resume';
+import type { Experience } from '../../src/models/resume';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', { day: undefined, month: 'long', year: 'numeric' });

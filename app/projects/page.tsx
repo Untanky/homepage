@@ -1,6 +1,6 @@
 import React from 'react';
 import { ProjectList } from './project-list';
-import { ProjectPreview } from '../models/project';
+import { ProjectPreview } from '../../src/models/project';
 
 const getProjects = (): Promise<ProjectPreview[]> => {
   return Promise.resolve([

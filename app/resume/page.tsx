@@ -4,7 +4,7 @@ import { Metadata } from 'next';
 import { ResumeSection } from './resume-section';
 import { ExperienceList } from './experience-list';
 import { EducationList } from './education-list';
-import type { Resume } from '../models/resume';
+import type { Resume } from '../../src/models/resume';
 import { Biography } from './biography';
 import { SkillList } from './skill-list';
 import { StrengthList } from './strength-list';

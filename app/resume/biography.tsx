@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Biography as BiographyModel } from '../models/resume';
+import type { Biography as BiographyModel } from '../../src/models/resume';
 
 export const Biography = ({ biography }: { biography: BiographyModel }) => {
   return (
