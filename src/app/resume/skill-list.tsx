@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Skill } from './model';
+import type { Skill } from '../models/resume';
 
 export const SkillList = ({ skills }: { skills: Skill[] }) => {
   return (

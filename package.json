@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@mdx-js/mdx": "^3.0.1",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18"
@@ -16,6 +17,7 @@
   "devDependencies": {
     "@eslint/js": "^9.11.0",
     "@stylistic/eslint-plugin": "^2.8.0",
+    "@tailwindcss/typography": "^0.5.15",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

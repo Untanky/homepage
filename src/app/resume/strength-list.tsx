@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Strength } from './model';
+import type { Strength } from '../models/resume';
 
 export const StrengthList = ({ strengths }: { strengths: Strength[] }) => {
   return (

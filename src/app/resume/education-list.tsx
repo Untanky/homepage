@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Education } from './model';
+import type { Education } from '../models/resume';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', { day: undefined, month: 'long', year: 'numeric' });
