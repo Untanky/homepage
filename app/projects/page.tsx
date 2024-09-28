@@ -1,4 +1,3 @@
-import React from 'react';
 import { loadFile } from '@/lib/load-file';
 import { getFrontmatter } from '@/lib/parse-md';
 import { ProjectPreview } from '../../src/models/project';

@@ -1,6 +1,5 @@
 import { loadFile } from '@/lib/load-file';
 import { renderMarkdown } from '../../../src/lib/parse-md';
-import React from 'react';
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const fileContent = await loadFile('/Users/lukas/dev/homepage/app/projects/[slug]/text.md');

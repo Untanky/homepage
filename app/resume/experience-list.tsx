@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Experience } from '../../src/models/resume';
 
 const formatDate = (date: Date) => {

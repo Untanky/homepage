@@ -1,5 +1,5 @@
 import { compile, type CompileOptions, run } from '@mdx-js/mdx';
-import type { ReactElement } from 'react';
+import { MDXContent } from 'mdx/types.js';
 import * as runtime from 'react/jsx-runtime';
 import remarkFrontmatter from 'remark-frontmatter';
 import remarkMdxFrontmatter from 'remark-mdx-frontmatter';
@@ -11,13 +11,9 @@ export type MarkdownFrontmatter = {
   title?: string;
 };
 
-type Props = {
-  components?: never;
-};
-
 type RenderMarkdownResult<T extends Record<string, unknown> = never> = {
   frontmatter: T;
-  Content: (props: Props) => ReactElement;
+  Content: MDXContent;
 };
 
 const compileOptions: CompileOptions = {

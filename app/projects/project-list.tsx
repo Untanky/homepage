@@ -1,6 +1,5 @@
-import React from 'react';
+import { ProjectPreview } from '@/models/project';
 import Link from 'next/link';
-import { ProjectPreview } from './page';
 
 export const ProjectList = ({ projects }: { projects: ProjectPreview[] }) => {
   return (

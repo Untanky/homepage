@@ -1,11 +1,10 @@
 import { loadJsonFile } from '@/lib/load-file';
-import React from 'react';
 import { Metadata } from 'next';
-import { ResumeSection } from './resume-section';
-import { ExperienceList } from './experience-list';
-import { EducationList } from './education-list';
 import type { Resume } from '../../src/models/resume';
 import { Biography } from './biography';
+import { EducationList } from './education-list';
+import { ExperienceList } from './experience-list';
+import { ResumeSection } from './resume-section';
 import { SkillList } from './skill-list';
 import { StrengthList } from './strength-list';
 

@@ -18,4 +18,9 @@ export default [
     arrowParens: true,
     commaDangle: 'always-multiline',
   }),
+  {
+    rules: {
+      'react/react-in-jsx-scope': 'off',
+    },
+  },
 ];

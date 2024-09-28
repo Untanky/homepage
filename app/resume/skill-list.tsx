@@ -1,4 +1,3 @@
-import React from 'react';
 import type { Skill } from '../../src/models/resume';
 
 export const SkillList = ({ skills }: { skills: Skill[] }) => {
