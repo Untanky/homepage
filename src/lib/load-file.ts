@@ -1,7 +1,13 @@
 import { readFile } from 'fs/promises';
 
-export const loadJsonFile = async <Result>(path: string): Promise<Result> => {
+export const loadFile = async (path: string): Promise<string> => {
   const buffer = await readFile(path);
 
-  return JSON.parse(buffer.toString()) as Result;
+  return buffer.toString();
+};
+
+export const loadJsonFile = async <Result>(path: string): Promise<Result> => {
+  const content = await loadFile(path);
+
+  return JSON.parse(content) as Result;
 };

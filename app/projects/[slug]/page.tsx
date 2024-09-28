@@ -1,40 +1,16 @@
-import { compile, run } from '@mdx-js/mdx';
+import { loadFile } from '@/lib/load-file';
+import { mdAsComponent } from '../../../src/lib/parse-md';
 import React from 'react';
-import * as runtime from 'react/jsx-runtime';
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const mdxSource = `# Hello, ${params.slug}
-  
-  Test
-  
-  ## My second test
-  
-  Foo
-  
-  Bar
-  
-  Baz
-  
-  Test
-  
-  Lol
-  
-  Amazing`;
+  const fileContent = await loadFile('/Users/lukas/dev/homepage/app/projects/[slug]/text.md');
 
-  const code = String(
-    await compile(mdxSource, { outputFormat: 'function-body' }),
-  );
-
-  // @ts-expect-error typing of runtimne is weird.
-  const { default: MDXContent } = await run(code, {
-    ...runtime,
-    baseUrl: import.meta.url,
-  });
+  const ProjectContent = await mdAsComponent(fileContent);
 
   // Render the MDX content, supplying the ClientComponent as a component
   return (
     <main className="prose prose-zinc dark:prose-invert m-4">
-      <MDXContent />
+      <ProjectContent />
     </main>
   );
 };
