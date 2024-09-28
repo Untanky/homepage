@@ -21,21 +21,20 @@ const compileOptions: CompileOptions = {
   remarkPlugins: [remarkFrontmatter, remarkMdxFrontmatter],
 };
 
-const compileMarkdownContent = async (content: string): Promise<VFile> => {
-  const code = await compile(content, compileOptions);
+const compileMarkdownContent = async (file: VFile): Promise<VFile> => {
+  const code = await compile(file, compileOptions);
 
   return code;
 };
 
-export const getFrontmatter = async <T extends Record<string, unknown> = never>(content: string): Promise<T> => {
-  const file = new VFile(content);
+export const getFrontmatter = async <T extends Record<string, unknown> = never>(file: VFile): Promise<T> => {
   matter(file);
 
   return file.data.matter as T;
 };
 
-export const renderMarkdown = async <T extends Record<string, unknown> = never>(content: string): Promise<RenderMarkdownResult<T>> => {
-  const code = await compileMarkdownContent(content);
+export const renderMarkdown = async <T extends Record<string, unknown> = never>(file: VFile): Promise<RenderMarkdownResult<T>> => {
+  const code = await compileMarkdownContent(file);
 
   // @ts-expect-error typing of runtime is weird.
   const result = await run(code, {
