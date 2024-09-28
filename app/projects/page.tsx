@@ -1,8 +1,14 @@
 import React from 'react';
-import { ProjectList } from './project-list';
+import { loadFile } from '@/lib/load-file';
+import { getFrontmatter } from '@/lib/parse-md';
 import { ProjectPreview } from '../../src/models/project';
+import { ProjectList } from './project-list';
 
-const getProjects = (): Promise<ProjectPreview[]> => {
+const getProjects = async (): Promise<ProjectPreview[]> => {
+  const fileContent = await loadFile('/Users/lukas/dev/homepage/app/projects/[slug]/text.md');
+
+  console.log(await getFrontmatter(fileContent));
+
   return Promise.resolve([
     {
       id: 'website-overhaul',

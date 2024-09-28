@@ -12,7 +12,11 @@
     "@mdx-js/mdx": "^3.0.1",
     "next": "14.2.13",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "remark-frontmatter": "^5.0.0",
+    "remark-mdx-frontmatter": "^5.0.0",
+    "vfile": "^6.0.3",
+    "vfile-matter": "^5.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.11.0",
