@@ -10,7 +10,11 @@ export class GitHubService implements FileService {
   ) {}
 
   async listFiles(path: string): Promise<Array<string>> {
-    const result = await this.octokit.rest.repos.getContent({ owner: this.owner, repo: this.repo, path: path });
+    const result = await this.octokit.rest.repos.getContent({
+      owner: this.owner,
+      repo: this.repo,
+      path: path,
+    });
 
     if (result.status !== 200) {
       throw new Error('request was not successful');
@@ -26,7 +30,11 @@ export class GitHubService implements FileService {
   }
 
   async readFile(path: string): Promise<VFile> {
-    const result = await this.octokit.rest.repos.getContent({ owner: this.owner, repo: this.repo, path: path });
+    const result = await this.octokit.rest.repos.getContent({
+      owner: this.owner,
+      repo: this.repo,
+      path: path,
+    });
 
     if (result.status !== 200) {
       throw new Error('request was not successful');
@@ -44,5 +52,19 @@ export class GitHubService implements FileService {
       path,
       value: Buffer.from(result.data.content, 'base64').toString('utf-8'),
     });
+  }
+
+  async getHistory(path: string): Promise<Array<string>> {
+    const result = await this.octokit.rest.repos.listCommits({
+      owner: this.owner,
+      repo: this.repo,
+      path: path,
+    });
+
+    if (result.status !== 200) {
+      throw new Error('request was not successful');
+    }
+
+    return result.data.map(({ sha }) => sha);
   }
 }
