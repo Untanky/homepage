@@ -10,7 +10,7 @@ export class ProjectService {
 
     const results = await Promise.allSettled(filePaths.map(
       (path) => this.fileService.readFile(path)
-        .then((file) => (console.log(file), getFrontmatter<ProjectPreview>(file))),
+        .then((file) => getFrontmatter<ProjectPreview>(file)),
     ));
 
     results

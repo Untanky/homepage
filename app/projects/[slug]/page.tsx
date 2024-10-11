@@ -3,7 +3,10 @@ import { renderMarkdown } from '@/lib/parse-md';
 import { ProjectPreview } from '@/models/project';
 import { Octokit } from 'octokit';
 
-const gitHubService = new GitHubService('untanky', 'content', new Octokit());
+const gitHubService = new GitHubService('untanky', 'content', new Octokit({
+  userAgent: `untanky-homepage/${process.env.VERSION}`,
+  auth: process.env.GITHUB_TOKEN,
+}));
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const file = await gitHubService.readFile(`project/${params.slug}.md`);

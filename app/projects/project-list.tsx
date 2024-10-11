@@ -7,7 +7,7 @@ export const ProjectList = ({ projects }: { projects: ProjectPreview[] }) => {
       {projects.map((project, index) => (
         <li key={index}>
           <Link href={project.link} className="block p-4 border border-zinc-500 rounded-xl">
-            <h2 className="text-xl font-semibold underline decoration-rose-500">{project.title}</h2>
+            <h2 className="text-xl font-semibold">{project.title}</h2>
             <p className="text-zinc-700 dark:text-zinc-300">{project.description}</p>
             <ul className="flex space-x-2 mt-2">
               {project.stack.map((it, index) => (

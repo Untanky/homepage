@@ -3,7 +3,10 @@ import { ProjectService } from '@/lib/project';
 import { Octokit } from 'octokit';
 import { ProjectList } from './project-list';
 
-const gitHubService = new GitHubService('untanky', 'content', new Octokit());
+const gitHubService = new GitHubService('untanky', 'content', new Octokit({
+  userAgent: `untanky-homepage/${process.env.VERSION}`,
+  auth: process.env.GITHUB_TOKEN,
+}));
 
 const projectService = new ProjectService(gitHubService);
 
