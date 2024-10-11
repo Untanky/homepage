@@ -1,6 +1,6 @@
 import { loadJsonFile } from '@/lib/load-file';
+import type { Resume } from '@/models/resume';
 import { Metadata } from 'next';
-import type { Resume } from '../../src/models/resume';
 import { Biography } from './biography';
 import { EducationList } from './education-list';
 import { ExperienceList } from './experience-list';

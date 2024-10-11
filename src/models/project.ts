@@ -11,8 +11,8 @@ export type Project = {
   title: string;
   description: string;
   stack: string[];
-  version: number;
-  createdAt: Date;
-  editedAt: Date;
+  version?: number;
+  createdAt?: Date;
+  editedAt?: Date;
   content: string;
 };

@@ -1,4 +1,4 @@
-import type { Skill } from '../../src/models/resume';
+import type { Skill } from '@/models/resume';
 
 export const SkillList = ({ skills }: { skills: Skill[] }) => {
   return (

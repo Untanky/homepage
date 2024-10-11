@@ -1,4 +1,4 @@
-import type { Education } from '../../src/models/resume';
+import type { Education } from '@/models/resume';
 
 const formatDate = (date: Date) => {
   return date.toLocaleDateString('en-US', { day: undefined, month: 'long', year: 'numeric' });

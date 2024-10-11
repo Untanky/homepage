@@ -1,30 +1,17 @@
-import { ProjectPreview } from '../../src/models/project';
+import { GitHubService } from '@/lib/github';
+import { ProjectService } from '@/lib/project';
+import { Octokit } from 'octokit';
 import { ProjectList } from './project-list';
 
-const getProjects = async (): Promise<ProjectPreview[]> => {
-  return Promise.resolve([
-    {
-      id: 'website-overhaul',
-      title: 'Website Overhaul',
-      description: 'Today I want to present the website overhaul I have been working on.',
-      stack: ['TypeScript', 'NextJS'],
-      link: '/projects/website-overhaul',
-    },
-    {
-      id: 'git-charged',
-      title: 'GitCharged',
-      description: 'GitCharged improves the UX of the Git CLI and adds some cool, opinioned features to Git.',
-      stack: ['Zig', 'Git'],
-      link: '/projects/git-charged',
-    },
-  ]);
-};
+const gitHubService = new GitHubService('untanky', 'content', new Octokit());
+
+const projectService = new ProjectService(gitHubService);
 
 export default async function ProjectsListPage() {
-  const projects = await getProjects();
+  const projects = await projectService.getProjectPreviews('project');
 
   return (
-    <main className="m-4">
+    <main className="m-4 md:w-[700px] md:mx-auto">
       <h1 className="text-4xl font-bold">
         Lukas&apos; Projects
       </h1>

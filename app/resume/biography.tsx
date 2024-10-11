@@ -1,4 +1,4 @@
-import type { Biography as BiographyModel } from '../../src/models/resume';
+import type { Biography as BiographyModel } from '@/models/resume';
 
 export const Biography = ({ biography }: { biography: BiographyModel }) => {
   return (

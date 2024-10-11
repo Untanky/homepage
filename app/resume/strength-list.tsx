@@ -1,4 +1,4 @@
-import type { Strength } from '../../src/models/resume';
+import type { Strength } from '@/models/resume';
 
 export const StrengthList = ({ strengths }: { strengths: Strength[] }) => {
   return (
