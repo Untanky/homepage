@@ -15,9 +15,9 @@ export default async function ProjectPage({ params }: { params: { slug: string }
 
   // Render the MDX content, supplying the ClientComponent as a component
   return (
-    <main className="prose prose-zinc dark:prose-invert m-4 md:w-[700px] md:mx-auto">
+    <article className="prose prose-zinc dark:prose-invert">
       <h1>{frontmatter.title}</h1>
       <ProjectContent />
-    </main>
+    </article>
   );
 };

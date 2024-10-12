@@ -14,7 +14,7 @@ export default async function ProjectsListPage() {
   const projects = await projectService.getProjectPreviews('project');
 
   return (
-    <main className="m-4 md:w-[700px] md:mx-auto">
+    <main>
       <h1 className="text-4xl font-bold">
         Lukas&apos; Projects
       </h1>
