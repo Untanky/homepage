@@ -1,15 +1,6 @@
-import { GitHubService } from '@/lib/github';
 import { renderMarkdown } from '@/lib/parse-md';
-import { ProjectService } from '@/lib/project';
-import { Octokit } from 'octokit';
 import { VFile } from 'vfile';
-
-const gitHubService = new GitHubService('untanky', 'content', new Octokit({
-  userAgent: `untanky-homepage/${process.env.VERSION}`,
-  auth: process.env.GITHUB_TOKEN,
-}));
-
-const projectService = new ProjectService(gitHubService);
+import { projectService } from '../project-service';
 
 export default async function ProjectPage({ params }: { params: { slug: string } }) {
   const project = await projectService.getProject(`project/${params.slug}.md`);

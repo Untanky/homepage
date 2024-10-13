@@ -27,8 +27,6 @@ export class ProjectService {
 
     const data = await getFrontmatter<Project>(file);
 
-    console.info(data);
-
     return {
       ...data,
       content: file.value.toString(),
