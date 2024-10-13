@@ -22,7 +22,16 @@ export class ProjectService {
       .map(({ value }) => value);
   }
 
-  async getProject(): Promise<Project> {
-    throw new Error('not implemented');
+  async getProject(path: string): Promise<Project> {
+    const file = await this.fileService.readFile(path);
+
+    const data = await getFrontmatter<Project>(file);
+
+    console.info(data);
+
+    return {
+      ...data,
+      content: file.value.toString(),
+    };
   }
 }

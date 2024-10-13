@@ -1,22 +1,25 @@
 import { GitHubService } from '@/lib/github';
 import { renderMarkdown } from '@/lib/parse-md';
-import { ProjectPreview } from '@/models/project';
+import { ProjectService } from '@/lib/project';
 import { Octokit } from 'octokit';
+import { VFile } from 'vfile';
 
 const gitHubService = new GitHubService('untanky', 'content', new Octokit({
   userAgent: `untanky-homepage/${process.env.VERSION}`,
   auth: process.env.GITHUB_TOKEN,
 }));
 
-export default async function ProjectPage({ params }: { params: { slug: string } }) {
-  const file = await gitHubService.readFile(`project/${params.slug}.md`);
+const projectService = new ProjectService(gitHubService);
 
-  const { frontmatter, Content: ProjectContent } = await renderMarkdown<ProjectPreview>(file);
+export default async function ProjectPage({ params }: { params: { slug: string } }) {
+  const project = await projectService.getProject(`project/${params.slug}.md`);
+
+  const { Content: ProjectContent } = await renderMarkdown(new VFile(project.content));
 
   // Render the MDX content, supplying the ClientComponent as a component
   return (
     <article className="prose prose-zinc dark:prose-invert">
-      <h1>{frontmatter.title}</h1>
+      <h1>{project.title}</h1>
       <ProjectContent />
     </article>
   );

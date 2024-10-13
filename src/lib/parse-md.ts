@@ -11,8 +11,7 @@ export type MarkdownFrontmatter = {
   title?: string;
 };
 
-type RenderMarkdownResult<T extends Record<string, unknown> = never> = {
-  frontmatter: T;
+type RenderMarkdownResult = {
   Content: MDXContent;
 };
 
@@ -33,7 +32,7 @@ export const getFrontmatter = async <T extends Record<string, unknown> = never>(
   return file.data.matter as T;
 };
 
-export const renderMarkdown = async <T extends Record<string, unknown> = never>(file: VFile): Promise<RenderMarkdownResult<T>> => {
+export const renderMarkdown = async (file: VFile): Promise<RenderMarkdownResult> => {
   const code = await compileMarkdownContent(file);
 
   // @ts-expect-error typing of runtime is weird.
@@ -43,7 +42,6 @@ export const renderMarkdown = async <T extends Record<string, unknown> = never>(
   });
 
   return {
-    frontmatter: result.frontmatter as T,
     Content: result.default,
   };
 };
