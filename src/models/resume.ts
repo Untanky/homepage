@@ -20,6 +20,7 @@ export type Biography = {
   links: Array<{
     label: string;
     href: string;
+    type: 'github' | 'linkedin' | 'location';
   }>;
 };
 

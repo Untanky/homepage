@@ -15,6 +15,7 @@ export default [
     quotes: 'single',
     semi: true,
     jsx: true,
+    braceStyle: '1tbs',
     arrowParens: true,
     commaDangle: 'always-multiline',
   }),

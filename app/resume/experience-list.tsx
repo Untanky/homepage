@@ -6,10 +6,10 @@ const formatDate = (date: Date) => {
 
 export const ExperienceList = ({ experienceList }: { experienceList: Experience[] }) => {
   return (
-    <ul className="space-y-3">
+    <ul className="space-y-4">
       {experienceList.map((experience) => (
         <li key={Math.random()}>
-          <h4 className="text-lg font-medium">
+          <h4 className="text-lg font-semibold">
             {experience.role}
             &nbsp;-&nbsp;
             <span className="italic">{experience.company}</span>

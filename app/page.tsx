@@ -1,4 +1,7 @@
+import { CodeBracketIcon, DocumentTextIcon } from '@heroicons/react/20/solid';
+import { GitHubIcon } from '@/components/github-icon';
 import Link from 'next/link';
+import { LinkedInIcon } from '@/components/linkedin-icon';
 
 export default function Home() {
   return (
@@ -45,16 +48,18 @@ export default function Home() {
           Links
         </h3>
         <Link
-          className="bg-rose-500 text-white dark:text-black px-4 py-2 border border-rose-400 dark:border-rose-600 rounded-xl hover:bg-rose-600 hover:dark:bg-rose-400 transition-colors"
+          className="flex items-center space-x-2 bg-rose-500 text-white dark:text-black px-4 py-2 border border-rose-400 dark:border-rose-600 rounded-xl hover:bg-rose-600 hover:dark:bg-rose-400 transition-colors"
           href="/resume"
         >
-          See Resumé
+          <DocumentTextIcon className="size-5" />
+          <span>See Resumé</span>
         </Link>
         <Link
-          className="px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
           href="/projects"
         >
-          See Projects
+          <CodeBracketIcon className="size-5" />
+          <span>See Projects</span>
         </Link>
       </section>
       <section className="flex flex-col space-y-3">
@@ -62,16 +67,18 @@ export default function Home() {
           Social Media Links
         </h3>
         <Link
-          className="px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
           href="https://github.com/untanky"
         >
-          GitHub
+          <GitHubIcon className="size-5" />
+          <span>GitHub</span>
         </Link>
         <Link
-          className="px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
+          className="flex items-center space-x-2 px-4 py-2 border border-rose-500 rounded-xl hover:bg-rose-50 hover:dark:bg-rose-950 transition-colors"
           href="https://linkedin.com/in/lukasgrimm"
         >
-          LinkedIn
+          <LinkedInIcon className="size-5" />
+          <span>LinkedIn</span>
         </Link>
       </section>
     </main>
