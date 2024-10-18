@@ -1,4 +1,4 @@
-import { Navigation } from '@/components/navigation';
+import { SmartNavigation } from '@/components/smart-navigation';
 
 export default function ProjectLayout({
   children,
@@ -7,7 +7,7 @@ export default function ProjectLayout({
 }>) {
   return (
     <div className="m-4 md:w-[700px] md:mx-auto">
-      <Navigation />
+      <SmartNavigation />
       {children}
     </div>
   );

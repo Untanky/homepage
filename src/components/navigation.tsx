@@ -1,17 +1,28 @@
-import { CodeBracketIcon, HomeIcon } from '@heroicons/react/20/solid';
+import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import Link from 'next/link';
+import type { ReactNode } from 'react';
 
-export const Navigation = () => {
+export type NavigationItem = {
+  icon: ReactNode;
+  label: string;
+  href: string;
+};
+
+export const Navigation = ({ navigationItems }: { navigationItems: NavigationItem[] }) => {
   return (
-    <nav className="flex space-x-2 border border-zinc-500 p-1 rounded-xl mb-2">
-      <Link href="/" className="flex items-center space-x-2 pl-1.5 pr-2.5 py-1 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800">
-        <HomeIcon className="size-5" />
-        <span>Home</span>
-      </Link>
-      <Link href="/projects" className="flex items-center space-x-2 pl-1.5 pr-2.5 py-1 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800">
-        <CodeBracketIcon className="size-5" />
-        <span>Projects</span>
-      </Link>
+    <nav className="flex items-center space-x-2 mb-2">
+      {navigationItems.map((item, index) => (
+        <>
+          {index !== 0 && <ChevronRightIcon className="size-4 text-zinc-700 dark:text-zinc-300" />}
+          <Link
+            href={item.href}
+            className="flex items-center space-x-2 pl-3 pr-4 py-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800"
+          >
+            {item.icon}
+            <span>{item.label}</span>
+          </Link>
+        </>
+      ))}
     </nav>
   );
 };
