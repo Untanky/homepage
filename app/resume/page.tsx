@@ -28,7 +28,7 @@ export default async function Resume() {
   }));
 
   return (
-    <main className="w-[400px] mx-4 grid grid-cols-1 grid-rows-[auto_min-content_min-content_auto] gap-4 grid-flow-dense mb-8 sm:mx-auto md:grid-cols-3 md:w-[800px]">
+    <main className="grid grid-cols-1 grid-rows-[auto_min-content_min-content_auto] gap-4 grid-flow-dense md:grid-cols-3">
       <header className="mt-4 md:col-span-3">
         <h1 className="text-4xl font-bold text-center">
           Lukas Grimm

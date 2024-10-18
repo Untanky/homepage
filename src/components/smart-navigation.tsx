@@ -22,11 +22,7 @@ const useNavigationItems = (): NavigationItem[] => {
     return [homeNavigationItem, projectNavigationItem];
   }
 
-  if (pathname.startsWith('/projects')) {
-    return [homeNavigationItem];
-  }
-
-  return [];
+  return [homeNavigationItem];
 };
 
 export const SmartNavigation = () => {
