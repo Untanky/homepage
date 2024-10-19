@@ -1,0 +1,9 @@
+.git
+.github
+.next
+.gitignore
+.editorconfig
+.env*
+node_modules
+Dockerfi
+le
