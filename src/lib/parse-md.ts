@@ -35,7 +35,6 @@ export const getFrontmatter = async <T extends Record<string, unknown> = never>(
 export const renderMarkdown = async (file: VFile): Promise<RenderMarkdownResult> => {
   const code = await compileMarkdownContent(file);
 
-  // @ts-expect-error typing of runtime is weird.
   const result = await run(code, {
     ...runtime,
     baseUrl: import.meta.url,
