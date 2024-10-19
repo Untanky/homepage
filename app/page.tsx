@@ -2,11 +2,21 @@ import { CodeBracketIcon, DocumentTextIcon } from '@heroicons/react/20/solid';
 import { GitHubIcon } from '@/components/github-icon';
 import Link from 'next/link';
 import { LinkedInIcon } from '@/components/linkedin-icon';
+import Image from 'next/image';
 
 export default function Home() {
   return (
-    <main className="mx-4 sm:w-[400px] sm:mx-auto">
-      <h1 className="text-4xl font-bold text-center mt-4">
+    <main className="mx-4 sm:w-[400px] sm:mx-auto mt-4">
+      <Image
+        src="/profile.jpg"
+        alt="Profile Picture"
+        width={250}
+        height={250}
+        priority={true}
+        placeholder="empty"
+        className="mx-auto rounded-2xl"
+      />
+      <h1 className="text-4xl font-bold text-center mt-2">
         Lukas Grimm
       </h1>
       <h2 className="text-2xl font-semibold text-center text-zinc-700 dark:text-zinc-300">

@@ -1,6 +1,7 @@
 import { loadJsonFile } from '@/lib/load-file';
 import type { Resume } from '@/models/resume';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { Biography } from './biography';
 import { EducationList } from './education-list';
 import { ExperienceList } from './experience-list';
@@ -29,13 +30,22 @@ export default async function Resume() {
 
   return (
     <main className="grid grid-cols-1 grid-rows-[auto_min-content_min-content_auto] gap-4 grid-flow-dense md:grid-cols-3">
-      <header className="mt-4 md:col-span-3">
+      <header className="relative self-center md:col-span-3 py-4 border border-rose-500 rounded-2xl mt-[140px] md:mt-0">
         <h1 className="text-4xl font-bold text-center">
           Lukas Grimm
         </h1>
         <h2 className="text-2xl font-medium text-center">
           Software Engineer
         </h2>
+        <Image
+          src="/profile.jpg"
+          alt="Profile Picture"
+          width={150}
+          height={150}
+          priority={true}
+          placeholder="empty"
+          className="absolute top-[-140px] right-[109px] md:right-[-1px] md:top-[-23px] mx-auto rounded-2xl"
+        />
       </header>
       <ResumeSection className="mt-2 md:col-span-1" title="Biography">
         <Biography biography={resume.biography} />

@@ -1,6 +1,6 @@
 import { ChevronRightIcon } from '@heroicons/react/16/solid';
 import Link from 'next/link';
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 export type NavigationItem = {
   icon: ReactNode;
@@ -12,7 +12,7 @@ export const Navigation = ({ navigationItems }: { navigationItems: NavigationIte
   return (
     <nav className="flex items-center space-x-2 mb-2">
       {navigationItems.map((item, index) => (
-        <>
+        <Fragment key={item.href}>
           {index !== 0 && <ChevronRightIcon className="size-4 text-zinc-700 dark:text-zinc-300" />}
           <Link
             href={item.href}
@@ -21,7 +21,7 @@ export const Navigation = ({ navigationItems }: { navigationItems: NavigationIte
             {item.icon}
             <span>{item.label}</span>
           </Link>
-        </>
+        </Fragment>
       ))}
     </nav>
   );
