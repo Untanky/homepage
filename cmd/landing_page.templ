@@ -1,0 +1,50 @@
+package main
+
+type layoutModel struct {
+  title string
+}
+
+templ layout(model layoutModel, body templ.Component) {
+  <html>
+    <head>
+      <title>{ model.title }</title>
+      <link href="assets/index.css" rel="stylesheet">
+    </head>
+    <body class="relative">
+      @body
+    </body>
+  </html>
+}
+
+templ landingPage() {
+  <div class="absolute -top-48 w-full -z-10">
+    <img class="max-w-[587px] mx-auto [mask:linear-gradient(to_bottom,black_0%,black_70%,transparent_100%)]" alt="Profile Background" src="static/banner.png">
+  </div>
+  <div class="max-w-[370px] px-4 mx-auto flex flex-col space-y-4">
+    <img class="w-[224px] border-2 border-white rounded-4xl mx-auto mt-20" alt="Profile Picture" src="static/profile.jpg">
+    <div>
+      <h1 class="text-3xl font-bold text-center">
+        Lukas Grimm
+      </h1>
+      <h2 class="text-xl text-center">
+        Senior Software Engineer
+      </h2>
+    </div>
+    <ul class="flex flex-col space-y-3 items-center">
+      <li class="w-full">
+        <a class="block w-full bg-red-500 text-lg font-medium text-center px-4.75 py-2.25 border border-red-700 rounded-lg" href="https://github.com/untanky">
+          GitHub
+        </a>
+      </li>
+      <li class="w-full">
+        <a class="block w-full bg-red-500 text-lg font-medium text-center px-4.75 py-2.25 border border-red-700 rounded-lg" href="https://linkedin.com/in/lukasgrimm">
+          LinkedIn
+        </a>
+      </li>
+      <li class="w-full bg-gray-100 text-gray-700 text-lg font-medium text-center px-4.75 py-2.25 border border-gray-700 rounded-lg">
+        More coming soon...
+      </li>
+    </ul>
+  </div>
+}
+
