@@ -2,7 +2,7 @@ clean:
 	rm -rf dist
 
 tailwind-build:
-	npx @tailwindcss/cli -i assets/index.css -o dist/assets/index.css
+	npx @tailwindcss/cli -i cmd/assets/index.css -o dist/assets/index.css
 
 templ-generate:
 	templ generate

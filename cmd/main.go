@@ -28,7 +28,15 @@ func (handler *MainHandler) ServeHTTP(writer http.ResponseWriter, request *http.
 	model := layoutModel {
 		title: "Lukas Grimm",
 	}
-	layout(model, landingPage()).Render(request.Context(), writer)
+
+	data := landingPageModel {
+		links: []landingPageLink {
+			{ label: "GitHub", href: "https://github.com/untanky" },
+			{ label: "LinkedIn", href: "https://linkedin.com/in/lukasgrimm" },
+		},
+	}
+
+	layout(model, landingPage(data)).Render(request.Context(), writer)
 }
 
 func (handler *MainHandler) RegisterStatic(httpPrefix string, osPath string) {
