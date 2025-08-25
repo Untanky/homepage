@@ -7,8 +7,11 @@ tailwind-build:
 templ-generate:
 	templ generate
 
-go-build: clean tailwind-build templ-generate
-	go build -o dist/server ./...
+copy-migrations:
+	cp -r db dist
+
+go-build: clean tailwind-build templ-generate copy-migrations
+	go build -o dist/server ./cmd
 
 dev: go-build
 	cd dist && ./server

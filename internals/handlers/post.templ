@@ -1,0 +1,34 @@
+package handlers
+
+import "github.com/untanky/homepage/internals/blog"
+
+type overviewData struct {
+	posts []*blog.Post
+}
+
+templ overview(data overviewData) {
+	<main class="max-w-[1580px] flex flex-col mx-auto">
+		<h1 class="text-8xl font-black text-center my-4 mx-4">Blog</h1>
+		<div class="flex flex-col md:grid md:grid-cols-2 xl:grid-cols-3 gap-6 md:mx-4 mb-5">
+			for _, post := range data.posts {
+				<a href={ post.Slug } target="_blank" class="group">
+					<img
+						src={ post.BannerUrl }
+						alt="Blog post banner"
+						class="aspect-video w-full mb-1.5 grayscale group-hover:grayscale-0 transition-[filter] duration-500 select-none"
+					/>
+					<h2 class="text-2xl font-bold mx-4 md:mx-0">
+						{ post.Title }
+					</h2>
+					<p class="text-gray-700 line-clamp-3 mx-4 md:mx-0">
+						Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna
+						aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid
+						ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
+						pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est
+						laborum.
+					</p>
+				</a>
+			}
+		</div>
+	</main>
+}

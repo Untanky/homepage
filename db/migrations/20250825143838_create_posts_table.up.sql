@@ -1,0 +1,18 @@
+CREATE TABLE authors (
+  id TEXT PRIMARY KEY,
+  name TEXT NOT NULL,
+  picture_url TEXT NOT NULL
+);
+
+CREATE TABLE posts (
+  id TEXT PRIMARY KEY,
+  slug TEXT NOT NULL,
+  title TEXT NOT NULL,
+  author_id TEXT NOT NULL,
+  content TEXT NOT NULL,
+  keywords TEXT NOT NULL,
+  banner_url TEXT NOT NULL,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  edited_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  delete_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
