@@ -29,7 +29,7 @@ func (repo sqlPostRepository) GetAll(ctx context.Context) ([]*blog.Post, error) 
 	query, args, _ := sq.Select(
 		"p.id", "p.slug", "p.title", "a.id", "a.name",
 		"a.picture_url", "p.content", "p.keywords",
-		"p.banner_url", "p.created_at", "p.edited_at",
+		"banner_url", "p.created_at", "p.edited_at",
 	).
 		From(postTable).
 		Join("authors a ON a.id = author_id").
@@ -47,11 +47,10 @@ func (repo sqlPostRepository) GetAll(ctx context.Context) ([]*blog.Post, error) 
 		post := new(blog.Post)
 		author := new(blog.Author)
 		var id, keywords string
-		var createdAt, editedAt int64
 		err = rows.Scan(
 			&id, &post.Slug, &post.Title, &author.Id, &author.Name,
 			&author.PictureUrl, &post.Content, &keywords,
-			&post.BannerUrl, &createdAt, &editedAt,
+			&post.BannerUrl, &post.CreatedAt, &post.EditedAt,
 		)
 		if err != nil {
 			return nil, err
@@ -60,8 +59,6 @@ func (repo sqlPostRepository) GetAll(ctx context.Context) ([]*blog.Post, error) 
 		post.Id, _ = uuid.Parse(id)
 		post.Author = author
 		post.Keywords = strings.Split(keywords, ",")
-		post.CreatedAt = time.Unix(createdAt, 0)
-		post.EditedAt = time.Unix(editedAt, 0)
 
 		posts = append(posts, post)
 	}
@@ -73,7 +70,7 @@ func (repo sqlPostRepository) GetByID(ctx context.Context, id uuid.UUID) (*blog.
 	query, args, _ := sq.Select(
 		"slug", "title", "a.id", "a.name",
 		"a.picture_url", "content", "keywords",
-		"banner_url", "create_at", "edited_at",
+		"banner_url", "created_at", "edited_at",
 	).
 		From(postTable).
 		Join("authors a ON a.id author_id").
@@ -85,11 +82,10 @@ func (repo sqlPostRepository) GetByID(ctx context.Context, id uuid.UUID) (*blog.
 	post := new(blog.Post)
 	author := new(blog.Author)
 	var keywords string
-	var createdAt, editedAt int64
 	err := row.Scan(
 		&post.Slug, &post.Title, &author.Id, &author.Name,
 		&author.PictureUrl, &post.Content, &keywords,
-		&post.BannerUrl, &createdAt, &editedAt,
+		&post.BannerUrl, &post.CreatedAt, &post.EditedAt,
 	)
 	if err != nil {
 		return nil, err
@@ -98,20 +94,18 @@ func (repo sqlPostRepository) GetByID(ctx context.Context, id uuid.UUID) (*blog.
 	post.Id = id
 	post.Author = author
 	post.Keywords = strings.Split(keywords, ",")
-	post.CreatedAt = time.Unix(createdAt, 0)
-	post.EditedAt = time.Unix(editedAt, 0)
 
 	return post, nil
 }
 
 func (repo sqlPostRepository) GetBySlug(ctx context.Context, slug string) (*blog.Post, error) {
 	query, args, _ := sq.Select(
-		"id", "slug", "title", "a.id", "a.name",
+		"p.id", "slug", "title", "a.id", "a.name",
 		"a.picture_url", "content", "keywords",
-		"banner_url", "create_at", "edited_at",
+		"banner_url", "created_at", "edited_at",
 	).
 		From(postTable).
-		Join("authors a ON a.id author_id").
+		Join("authors a ON a.id = author_id").
 		Where(sq.And{sq.Eq{"delete_at": nil}, sq.Eq{"slug": slug}}).
 		Limit(1).
 		ToSql()
@@ -120,11 +114,10 @@ func (repo sqlPostRepository) GetBySlug(ctx context.Context, slug string) (*blog
 	post := new(blog.Post)
 	author := new(blog.Author)
 	var id, keywords string
-	var createdAt, editedAt int64
 	err := row.Scan(
 		&id, &post.Slug, &post.Title, &author.Id, &author.Name,
 		&author.PictureUrl, &post.Content, &keywords,
-		&post.BannerUrl, &createdAt, &editedAt,
+		&post.BannerUrl, &post.CreatedAt, &post.EditedAt,
 	)
 	if err != nil {
 		return nil, err
@@ -133,8 +126,6 @@ func (repo sqlPostRepository) GetBySlug(ctx context.Context, slug string) (*blog
 	post.Id, _ = uuid.Parse(id)
 	post.Author = author
 	post.Keywords = strings.Split(keywords, ",")
-	post.CreatedAt = time.Unix(createdAt, 0)
-	post.EditedAt = time.Unix(editedAt, 0)
 
 	return post, nil
 }

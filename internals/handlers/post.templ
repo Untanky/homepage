@@ -32,3 +32,14 @@ templ overview(data overviewData) {
 		</div>
 	</main>
 }
+
+type postData struct {
+	post *blog.Post
+}
+
+templ post(data postData) {
+	<main class="max-w-[780px] flex flex-col mx-auto">
+		<h1 class="text-8xl font-black text-center my-4 mx-4">{ data.post.Title }</h1>
+		@templ.Raw(data.post.Content)
+	</main>
+}

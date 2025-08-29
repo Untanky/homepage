@@ -63,7 +63,7 @@ func renderLandingPage(writer http.ResponseWriter, request *http.Request) {
 }
 
 func main() {
-	database, err := sql.Open("sqlite3", "data.db")
+	database, err := sql.Open("sqlite3", "../data.db")
 	if err != nil {
 		panic(err)
 	}
@@ -89,8 +89,8 @@ func main() {
 	handler := handlers.NewPostHandler(postService)
 
 	muxHandler := http.NewServeMux()
-	muxHandler.HandleFunc("GET /index.html", renderLandingPage)
-	muxHandler.Handle("/blog", handler)
+	muxHandler.HandleFunc("GET /{$}", renderLandingPage)
+	muxHandler.Handle("/blog/", http.StripPrefix("/blog", handler))
 
 	myHandler.handler = muxHandler
 	myHandler.RegisterStatic("/assets", "./assets")

@@ -17,8 +17,8 @@ func NewPostHandler(postService *blog.PostService) http.Handler {
 	}
 
 	handler := http.NewServeMux()
-	handler.HandleFunc("GET /blog", postHandler.renderOverview)
-	handler.HandleFunc("GET /blog/{slug}", postHandler.renderPost)
+	handler.HandleFunc("GET /{$}", postHandler.renderOverview)
+	handler.HandleFunc("GET /{slug}", postHandler.renderPost)
 
 	return handler
 }
@@ -44,5 +44,24 @@ func (handler postHandler) renderOverview(w http.ResponseWriter, r *http.Request
 }
 
 func (handler postHandler) renderPost(w http.ResponseWriter, r *http.Request) {
+	slug := r.PathValue("slug")
+	if slug == "" {
+		slog.Error("slug is missing", slog.String("path", r.URL.Path))
+		internalServerError(w, r)
+		return
+	}
 
+	pst, err := handler.service.GetBySlug(r.Context(), slug)
+	if err != nil {
+		slog.Error("could not render post", slog.Any("error", err))
+		internalServerError(w, r)
+		return
+	}
+
+	data := postData{
+		post: pst,
+	}
+
+	w.WriteHeader(http.StatusOK)
+	layout(layoutModel{title: pst.Title}, post(data)).Render(r.Context(), w)
 }
