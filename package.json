@@ -10,7 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.11",
-    "tailwindcss": "^4.1.11"
+    "@tailwindcss/cli": "^4.1.11"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.9",
+    "esbuild-plugin-tailwindcss": "^2.1.0",
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.9.2"
   }
 }

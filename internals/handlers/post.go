@@ -7,13 +7,19 @@ import (
 	"github.com/untanky/homepage/internals/blog"
 )
 
-type postHandler struct {
-	service *blog.PostService
+type Manifest interface {
+	GetUrl(entrypoint string) string
 }
 
-func NewPostHandler(postService *blog.PostService) http.Handler {
+type postHandler struct {
+	service  *blog.PostService
+	manifest Manifest
+}
+
+func NewPostHandler(postService *blog.PostService, manifest Manifest) http.Handler {
 	postHandler := postHandler{
-		service: postService,
+		service:  postService,
+		manifest: manifest,
 	}
 
 	handler := http.NewServeMux()
@@ -35,12 +41,18 @@ func (handler postHandler) renderOverview(w http.ResponseWriter, r *http.Request
 		return
 	}
 
+	layoutData := layoutModel{
+		title: "Blog | Lukas Grimm",
+
+		stylesheets: []string{handler.manifest.GetUrl("index.css")},
+		scripts:     []string{handler.manifest.GetUrl("index.ts")},
+	}
 	data := overviewData{
 		posts: posts,
 	}
 
 	w.WriteHeader(http.StatusOK)
-	layout(layoutModel{title: "Blog | Lukas Grimm"}, overview(data)).Render(r.Context(), w)
+	layout(layoutData, overview(data)).Render(r.Context(), w)
 }
 
 func (handler postHandler) renderPost(w http.ResponseWriter, r *http.Request) {

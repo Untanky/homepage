@@ -82,19 +82,25 @@ func main() {
 		panic(err)
 	}
 
+	manifest, err := readManifest()
+	if err != nil {
+		panic(err)
+	}
+
 	postRespository := db.NewPostRepository(database)
 	postService := blog.NewPostService(postRespository)
 
 	myHandler := &MainHandler{}
-	handler := handlers.NewPostHandler(postService)
+	handler := handlers.NewPostHandler(postService, manifest)
 
 	muxHandler := http.NewServeMux()
 	muxHandler.HandleFunc("GET /{$}", renderLandingPage)
 	muxHandler.Handle("/blog/", http.StripPrefix("/blog", handler))
 
 	myHandler.handler = muxHandler
-	myHandler.RegisterStatic("/assets", "./assets")
 	myHandler.RegisterStatic("/static", "../static")
+	myHandler.RegisterStatic("/css", "./css")
+	myHandler.RegisterStatic("/js", "./js")
 
 	server := &http.Server{
 		Addr:    ":8080",

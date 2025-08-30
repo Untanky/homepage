@@ -2,13 +2,21 @@ package handlers
 
 type layoutModel struct {
 	title string
+
+	stylesheets []string
+	scripts     []string
 }
 
 templ layout(model layoutModel, body templ.Component) {
 	<html>
 		<head>
 			<title>{ model.title }</title>
-			<link href="/assets/index.css" rel="stylesheet"/>
+			for _, stylesheet := range model.stylesheets {
+				<link href={ stylesheet } rel="stylesheet"/>
+			}
+			for _, script := range model.scripts {
+				<script src={ script }></script>
+			}
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		</head>
 		<body class="relative">
