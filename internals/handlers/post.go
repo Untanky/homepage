@@ -8,7 +8,7 @@ import (
 )
 
 type Manifest interface {
-	GetUrl(entrypoint string) string
+	GetUrls(entrypoint ...string) []string
 }
 
 type postHandler struct {
@@ -30,7 +30,11 @@ func NewPostHandler(postService *blog.PostService, manifest Manifest) http.Handl
 }
 
 func internalServerError(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusInternalServerError)
+}
 
+func notFoundError(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotFound)
 }
 
 func (handler postHandler) renderOverview(w http.ResponseWriter, r *http.Request) {
@@ -44,8 +48,8 @@ func (handler postHandler) renderOverview(w http.ResponseWriter, r *http.Request
 	layoutData := layoutModel{
 		title: "Blog | Lukas Grimm",
 
-		stylesheets: []string{handler.manifest.GetUrl("index.css")},
-		scripts:     []string{handler.manifest.GetUrl("index.ts")},
+		stylesheets: handler.manifest.GetUrls("index.css"),
+		scripts:     handler.manifest.GetUrls("index.ts"),
 	}
 	data := overviewData{
 		posts: posts,

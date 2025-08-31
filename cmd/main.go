@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
@@ -11,6 +12,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/untanky/homepage/internals/blog"
 	"github.com/untanky/homepage/internals/db"
+	"github.com/untanky/homepage/internals/file"
 	"github.com/untanky/homepage/internals/handlers"
 )
 
@@ -82,7 +84,13 @@ func main() {
 		panic(err)
 	}
 
-	manifest, err := readManifest()
+	f, err := os.Open("manifest.json")
+	if err != nil {
+		panic(err)
+	}
+
+	manifest, err := file.ReadManifest(f)
+	f.Close()
 	if err != nil {
 		panic(err)
 	}
@@ -93,14 +101,16 @@ func main() {
 	myHandler := &MainHandler{}
 	handler := handlers.NewPostHandler(postService, manifest)
 
+	manifestHandler := handlers.NewManifestHandler(manifest)
+
 	muxHandler := http.NewServeMux()
 	muxHandler.HandleFunc("GET /{$}", renderLandingPage)
 	muxHandler.Handle("/blog/", http.StripPrefix("/blog", handler))
+	muxHandler.Handle("/css/", manifestHandler)
+	muxHandler.Handle("/js/", manifestHandler)
 
 	myHandler.handler = muxHandler
 	myHandler.RegisterStatic("/static", "../static")
-	myHandler.RegisterStatic("/css", "./css")
-	myHandler.RegisterStatic("/js", "./js")
 
 	server := &http.Server{
 		Addr:    ":8080",
