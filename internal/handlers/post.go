@@ -4,11 +4,11 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/untanky/homepage/internals/blog"
+	"github.com/untanky/homepage/internal/blog"
 )
 
 type Manifest interface {
-	GetUrls(entrypoint ...string) []string
+  MapEntrypoints(entrypoints ...string) []string 
 }
 
 type postHandler struct {
@@ -48,8 +48,8 @@ func (handler postHandler) renderOverview(w http.ResponseWriter, r *http.Request
 	layoutData := layoutModel{
 		title: "Blog | Lukas Grimm",
 
-		stylesheets: handler.manifest.GetUrls("index.css"),
-		scripts:     handler.manifest.GetUrls("index.ts"),
+		stylesheets: handler.manifest.MapEntrypoints("index.css"),
+		scripts:     handler.manifest.MapEntrypoints("index.ts"),
 	}
 	data := overviewData{
 		posts: posts,

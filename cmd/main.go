@@ -3,17 +3,16 @@ package main
 import (
 	"database/sql"
 	"net/http"
-	"os"
 	"strings"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/untanky/homepage/internals/blog"
-	"github.com/untanky/homepage/internals/db"
-	"github.com/untanky/homepage/internals/file"
-	"github.com/untanky/homepage/internals/handlers"
+	"github.com/untanky/homepage/internal/assets"
+	"github.com/untanky/homepage/internal/blog"
+	"github.com/untanky/homepage/internal/db"
+	"github.com/untanky/homepage/internal/handlers"
 )
 
 type staticHandler struct {
@@ -84,30 +83,18 @@ func main() {
 		panic(err)
 	}
 
-	f, err := os.Open("manifest.json")
-	if err != nil {
-		panic(err)
-	}
-
-	manifest, err := file.ReadManifest(f)
-	f.Close()
-	if err != nil {
-		panic(err)
-	}
-
 	postRespository := db.NewPostRepository(database)
 	postService := blog.NewPostService(postRespository)
 
 	myHandler := &MainHandler{}
-	handler := handlers.NewPostHandler(postService, manifest)
+	handler := handlers.NewPostHandler(postService, assets.GetManifest())
 
-	manifestHandler := handlers.NewManifestHandler(manifest)
+	manifestHandler := handlers.NewAssetHandler()
 
 	muxHandler := http.NewServeMux()
 	muxHandler.HandleFunc("GET /{$}", renderLandingPage)
 	muxHandler.Handle("/blog/", http.StripPrefix("/blog", handler))
-	muxHandler.Handle("/css/", manifestHandler)
-	muxHandler.Handle("/js/", manifestHandler)
+	muxHandler.Handle("/assets/", manifestHandler)
 
 	myHandler.handler = muxHandler
 	myHandler.RegisterStatic("/static", "../static")

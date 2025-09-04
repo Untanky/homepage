@@ -10,7 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.11"
+    "@tailwindcss/cli": "^4.1.11",
+    "mime-types": "^3.0.1"
   },
   "devDependencies": {
     "esbuild": "^0.25.9",

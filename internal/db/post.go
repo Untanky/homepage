@@ -8,7 +8,7 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 	"github.com/google/uuid"
-	"github.com/untanky/homepage/internals/blog"
+	"github.com/untanky/homepage/internal/blog"
 )
 
 const (

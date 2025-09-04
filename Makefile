@@ -1,7 +1,8 @@
 clean:
-	rm -rf dist
+	rm -rf dist internal/assets/dist
 
 assets-build:
+	mkdir dist
 	node esbuild.mjs
 
 templ-generate:
