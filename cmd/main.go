@@ -34,7 +34,7 @@ func main() {
 		panic(err)
 	}
 
-	landingPageController := handlers.LandingPageController {
+	landingPageController := handlers.LandingPageController{
 		Manifest: assets.GetManifest(),
 	}
 

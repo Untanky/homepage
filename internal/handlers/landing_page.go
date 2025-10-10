@@ -14,8 +14,7 @@ type LandingPageController struct {
 
 func (c LandingPageController) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	layoutData := layoutModel{
-		title: "Lukas Grimm",
-
+		title:       "Lukas Grimm",
 		stylesheets: c.Manifest.MapEntrypoints("index.css"),
 		scripts:     c.Manifest.MapEntrypoints("index.ts"),
 	}

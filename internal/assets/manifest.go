@@ -16,7 +16,7 @@ var assets embed.FS
 var manifest Manifest
 
 var (
-	NotFound = errors.New("asset not found")
+	NotFound             = errors.New("asset not found")
 	EncodingDoesNotExist = errors.New("encoding does not exist")
 )
 

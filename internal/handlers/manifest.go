@@ -22,7 +22,7 @@ func writeEncodingHeader(header http.Header, encoding string) {
 
 type assetHandler struct {
 	manifest *assets.Manifest
-} 
+}
 
 func NewAssetHandler() http.Handler {
 	assetHandlerInstance := assetHandler{
@@ -59,7 +59,7 @@ func (h assetHandler) negotiateEncoding(asset assets.Asset, request *http.Reques
 
 func (h assetHandler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	path := request.PathValue("path")
-	asset, err := h.manifest.GetAsset(path) 
+	asset, err := h.manifest.GetAsset(path)
 	if errors.Is(err, assets.NotFound) {
 		notFoundError(writer, request)
 		return
@@ -79,11 +79,10 @@ func (h assetHandler) ServeHTTP(writer http.ResponseWriter, request *http.Reques
 	header.Set("Content-Length", strconv.FormatInt(file.Size, 10))
 	writeEncodingHeader(header, file.Encoding)
 	header.Set("Cache-Control", "public, max-age=31556952, immutable")
-	
+
 	writer.WriteHeader(http.StatusOK)
 	_, err = io.Copy(writer, reader)
 	if err != nil {
 		slog.ErrorContext(request.Context(), "error copying file content", slog.Any("error", err))
 	}
 }
-

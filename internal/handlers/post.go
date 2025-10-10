@@ -8,7 +8,7 @@ import (
 )
 
 type Manifest interface {
-  MapEntrypoints(entrypoints ...string) []string 
+	MapEntrypoints(entrypoints ...string) []string
 }
 
 type postHandler struct {
