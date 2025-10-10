@@ -22,7 +22,7 @@ func (c LandingPageController) ServeHTTP(writer http.ResponseWriter, request *ht
 
 	buffer := new(bytes.Buffer)
 	err := layout(
-		layoutData, 
+		layoutData,
 		landingPage(landingPageModel{
 			links: []landingPageLink{
 				{
@@ -34,8 +34,25 @@ func (c LandingPageController) ServeHTTP(writer http.ResponseWriter, request *ht
 					href:  "https://linkedin.com/in/lukasgrimm",
 				},
 			},
-		})).
-		Render(request.Context(), buffer)
+			profilePicture: imageModel{
+				source:      "/static/profile.jpg",
+				alternative: "Headshot of Lukas Grimm",
+				sources: []imageSource{
+					{
+						sourceSet: "/static/profile@1x.avif 1x, /static/profile@2x.avif 2x, /static/profile@3x.avif 3x",
+						mediaType: "image/avif",
+					},
+					{
+						sourceSet: "/static/profile@1x.webp 1x, /static/profile@2x.webp 2x, /static/profile@3x.webp 3x",
+						mediaType: "image/webp",
+					},
+					{
+						sourceSet: "/static/profile@1x.jpg 1x, /static/profile@2x.jpg 2x, /static/profile@3x.jpg 3x",
+						mediaType: "image/jpeg",
+					},
+				},
+			},
+		})).Render(request.Context(), buffer)
 	if err != nil {
 		writer.WriteHeader(http.StatusInternalServerError)
 		return
@@ -53,4 +70,3 @@ func (c LandingPageController) ServeHTTP(writer http.ResponseWriter, request *ht
 	writer.WriteHeader(http.StatusOK)
 	buffer.WriteTo(writer)
 }
-
