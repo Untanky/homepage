@@ -9,6 +9,7 @@ import (
 
 	"github.com/untanky/homepage/blog"
 	"github.com/untanky/homepage/internal/database"
+	"github.com/untanky/homepage/internal/telemetry"
 )
 
 func main() {
@@ -21,6 +22,15 @@ func main() {
 }
 
 func run(ctx context.Context) error {
+	logger, err := telemetry.Setup(ctx, telemetry.Config{})
+	if err != nil {
+		return fmt.Errorf("setting up logging: %w", err)
+	}
+
+	logger.InfoContext(ctx, "starting server")
+
+	logger.InfoContext(ctx, "setting up database")
+
 	databaseClient, err := database.Setup(ctx, database.Config{
 		Username: "postgres",
 		Password: "postgres",
@@ -33,9 +43,11 @@ func run(ctx context.Context) error {
 	}
 	defer func() {
 		if err := databaseClient.Close(ctx); err != nil {
-			slog.ErrorContext(ctx, "failed to close database client", slog.Any("error", err))
+			logger.ErrorContext(ctx, "failed to close database client", slog.Any("error", err))
 		}
 	}()
+
+	logger.InfoContext(ctx, "setting up server")
 
 	server := new(http.Server{
 		Addr:    ":8080",
