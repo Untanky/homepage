@@ -97,3 +97,31 @@ templ postList(data BlogListData) {
     </a>
   }
 }
+
+type PostData struct {
+  Post blog.Post
+}
+
+templ PostPage(data PostData, options ...PageOption) {
+  {{
+    cfg := pageConfig{}
+    for _, opt := range options {
+      opt(ctx, &cfg)
+    }
+    metadata := data.Post.Metadata()
+  }}
+
+  @html(cfg) {
+    <main class="max-w-[850px] mx-auto">
+      <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
+      <div class="max-w-[640px] px-4 mx-auto mt-6 space-y-2">
+        <h1 class="text-5xl font-bold">
+          {metadata.Title}
+        </h1>
+      </div>
+      <div class="max-w-[700px] mx-auto mt-8 space-y-8">
+        @post(data.Post)
+      </div>
+    </main>
+  }
+}

@@ -1,6 +1,8 @@
 package bloghttp
 
 import (
+	"bytes"
+	"io"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -68,6 +70,39 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {
+	post := memoryPost{
+		metadata: blog.PostMetadata{
+			BlogID:  blog.BlogID(uuid.New()),
+			ID:      blog.PostID(uuid.New()),
+			Title:   "My first blog post",
+			Summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id pulvinar sem. Vivamus consectetur, leo sed tincidunt varius, neque sapien laoreet justo, in mollis quam orci eget nisl. Phasellus urna purus, facilisis a posuere a, auctor in odio.",
+		},
+		buffer: bytes.NewBuffer([]byte("<h2 class=\"text-2xl\">Works</h2>")),
+	}
+
+	data := components.PostData{
+		Post: &post,
+	}
+
 	writer.WriteHeader(http.StatusOK)
-	writer.Write([]byte("post"))
+	components.PostPage(data,
+		components.WithScript("https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
+	).Render(request.Context(), writer)
+}
+
+type memoryPost struct {
+	metadata blog.PostMetadata
+	buffer   *bytes.Buffer
+}
+
+func (post *memoryPost) Metadata() blog.PostMetadata {
+	return post.metadata
+}
+
+func (post *memoryPost) WriteTo(writer io.Writer) (int64, error) {
+	return post.buffer.WriteTo(writer)
+}
+
+func (post *memoryPost) Close() error {
+	return nil
 }
