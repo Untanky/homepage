@@ -51,7 +51,7 @@ func run(ctx context.Context) error {
 
 	server := new(http.Server{
 		Addr:    ":8080",
-		Handler: blog.Handler(),
+		Handler: telemetry.NewHandler(blog.Handler(), logger),
 	})
 
 	if err := server.ListenAndServe(); err != nil {
