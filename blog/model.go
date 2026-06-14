@@ -1,6 +1,7 @@
 package blog
 
 import (
+	"fmt"
 	"io"
 	"time"
 
@@ -18,6 +19,10 @@ type Blog struct {
 	ID      BlogID
 	Title   string
 	Summary string
+}
+
+func (blog Blog) PostURL(metadata PostMetadata) string {
+	return fmt.Sprintf("/%s", metadata.Slug)
 }
 
 type Author struct {

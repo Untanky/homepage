@@ -56,19 +56,15 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 		},
 	}
 
-	htmlData := components.HTMLData{
-		Title: blg.Title,
-
-		Scripts: []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
-	}
-
 	blogListData := components.BlogListData{
 		Blog:  blg,
 		Posts: posts,
 	}
 
 	writer.WriteHeader(http.StatusOK)
-	components.HTML(htmlData, components.BlogList(blogListData)).Render(request.Context(), writer)
+	components.BlogPage(blogListData,
+		components.WithScript("https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
+	).Render(request.Context(), writer)
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {

@@ -1,29 +1,52 @@
 package components
 
-import "github.com/untanky/homepage/blog"
+import (
+  "context"
+  "github.com/untanky/homepage/blog"
+)
 
-type HTMLData struct {
-  Title string
+type pageConfig struct {
+  title string
 
-  Scripts     []string
-  Stylesheets []string
+  scripts     []string
+  stylesheets []string
 }
 
-templ HTML(data HTMLData, body templ.Component) {
+type PageOption func(ctx context.Context, cfg *pageConfig)
+
+func WithTitle(title string) PageOption {
+  return func(ctx context.Context, cfg *pageConfig) {
+     cfg.title = title
+  }
+}
+
+func WithScript(scriptURL string) PageOption {
+  return func(ctx context.Context, cfg *pageConfig) {
+     cfg.scripts = append(cfg.scripts, scriptURL)
+  }
+}
+
+func WithStylesheet(stylesheetURL string) PageOption {
+  return func(ctx context.Context, cfg *pageConfig) {
+     cfg.stylesheets = append(cfg.stylesheets, stylesheetURL)
+  }
+}
+
+templ html(cfg pageConfig) {
   <html>
     <head>
-      <title>{data.Title}</title>
+      <title>{cfg.title}</title>
       <meta charset="UTF-8" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      for _, script := range data.Scripts {
+      for _, script := range cfg.scripts {
       <script src={script}></script>
       }
-      for _, stylesheet := range data.Stylesheets {
+      for _, stylesheet := range cfg.stylesheets {
       <link rel="stylesheet" href={stylesheet} />
       }
     </head>
     <body>
-      @body
+      { children... }
     </body>
   </html>
 }
@@ -33,26 +56,35 @@ type BlogListData struct {
   Posts []blog.PostMetadata
 }
 
-templ BlogList(data BlogListData) {
-  <main class="max-w-[850px] mx-auto">
-    <div class="bg-red-500/25 aspect-3/1 w-full"></div>
-    <div class="max-w-[640px] px-4 mx-auto mt-6 space-y-2">
-      <h1 class="text-5xl font-bold">
-        {data.Blog.Title}
-      </h1>
-      <p class="text-gray-700 text-lg">
-        {data.Blog.Summary}
-      </p>
-    </div>
-    <div class="max-w-[640px] mx-auto mt-8 space-y-8">
-      @List(data.Posts)
-    </div>
-  </main>
+templ BlogPage(data BlogListData, options ...PageOption) {
+  {{
+    cfg := pageConfig{}
+    for _, opt := range options {
+      opt(ctx, &cfg)
+    }
+  }}
+
+  @html(cfg) {
+    <main class="max-w-[850px] mx-auto">
+      <div class="bg-red-500/25 aspect-3/1 w-full"></div>
+      <div class="max-w-[640px] px-4 mx-auto mt-6 space-y-2">
+        <h1 class="text-5xl font-bold">
+          {data.Blog.Title}
+        </h1>
+        <p class="text-gray-700 text-lg">
+          {data.Blog.Summary}
+        </p>
+      </div>
+      <div class="max-w-[640px] mx-auto mt-8 space-y-8">
+        @postList(data)
+      </div>
+    </main>
+  }
 }
 
-templ List(posts []blog.PostMetadata) {
-  for _, post := range posts {
-    <div class="space-y-2">
+templ postList(data BlogListData) {
+  for _, post := range data.Posts {
+    <a href={data.Blog.PostURL(post)} class="block space-y-2">
       <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
       <div class="px-4 space-y-1">
         <h2 class="text-3xl font-semibold">
@@ -62,6 +94,6 @@ templ List(posts []blog.PostMetadata) {
           {post.Summary}
         </p>
       </div>
-    </div>
+    </a>
   }
 }
