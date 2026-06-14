@@ -1,6 +1,10 @@
 package blog
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/untanky/homepage/internal/components"
+)
 
 func Handler() http.Handler {
 	ctrl := new(controller{})
@@ -18,7 +22,11 @@ type controller struct {
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
 	writer.WriteHeader(http.StatusOK)
-	writer.Write([]byte("post list"))
+	components.HTML(components.HTMLData{
+		Title: "Blog",
+
+		Scripts: []string{"https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"},
+	}).Render(request.Context(), writer)
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {

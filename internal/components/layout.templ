@@ -1,6 +1,25 @@
 package components
 
-templ Layout() {
+type HTMLData struct {
+  Title string
+
+  Scripts     []string
+  Stylesheets []string
+}
+
+templ HTML(data HTMLData) {
   <html>
+    <head>
+      <title>{data.Title}</title>
+      for _, script := range data.Scripts {
+      <script src={script}></script>
+      }
+      for _, stylesheet := range data.Stylesheets {
+      <link rel="stylesheet" href={stylesheet} />
+      }
+    </head>
+    <body>
+      <h1>Title</h1>
+    </body>
   </html>
 }
