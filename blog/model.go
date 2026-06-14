@@ -14,6 +14,12 @@ type (
 	PostID   uuid.UUID
 )
 
+type Blog struct {
+	ID      BlogID
+	Title   string
+	Summary string
+}
+
 type Author struct {
 	ID        AuthorID
 	Name      string
@@ -26,6 +32,7 @@ type PostMetadata struct {
 	Slug   string
 
 	Title    string
+	Summary  string
 	BannerID MediaID
 
 	CreatedAt time.Time

@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/untanky/homepage/blog"
+	bloghttp "github.com/untanky/homepage/blog/http"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/telemetry"
 )
@@ -51,7 +51,7 @@ func run(ctx context.Context) error {
 
 	server := new(http.Server{
 		Addr:    ":8080",
-		Handler: telemetry.NewHandler(blog.Handler(), logger),
+		Handler: telemetry.NewHandler(bloghttp.Handler(), logger),
 	})
 
 	if err := server.ListenAndServe(); err != nil {
