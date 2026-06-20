@@ -40,6 +40,8 @@ type PostMetadata struct {
 	Summary  string
 	BannerID MediaID
 
+	Author Author
+
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }

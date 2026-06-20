@@ -53,7 +53,7 @@ templ html(cfg pageConfig) {
 
 type BlogListData struct {
   Blog  blog.Blog
-  Posts []blog.PostMetadata
+  Posts []*blog.PostMetadata
 }
 
 templ BlogPage(data BlogListData, options ...PageOption) {
@@ -84,7 +84,7 @@ templ BlogPage(data BlogListData, options ...PageOption) {
 
 templ postList(data BlogListData) {
   for _, post := range data.Posts {
-    <a href={data.Blog.PostURL(post)} class="block space-y-2">
+    <a href={data.Blog.PostURL(*post)} class="block space-y-2">
       <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
       <div class="px-4 space-y-1">
         <h2 class="text-3xl font-semibold">

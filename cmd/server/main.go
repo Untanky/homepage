@@ -7,7 +7,9 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/jackc/pgx/v5"
 	bloghttp "github.com/untanky/homepage/blog/http"
+	"github.com/untanky/homepage/blog/sql"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/telemetry"
 )
@@ -51,7 +53,7 @@ func run(ctx context.Context) error {
 
 	server := new(http.Server{
 		Addr:    ":8080",
-		Handler: telemetry.NewHandler(buildHandler(), logger),
+		Handler: telemetry.NewHandler(buildHandler(databaseClient), logger),
 	})
 
 	if err := server.ListenAndServe(); err != nil {
@@ -61,12 +63,14 @@ func run(ctx context.Context) error {
 	return nil
 }
 
-func buildHandler() http.Handler {
+func buildHandler(conn *pgx.Conn) http.Handler {
+	repo := sql.NewBlogRepository(conn)
+
 	mux := http.NewServeMux()
 
 	assetHandler := http.FileServer(http.Dir("./tmp/web"))
 	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
-	mux.Handle("/{a...}", bloghttp.Handler())
+	mux.Handle("/{a...}", bloghttp.Handler(repo))
 
 	return mux
 }

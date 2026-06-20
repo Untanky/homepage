@@ -134,7 +134,7 @@ func html(cfg pageConfig) templ.Component {
 
 type BlogListData struct {
 	Blog  blog.Blog
-	Posts []blog.PostMetadata
+	Posts []*blog.PostMetadata
 }
 
 func BlogPage(data BlogListData, options ...PageOption) templ.Component {
@@ -249,9 +249,9 @@ func postList(data BlogListData) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var10 templ.SafeURL
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinURLErrs(data.Blog.PostURL(post))
+			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinURLErrs(data.Blog.PostURL(*post))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout.templ`, Line: 87, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/layout.templ`, Line: 87, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
 			if templ_7745c5c3_Err != nil {

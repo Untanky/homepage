@@ -2,7 +2,9 @@ package http
 
 import (
 	"bytes"
+	"context"
 	"io"
+	"log/slog"
 	"net/http"
 
 	"github.com/google/uuid"
@@ -10,8 +12,14 @@ import (
 	"github.com/untanky/homepage/internal/components"
 )
 
-func Handler() http.Handler {
-	ctrl := new(controller{})
+type Repository interface {
+	GetAllMetadata(ctx context.Context, blogID blog.BlogID) ([]*blog.PostMetadata, error)
+}
+
+func Handler(repo Repository) http.Handler {
+	ctrl := new(controller{
+		repo: repo,
+	})
 
 	mux := http.NewServeMux()
 
@@ -22,40 +30,21 @@ func Handler() http.Handler {
 }
 
 type controller struct {
+	repo Repository
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
 	blg := blog.Blog{
-		ID:      blog.BlogID(uuid.New()),
+		ID:      blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")),
 		Title:   "Lukas' Blog",
 		Summary: "A blog about technology I find interesting.",
 	}
 
-	posts := []blog.PostMetadata{
-		{
-			BlogID:  blg.ID,
-			ID:      blog.PostID(uuid.New()),
-			Title:   "My first blog post",
-			Summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id pulvinar sem. Vivamus consectetur, leo sed tincidunt varius, neque sapien laoreet justo, in mollis quam orci eget nisl. Phasellus urna purus, facilisis a posuere a, auctor in odio.",
-		},
-		{
-			BlogID:  blg.ID,
-			ID:      blog.PostID(uuid.New()),
-			Title:   "My second blog post",
-			Summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id pulvinar sem. Vivamus consectetur, leo sed tincidunt varius, neque sapien laoreet justo, in mollis quam orci eget nisl. Phasellus urna purus, facilisis a posuere a, auctor in odio.",
-		},
-		{
-			BlogID:  blg.ID,
-			ID:      blog.PostID(uuid.New()),
-			Title:   "My third blog post",
-			Summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id pulvinar sem. Vivamus consectetur, leo sed tincidunt varius, neque sapien laoreet justo, in mollis quam orci eget nisl. Phasellus urna purus, facilisis a posuere a, auctor in odio.",
-		},
-		{
-			BlogID:  blg.ID,
-			ID:      blog.PostID(uuid.New()),
-			Title:   "My fourth blog post",
-			Summary: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam id pulvinar sem. Vivamus consectetur, leo sed tincidunt varius, neque sapien laoreet justo, in mollis quam orci eget nisl. Phasellus urna purus, facilisis a posuere a, auctor in odio.",
-		},
+	posts, err := c.repo.GetAllMetadata(request.Context(), blg.ID)
+	if err != nil {
+		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
 	blogListData := components.BlogListData{

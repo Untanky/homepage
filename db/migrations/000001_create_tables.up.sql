@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS posts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   blog_id UUID NOT NULL REFERENCES blogs(id) ON DELETE CASCADE,
   author_id UUID NOT NULL REFERENCES authors(id) ON DELETE RESTRICT,
+  slug VARCHAR(32),
   title varchar(256) NOT NULL,
   summary TEXT,
   content TEXT,
