@@ -8,3 +8,10 @@ watch/build: generate
 
 watch:
 	@go tool air
+
+migrate/create:
+	@read -p "Enter migration name: " MIGRATION_NAME; \
+	go tool migrate create -seq -digits 6 -dir db/migrations -ext sql "$$MIGRATION_NAME"
+
+migrate:
+	@go run ./cmd/migrate
