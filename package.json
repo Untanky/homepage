@@ -1,0 +1,18 @@
+{
+  "name": "homepage",
+  "version": "latest",
+  "description": "",
+  "type": "module",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "Lukas Grimm",
+  "devDependencies": {
+    "autoprefixer": "^10.5.0",
+    "esbuild": "^0.28.1",
+    "esbuild-plugin-tailwindcss": "^2.2.0",
+    "postcss": "^8.5.15",
+    "tailwindcss": "^4.3.1",
+    "typescript": "^6.0.3"
+  }
+}
