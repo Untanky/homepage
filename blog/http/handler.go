@@ -13,12 +13,17 @@ import (
 )
 
 type Repository interface {
+	GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error)
+}
+
+type PostRepository interface {
 	GetAllMetadata(ctx context.Context, blogID blog.BlogID) ([]*blog.PostMetadata, error)
 }
 
-func Handler(repo Repository) http.Handler {
+func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
 	ctrl := new(controller{
-		repo: repo,
+		blogRepo: blogRepo,
+		postRepo: postRepo,
 	})
 
 	mux := http.NewServeMux()
@@ -30,17 +35,19 @@ func Handler(repo Repository) http.Handler {
 }
 
 type controller struct {
-	repo Repository
+	blogRepo Repository
+	postRepo PostRepository
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
-	blg := blog.Blog{
-		ID:      blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")),
-		Title:   "Lukas' Blog",
-		Summary: "A blog about technology I find interesting.",
+	blg, err := c.blogRepo.GetBlog(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")))
+	if err != nil {
+		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	posts, err := c.repo.GetAllMetadata(request.Context(), blg.ID)
+	posts, err := c.postRepo.GetAllMetadata(request.Context(), blg.ID)
 	if err != nil {
 		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
 		writer.WriteHeader(http.StatusInternalServerError)

@@ -18,6 +18,18 @@ func NewBlogRepository(conn *pgx.Conn) *BlogRepository {
 	}
 }
 
+func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error) {
+	result := repo.db.QueryRow(ctx, "SELECT id, title, summary FROM blogs WHERE id = $1 LIMIT 1", blogID)
+
+	blg := blog.Blog{}
+	err := result.Scan(&blg.ID, &blg.Title, &blg.Summary)
+	if err != nil {
+		return blog.Blog{}, fmt.Errorf("retrieving blog: %w", err)
+	}
+
+	return blg, nil
+}
+
 func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.BlogID) ([]*blog.PostMetadata, error) {
 	result, err := repo.db.Query(ctx, "SELECT posts.id, posts.blog_id, posts.title, posts.slug, posts.summary, posts.banner_id, posts.created_at, posts.updated_at, authors.id, authors.name, authors.picture_id FROM posts JOIN authors ON posts.author_id = authors.id WHERE posts.blog_id = $1", blogID)
 	if err != nil {

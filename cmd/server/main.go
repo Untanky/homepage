@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/untanky/homepage/blog"
 	bloghttp "github.com/untanky/homepage/blog/http"
 	"github.com/untanky/homepage/blog/sql"
 	"github.com/untanky/homepage/internal/database"
@@ -70,7 +71,7 @@ func buildHandler(conn *pgx.Conn) http.Handler {
 
 	assetHandler := http.FileServer(http.Dir("./tmp/web"))
 	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
-	mux.Handle("/{a...}", bloghttp.Handler(repo))
+	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo))
 
 	return mux
 }
