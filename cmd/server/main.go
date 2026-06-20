@@ -51,7 +51,7 @@ func run(ctx context.Context) error {
 
 	server := new(http.Server{
 		Addr:    ":8080",
-		Handler: telemetry.NewHandler(bloghttp.Handler(), logger),
+		Handler: telemetry.NewHandler(buildHandler(), logger),
 	})
 
 	if err := server.ListenAndServe(); err != nil {
@@ -59,4 +59,14 @@ func run(ctx context.Context) error {
 	}
 
 	return nil
+}
+
+func buildHandler() http.Handler {
+	mux := http.NewServeMux()
+
+	assetHandler := http.FileServer(http.Dir("./tmp/web"))
+	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
+	mux.Handle("/{a...}", bloghttp.Handler())
+
+	return mux
 }

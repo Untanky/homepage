@@ -65,7 +65,7 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 
 	writer.WriteHeader(http.StatusOK)
 	components.BlogPage(blogListData,
-		components.WithScript("https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
+		components.WithStylesheet("/assets/main.css"),
 	).Render(request.Context(), writer)
 }
 
@@ -86,7 +86,7 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 
 	writer.WriteHeader(http.StatusOK)
 	components.PostPage(data,
-		components.WithScript("https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
+		components.WithStylesheet("/assets/main.css"),
 	).Render(request.Context(), writer)
 }
 
