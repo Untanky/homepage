@@ -3,11 +3,15 @@ package sql
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/blog"
+	myerrors "github.com/untanky/homepage/internal/errors"
 )
+
+var postNotFound = errors.New("blog post not found")
 
 type BlogRepository struct {
 	db *pgx.Conn
@@ -25,7 +29,7 @@ func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (bl
 	blg := blog.Blog{}
 	err := result.Scan(&blg.ID, &blg.Title, &blg.Summary)
 	if err != nil {
-		return blog.Blog{}, fmt.Errorf("retrieving blog: %w", err)
+		return blog.Blog{}, myerrors.InternalServerError(fmt.Errorf("retrieving blog: %w", err))
 	}
 
 	return blg, nil
@@ -45,7 +49,7 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 
 		err := result.Scan(&post.ID, &post.BlogID, &post.Title, &post.Slug, &post.Summary, &post.BannerID, &post.CreatedAt, &post.UpdatedAt, &post.Author.ID, &post.Author.Name, &post.Author.PictureID)
 		if err != nil {
-			return nil, fmt.Errorf("scanning metadata: %w", err)
+			return nil, myerrors.InternalServerError(fmt.Errorf("scanning metadata: %w", err))
 		}
 
 		metadataList = append(metadataList, post)
@@ -63,7 +67,11 @@ func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, pos
 	err := row.Scan(&metadata.ID, &metadata.BlogID, &metadata.Title, &metadata.Slug, &metadata.Summary, &metadata.BannerID, &metadata.CreatedAt, &metadata.UpdatedAt, &content, &metadata.Author.ID, &metadata.Author.Name, &metadata.Author.PictureID)
 
 	if err != nil {
-		return nil, fmt.Errorf("scanning blog post data: %w", err)
+		if errors.Is(err, pgx.ErrNoRows) {
+			return nil, myerrors.NotFoundError(fmt.Errorf("blog id: %s, post id: %s: %w", blogID, postID, postNotFound))
+		}
+
+		return nil, myerrors.InternalServerError(fmt.Errorf("scanning blog post data: %w", err))
 	}
 
 	return &memoryPost{
