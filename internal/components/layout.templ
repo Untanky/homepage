@@ -65,9 +65,9 @@ templ BlogPage(data BlogListData, options ...PageOption) {
   }}
 
   @html(cfg) {
-    <main class="max-w-[850px] mx-auto">
+    <main class="max-w-(--content-width) mx-auto">
       <div class="bg-red-500/25 aspect-3/1 w-full"></div>
-      <div class="max-w-[640px] px-4 mx-auto mt-6 space-y-2">
+      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
         <h1 class="text-5xl font-bold">
           {data.Blog.Title}
         </h1>
@@ -75,7 +75,7 @@ templ BlogPage(data BlogListData, options ...PageOption) {
           {data.Blog.Summary}
         </p>
       </div>
-      <div class="max-w-[640px] mx-auto mt-8 space-y-8">
+      <div class="max-w-(--text-width) mx-auto mt-8 space-y-8">
         @postList(data)
       </div>
     </main>
@@ -112,9 +112,9 @@ templ PostPage(data PostData, options ...PageOption) {
   }}
 
   @html(cfg) {
-    <main class="max-w-[850px] mx-auto">
+    <main class="max-w-(--content-width) mx-auto">
       <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
-      <div class="max-w-[640px] px-4 mx-auto mt-6 space-y-2">
+      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
         <h1 class="text-5xl font-bold">
           {metadata.Title}
         </h1>

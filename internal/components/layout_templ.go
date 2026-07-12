@@ -174,7 +174,7 @@ func BlogPage(data BlogListData, options ...PageOption) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<main class=\"max-w-[850px] mx-auto\"><div class=\"bg-red-500/25 aspect-3/1 w-full\"></div><div class=\"max-w-[640px] px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-5xl font-bold\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<main class=\"max-w-(--content-width) mx-auto\"><div class=\"bg-red-500/25 aspect-3/1 w-full\"></div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-5xl font-bold\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -200,7 +200,7 @@ func BlogPage(data BlogListData, options ...PageOption) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p></div><div class=\"max-w-[640px] mx-auto mt-8 space-y-8\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</p></div><div class=\"max-w-(--text-width) mx-auto mt-8 space-y-8\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -334,7 +334,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<main class=\"max-w-[850px] mx-auto\"><div class=\"bg-blue-500/25 aspect-3/1 w-full\"></div><div class=\"max-w-[640px] px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-5xl font-bold\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 17, "<main class=\"max-w-(--content-width) mx-auto\"><div class=\"bg-blue-500/25 aspect-3/1 w-full\"></div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-5xl font-bold\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

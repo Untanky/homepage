@@ -1,8 +1,16 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@layer theme {
+  :root,
+  :host {
+    --content-width: calc(var(--spacing) * 220);
+    --text-width: calc(var(--spacing) * 160);
+  }
+}
+
 @layer utilities {
   .prose > *:not(img) {
-    @apply max-w-160 mx-auto px-4;
+    @apply max-w-(--text-width) mx-auto px-4;
   }
 }
