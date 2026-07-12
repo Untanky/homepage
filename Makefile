@@ -3,7 +3,10 @@ generate: generate/templ
 generate/templ:
 	@go tool templ generate
 
-watch/build: generate
+build/web:
+	@node ./esbuild.ts
+
+watch/build: generate build/web
 	@go build -o ./tmp/server ./cmd/server
 
 watch:
