@@ -119,9 +119,9 @@ templ PostPage(data PostData, options ...PageOption) {
           {metadata.Title}
         </h1>
       </div>
-      <div class="max-w-[700px] mx-auto mt-8 space-y-8">
+      <article class="prose mx-auto mt-8 space-y-8">
         @post(data.Post)
-      </div>
+      </article>
     </main>
   }
 }

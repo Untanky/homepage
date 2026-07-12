@@ -1,1 +1,8 @@
-@import "tailwindcss"
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@layer utilities {
+  .prose > *:not(img) {
+    @apply max-w-160 mx-auto px-4;
+  }
+}
