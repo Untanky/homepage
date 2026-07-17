@@ -12,6 +12,8 @@ import (
 	bloghttp "github.com/untanky/homepage/blog/http"
 	"github.com/untanky/homepage/blog/sql"
 	"github.com/untanky/homepage/internal/database"
+	mediahttp "github.com/untanky/homepage/internal/media/http"
+	mediasql "github.com/untanky/homepage/internal/media/sql"
 	"github.com/untanky/homepage/internal/telemetry"
 )
 
@@ -66,11 +68,13 @@ func run(ctx context.Context) error {
 
 func buildHandler(conn *pgx.Conn) http.Handler {
 	repo := sql.NewBlogRepository(conn)
+	mediaRepo := mediasql.NewMediaRepository(conn)
 
 	mux := http.NewServeMux()
 
 	assetHandler := http.FileServer(http.Dir("./tmp/web"))
 	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
+	mux.Handle("/media/{a...}", http.StripPrefix("/media", mediahttp.Handler(mediaRepo)))
 	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo))
 
 	return mux

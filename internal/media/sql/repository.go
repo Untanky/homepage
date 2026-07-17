@@ -1,7 +1,9 @@
 package sql
 
 import (
+	"bytes"
 	"context"
+	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/internal/media"
@@ -15,6 +17,25 @@ func NewMediaRepository(db *pgx.Conn) *MediaRepository {
 	return new(MediaRepository{
 		db: db,
 	})
+}
+
+func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, scale float64, mimetype string) (media.AssetVersion, error) {
+	row := repo.db.QueryRow(ctx, "SELECT av.data FROM media.asset_versions av JOIN media.assets a ON av.asset_id = a.id WHERE a.name = $1 AND av.scale = $2 AND av.mimetype = $3 LIMIT 1", path, scale, strings.ToUpper(mimetype))
+
+	version := media.AssetVersion{
+		Scale:     scale,
+		MediaType: mimetype,
+	}
+
+	data := []byte{}
+
+	if err := row.Scan(&data); err != nil {
+		return media.AssetVersion{}, err
+	}
+
+	version.Buffer = bytes.NewBuffer(data)
+
+	return version, nil
 }
 
 func (repo *MediaRepository) Create(ctx context.Context, asset media.Asset) error {
