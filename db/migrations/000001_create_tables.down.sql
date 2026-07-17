@@ -1,3 +1,7 @@
+DROP TABLE IF EXISTS media.asset_versions;
+DROP TABLE IF EXISTS media.assets;
+DROP SCHEMA IF EXISTS media;
+
 DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS authors;
 DROP TABLE IF EXISTS blogs;
