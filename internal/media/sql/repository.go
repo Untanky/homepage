@@ -20,12 +20,17 @@ func NewMediaRepository(db *pgx.Conn) *MediaRepository {
 }
 
 func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, scale float64, mimetype string) (media.AssetVersion, error) {
-	row := repo.db.QueryRow(ctx, "SELECT av.data FROM media.asset_versions av JOIN media.assets a ON av.asset_id = a.id WHERE a.name = $1 AND av.scale = $2 AND av.mimetype = $3 LIMIT 1", path, scale, strings.ToUpper(mimetype))
+	const queryAssetVersion = `
+    SELECT av.data
+    FROM media.asset_versions av
+    JOIN media.assets a ON av.asset_id = a.id
+    WHERE a.name = $1
+      AND av.scale = $2
+      AND av.mimetype = $3
+    LIMIT 1
+	`
 
-	version := media.AssetVersion{
-		Scale:     scale,
-		MediaType: mimetype,
-	}
+	row := repo.db.QueryRow(ctx, queryAssetVersion, path, scale, strings.ToUpper(mimetype))
 
 	data := []byte{}
 
@@ -33,32 +38,39 @@ func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, s
 		return media.AssetVersion{}, err
 	}
 
-	version.Buffer = bytes.NewBuffer(data)
-
-	return version, nil
+	return media.AssetVersion{
+		Scale:     scale,
+		MediaType: mimetype,
+		Buffer:    bytes.NewBuffer(data),
+	}, nil
 }
 
 func (repo *MediaRepository) Create(ctx context.Context, asset media.Asset) error {
+	const (
+		insertAssetQuery = `
+			INSERT INTO media.assets (id, name, width, height)
+			VALUES ($1, $2, $3, $4)
+		`
+		insertAssetVersionQuery = `
+			INSERT INTO media.asset_versions (asset_id, scale, mimetype, data)
+			VALUES ($1, $2, $3, $4)
+		`
+	)
+
 	batch := new(pgx.Batch)
 
-	batch.Queue("INSERT INTO media.assets (id, name, width, height) VALUES ($1, $2, $3, $4)", asset.ID, asset.Name, asset.Width, asset.Height)
+	batch.Queue(insertAssetQuery, asset.ID, asset.Name, asset.Width, asset.Height)
 
 	for _, version := range asset.Versions {
-		batch.Queue("INSERT INTO media.asset_versions (asset_id, scale, mimetype, data) VALUES ($1, $2, $3, $4)",
-			asset.ID,
-			version.Scale,
-			version.MediaType,
-			version.Buffer.Bytes(),
-		)
+		batch.Queue(insertAssetVersionQuery, asset.ID, version.Scale, version.MediaType, version.Buffer.Bytes())
 	}
 
 	results := repo.db.SendBatch(ctx, batch)
 	defer results.Close()
 
 	// Iterate to check errors
-	for range asset.Versions {
-		_, err := results.Exec()
-		if err != nil {
+	for i := 0; i < batch.Len(); i++ {
+		if _, err := results.Exec(); err != nil {
 			return err
 		}
 	}
