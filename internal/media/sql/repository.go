@@ -3,7 +3,6 @@ package sql
 import (
 	"bytes"
 	"context"
-	"strings"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/internal/media"
@@ -30,7 +29,7 @@ func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, s
     LIMIT 1
 	`
 
-	row := repo.db.QueryRow(ctx, queryAssetVersion, path, scale, strings.ToUpper(mimetype))
+	row := repo.db.QueryRow(ctx, queryAssetVersion, path, scale, mimetype)
 
 	data := []byte{}
 

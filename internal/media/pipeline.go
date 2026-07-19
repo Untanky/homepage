@@ -8,6 +8,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io"
+	"mime"
 	"strings"
 
 	"github.com/gen2brain/avif"
@@ -47,9 +48,11 @@ func (pipeline ImagePipeline) Run() ([]AssetVersion, error) {
 				return nil, fmt.Errorf("failed to encode image as '%s': %w", strings.ToLower(string(mediaType)), err)
 			}
 
+			mimetype := mime.TypeByExtension(fmt.Sprintf(".%s", mediaType))
+
 			versions = append(versions, AssetVersion{
 				Scale:     scale,
-				MediaType: string(mediaType),
+				MediaType: mimetype,
 				Buffer:    buffer,
 			})
 		}

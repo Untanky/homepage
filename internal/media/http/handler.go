@@ -3,8 +3,10 @@ package http
 import (
 	"context"
 	"fmt"
+	"log"
 	"mime"
 	"net/http"
+	"path"
 	"strconv"
 	"strings"
 
@@ -32,22 +34,35 @@ func Handler(assetRepo AssetRepository) http.Handler {
 }
 
 func (c *controller) serveAssetVersion(writer http.ResponseWriter, request *http.Request) {
-	requestPath := request.PathValue("path")
-	foo := strings.SplitN(requestPath, "@", 2)
-	path, rest := foo[0], foo[1]
-	foo = strings.Split(rest, ".")
-	rawScale, extension := foo[0], foo[1]
+	requestPath := request.URL.Path
+	extension := path.Ext(requestPath)
+	if extension == "" {
+		http.Error(writer, "no externsion found", http.StatusBadRequest)
+		return
+	}
 
-	mimetype := mime.TypeByExtension(fmt.Sprintf(".%s", extension))
+	requestPath, _ = strings.CutSuffix(requestPath, extension)
+
+	parts := strings.Split(requestPath, "@")
+	if len(parts) != 2 {
+		http.Error(writer, "more than one quality marker found", http.StatusBadRequest)
+		return
+	}
+	name, rawScale := parts[0], parts[1]
+
+	mimetype := mime.TypeByExtension(extension)
 	scale, err := strconv.ParseFloat(rawScale, 64)
 	if err != nil {
 		http.Error(writer, "could not parse float", http.StatusBadRequest)
 		return
 	}
 
-	assetVersion, err := c.assetRepo.GetAssetVersion(request.Context(), path, scale, extension)
+	fmt.Println(strings.TrimPrefix(name, "/"), scale, mimetype)
+
+	assetVersion, err := c.assetRepo.GetAssetVersion(request.Context(), strings.TrimPrefix(name, "/"), scale, mimetype)
 	if err != nil {
 		http.Error(writer, "could not get asset version", http.StatusInternalServerError)
+		log.Println(err)
 		return
 	}
 
