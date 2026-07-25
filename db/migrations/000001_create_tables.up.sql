@@ -7,7 +7,8 @@ CREATE TABLE IF NOT EXISTS authors (
 CREATE TABLE IF NOT EXISTS blogs (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   title VARCHAR(128) NOT NULL,
-  summary TEXT
+  summary TEXT,
+  banner_id UUID NOT NULL,
 );
 
 CREATE TABLE IF NOT EXISTS posts (

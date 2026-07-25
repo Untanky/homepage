@@ -60,17 +60,9 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 		return
 	}
 
-	bannerAsset, err := c.assetRepo.GetAsset(request.Context(), media.AssetID(uuid.MustParse("019f7b81-7394-7ae1-af2f-3940b3ec90ea")))
-	if err != nil {
-		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
-		writer.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	blogListData := components.BlogListData{
-		Blog:   blg,
-		Posts:  posts,
-		Banner: bannerAsset,
+		Blog:  blg,
+		Posts: posts,
 	}
 
 	writer.WriteHeader(http.StatusOK)

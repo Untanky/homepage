@@ -6,17 +6,20 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/untanky/homepage/internal/media"
 )
 
 type (
 	AuthorID uuid.UUID
-	MediaID  uuid.UUID
 	BlogID   uuid.UUID
 	PostID   uuid.UUID
+
+	MediaID = media.AssetID
 )
 
 type Blog struct {
 	ID      BlogID
+	Banner  media.Asset
 	Title   string
 	Summary string
 }

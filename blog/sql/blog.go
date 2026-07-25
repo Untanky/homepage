@@ -9,6 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/blog"
 	myerrors "github.com/untanky/homepage/internal/errors"
+	"github.com/untanky/homepage/internal/media"
 )
 
 var postNotFound = errors.New("blog post not found")
@@ -24,12 +25,38 @@ func NewBlogRepository(conn *pgx.Conn) *BlogRepository {
 }
 
 func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error) {
-	result := repo.db.QueryRow(ctx, "SELECT id, title, summary FROM blogs WHERE id = $1 LIMIT 1", blogID)
+	const blogQuery = `
+		SELECT b.id, b.title, b.summary, b.banner_id, a.name as banner_path, av.scale as banner_scale, av.mimetype as banner_mimetype
+		FROM blogs b
+		JOIN media.assets a ON b.banner_id = a.id
+		JOIN media.asset_versions av ON b.banner_id = av.asset_id 
+		WHERE b.id = $1
+	`
+
+	result, err := repo.db.Query(ctx, blogQuery, blogID)
+	if err != nil {
+		return blog.Blog{}, err
+	}
+
+	rows, err := pgx.CollectRows(result, pgx.RowToStructByName[blogRow])
+	if err != nil {
+		return blog.Blog{}, err
+	}
 
 	blg := blog.Blog{}
-	err := result.Scan(&blg.ID, &blg.Title, &blg.Summary)
-	if err != nil {
-		return blog.Blog{}, myerrors.InternalServerError(fmt.Errorf("retrieving blog: %w", err))
+	for idx, row := range rows {
+		if idx == 0 {
+			blg.ID = blog.BlogID(row.ID)
+			blg.Title = row.Title
+			blg.Summary = row.Summary
+			blg.Banner.ID = blog.MediaID(row.BannerID)
+			blg.Banner.Name = row.BannerPath
+		}
+
+		blg.Banner.Versions = append(blg.Banner.Versions, media.AssetVersion{
+			Scale:     row.BannerScale,
+			MediaType: row.BannerMimetype,
+		})
 	}
 
 	return blg, nil
