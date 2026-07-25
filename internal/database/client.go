@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type Config struct {
@@ -15,20 +15,20 @@ type Config struct {
 	Database string
 }
 
-type Client = *pgx.Conn
+type Client = *pgxpool.Pool
 
 func Setup(ctx context.Context, config Config) (Client, error) {
 	connString := fmt.Sprintf("postgresql://%s:%s@%s:%d/%s",
 		config.Username, config.Password, config.Host, config.Port, config.Database)
-	cfg, err := pgx.ParseConfig(connString)
+	cfg, err := pgxpool.ParseConfig(connString)
 	if err != nil {
 		return nil, fmt.Errorf("parsing configuration: %w", err)
 	}
 
-	conn, err := pgx.ConnectConfig(ctx, cfg)
+	pool, err := pgxpool.NewWithConfig(ctx, cfg)
 	if err != nil {
-		return nil, fmt.Errorf("connecting to database: %w", err)
+		return nil, fmt.Errorf("creating pool: %w", err)
 	}
 
-	return Client(conn), nil
+	return Client(pool), nil
 }

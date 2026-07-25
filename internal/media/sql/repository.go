@@ -5,14 +5,15 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
+	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media"
 )
 
 type MediaRepository struct {
-	db *pgx.Conn
+	db database.Client
 }
 
-func NewMediaRepository(db *pgx.Conn) *MediaRepository {
+func NewMediaRepository(db database.Client) *MediaRepository {
 	return new(MediaRepository{
 		db: db,
 	})

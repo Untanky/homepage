@@ -8,19 +8,18 @@ import (
 
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/blog"
+	"github.com/untanky/homepage/internal/database"
 	myerrors "github.com/untanky/homepage/internal/errors"
 	"github.com/untanky/homepage/internal/media"
 )
 
-var postNotFound = errors.New("blog post not found")
-
 type BlogRepository struct {
-	db *pgx.Conn
+	db database.Client
 }
 
-func NewBlogRepository(conn *pgx.Conn) *BlogRepository {
+func NewBlogRepository(db database.Client) *BlogRepository {
 	return &BlogRepository{
-		db: conn,
+		db: db,
 	}
 }
 

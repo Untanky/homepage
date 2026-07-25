@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/blog"
 	bloghttp "github.com/untanky/homepage/blog/http"
 	"github.com/untanky/homepage/blog/sql"
@@ -46,11 +45,7 @@ func run(ctx context.Context) error {
 	if err != nil {
 		return fmt.Errorf("setting up database: %w", err)
 	}
-	defer func() {
-		if err := databaseClient.Close(ctx); err != nil {
-			logger.ErrorContext(ctx, "failed to close database client", slog.Any("error", err))
-		}
-	}()
+	defer databaseClient.Close()
 
 	logger.InfoContext(ctx, "setting up server")
 
@@ -66,7 +61,7 @@ func run(ctx context.Context) error {
 	return nil
 }
 
-func buildHandler(conn *pgx.Conn) http.Handler {
+func buildHandler(conn database.Client) http.Handler {
 	repo := sql.NewBlogRepository(conn)
 	mediaRepo := mediasql.NewMediaRepository(conn)
 
