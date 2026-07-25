@@ -35,12 +35,12 @@ func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (bl
 
 	result, err := repo.db.Query(ctx, blogQuery, blogID)
 	if err != nil {
-		return blog.Blog{}, err
+		return blog.Blog{}, fmt.Errorf("querying database: %w", handleErr(err))
 	}
 
 	rows, err := pgx.CollectRows(result, pgx.RowToStructByName[blogRow])
 	if err != nil {
-		return blog.Blog{}, err
+		return blog.Blog{}, fmt.Errorf("reading rows: %w", myerrors.InternalServerError(err))
 	}
 
 	blg := blog.Blog{}
