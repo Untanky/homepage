@@ -4,8 +4,8 @@
 @layer theme {
   :root,
   :host {
-    --content-width: calc(var(--spacing) * 220);
-    --text-width: calc(var(--spacing) * 160);
+    --content-width: calc(var(--spacing) * 210);
+    --text-width: calc(var(--spacing) * 150);
   }
 }
 

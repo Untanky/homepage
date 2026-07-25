@@ -18,6 +18,46 @@ func NewMediaRepository(db *pgx.Conn) *MediaRepository {
 	})
 }
 
+func (repo *MediaRepository) GetAsset(ctx context.Context, id media.AssetID) (media.Asset, error) {
+	const (
+		queryAsset = `
+			SELECT a.name, a.width, a.height
+			FROM media.assets a
+			WHERE a.id = $1
+			LIMIT 1
+		`
+		queryAssetVersion = `
+			SELECT av.scale, av.mimetype
+			FROM media.asset_versions av
+			WHERE av.asset_id = $1
+		`
+	)
+
+	asset := media.Asset{}
+
+	row := repo.db.QueryRow(ctx, queryAsset, id)
+
+	if err := row.Scan(&asset.Name, &asset.Width, &asset.Height); err != nil {
+		return media.Asset{}, err
+	}
+
+	result, err := repo.db.Query(ctx, queryAssetVersion, id)
+	if err != nil {
+		return media.Asset{}, err
+	}
+
+	for result.Next() {
+		assetVersion := media.AssetVersion{}
+		if err := result.Scan(&assetVersion.Scale, &assetVersion.MediaType); err != nil {
+			return media.Asset{}, err
+		}
+
+		asset.Versions = append(asset.Versions, assetVersion)
+	}
+
+	return asset, nil
+}
+
 func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, scale float64, mimetype string) (media.AssetVersion, error) {
 	const queryAssetVersion = `
     SELECT av.data

@@ -2,7 +2,9 @@ package components
 
 import (
   "context"
+
   "github.com/untanky/homepage/blog"
+  "github.com/untanky/homepage/internal/media"
 )
 
 type pageConfig struct {
@@ -54,6 +56,7 @@ templ html(cfg pageConfig) {
 type BlogListData struct {
   Blog  blog.Blog
   Posts []*blog.PostMetadata
+  Banner media.Asset
 }
 
 templ BlogPage(data BlogListData, options ...PageOption) {
@@ -66,7 +69,9 @@ templ BlogPage(data BlogListData, options ...PageOption) {
 
   @html(cfg) {
     <main class="max-w-(--content-width) mx-auto">
-      <div class="bg-red-500/25 aspect-3/1 w-full"></div>
+      <div class="bg-red-500/25 aspect-3/1 w-full">
+        @image(data.Banner)
+      </div>
       <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
         <h1 class="text-5xl font-bold">
           {data.Blog.Title}

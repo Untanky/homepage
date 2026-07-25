@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/untanky/homepage/blog"
 	"github.com/untanky/homepage/internal/components"
+	"github.com/untanky/homepage/internal/media"
 )
 
 type Repository interface {
@@ -19,10 +20,15 @@ type PostRepository interface {
 	GetPost(ctx context.Context, blogID blog.BlogID, postID blog.PostID) (blog.Post, error)
 }
 
-func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
+type AssetRepository interface {
+	GetAsset(ctx context.Context, id media.AssetID) (media.Asset, error)
+}
+
+func Handler(blogRepo Repository, postRepo PostRepository, assetRepo AssetRepository) http.Handler {
 	ctrl := new(controller{
-		blogRepo: blogRepo,
-		postRepo: postRepo,
+		blogRepo:  blogRepo,
+		postRepo:  postRepo,
+		assetRepo: assetRepo,
 	})
 
 	mux := http.NewServeMux()
@@ -34,8 +40,9 @@ func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
 }
 
 type controller struct {
-	blogRepo Repository
-	postRepo PostRepository
+	blogRepo  Repository
+	postRepo  PostRepository
+	assetRepo AssetRepository
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
@@ -53,9 +60,17 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 		return
 	}
 
+	bannerAsset, err := c.assetRepo.GetAsset(request.Context(), media.AssetID(uuid.MustParse("019f7b81-7394-7ae1-af2f-3940b3ec90ea")))
+	if err != nil {
+		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	blogListData := components.BlogListData{
-		Blog:  blg,
-		Posts: posts,
+		Blog:   blg,
+		Posts:  posts,
+		Banner: bannerAsset,
 	}
 
 	writer.WriteHeader(http.StatusOK)

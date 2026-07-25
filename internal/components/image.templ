@@ -1,0 +1,30 @@
+package components
+
+import (
+  "fmt"
+  "mime"
+  "strings"
+
+  "github.com/untanky/homepage/internal/media"
+)
+
+func srcSets(asset media.Asset) map[string][]string {
+  srcSets := make(map[string][]string, 3)
+
+  for _, version := range asset.Versions {
+    extension, _ := mime.ExtensionsByType(version.MediaType)
+    srcSets[version.MediaType] = append(srcSets[version.MediaType], fmt.Sprintf("/media/%s@%g%s %gx", asset.Name, version.Scale, extension[0], version.Scale))
+  }
+
+  return srcSets
+}
+
+templ image(asset media.Asset) {
+  {{ sets := srcSets(asset) }}
+  <picture class="w-full h-full">
+    for mimetype, set := range sets {
+      <source srcset={strings.Join(set, ", ")} type={mimetype} />
+    }
+    <img src="">
+  </picture>
+}

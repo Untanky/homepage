@@ -75,7 +75,7 @@ func buildHandler(conn *pgx.Conn) http.Handler {
 	assetHandler := http.FileServer(http.Dir("./tmp/web"))
 	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
 	mux.Handle("/media/{a...}", http.StripPrefix("/media", mediahttp.Handler(mediaRepo)))
-	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo))
+	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo, mediaRepo))
 
 	return mux
 }
