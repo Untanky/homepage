@@ -88,7 +88,9 @@ templ BlogPage(data BlogListData, options ...PageOption) {
 templ postList(data BlogListData) {
   for _, post := range data.Posts {
     <a href={data.Blog.PostURL(*post)} class="block space-y-2">
-      <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
+      <div class="bg-blue-500/25 aspect-3/1 w-full">
+        @image(post.Banner)
+      </div>
       <div class="px-4 space-y-1">
         <h2 class="text-3xl font-semibold">
           {post.Title}
@@ -116,7 +118,9 @@ templ PostPage(data PostData, options ...PageOption) {
 
   @html(cfg) {
     <main class="max-w-(--content-width) mx-auto">
-      <div class="bg-blue-500/25 aspect-3/1 w-full"></div>
+      <div class="bg-blue-500/25 aspect-3/1 w-full">
+        @image(metadata.Banner)
+      </div>
       <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
         <h1 class="text-5xl font-bold">
           {metadata.Title}

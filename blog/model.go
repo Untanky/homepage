@@ -29,9 +29,9 @@ func (blog Blog) PostURL(metadata PostMetadata) string {
 }
 
 type Author struct {
-	ID        AuthorID
-	Name      string
-	PictureID MediaID
+	ID      AuthorID
+	Name    string
+	Picture media.Asset
 }
 
 type PostMetadata struct {
@@ -39,9 +39,9 @@ type PostMetadata struct {
 	ID     PostID
 	Slug   string
 
-	Title    string
-	Summary  string
-	BannerID MediaID
+	Title   string
+	Summary string
+	Banner  media.Asset
 
 	Author Author
 

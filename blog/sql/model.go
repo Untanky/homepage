@@ -3,19 +3,53 @@ package sql
 import (
 	"bytes"
 	"io"
+	"time"
 
-	"github.com/google/uuid"
 	"github.com/untanky/homepage/blog"
+	"github.com/untanky/homepage/internal/media"
 )
 
 type blogRow struct {
-	ID             uuid.UUID `db:"id"`
-	Title          string    `db:"title"`
-	Summary        string    `db:"summary"`
-	BannerID       uuid.UUID `db:"banner_id"`
-	BannerPath     string    `db:"banner_path"`
-	BannerScale    float64   `db:"banner_scale"`
-	BannerMimetype string    `db:"banner_mimetype"`
+	ID             blog.BlogID  `db:"id"`
+	Title          string       `db:"title"`
+	Summary        string       `db:"summary"`
+	BannerID       blog.MediaID `db:"banner_id"`
+	BannerPath     string       `db:"banner_path"`
+	BannerScale    float64      `db:"banner_scale"`
+	BannerMimetype string       `db:"banner_mimetype"`
+}
+
+type postMetadataRow struct {
+	ID         blog.PostID   `db:"id"`
+	BlogID     blog.BlogID   `db:"blog_id"`
+	Slug       string        `db:"slug"`
+	Title      string        `db:"title"`
+	Summary    string        `db:"summary"`
+	BannerID   blog.MediaID  `db:"banner_id"`
+	BannerPath string        `db:"banner_path"`
+	CreatedAt  time.Time     `db:"created_at"`
+	UpdatedAt  time.Time     `db:"updated_at"`
+	AuthorID   blog.AuthorID `db:"author_id"`
+	AuthorName string        `db:"author_name"`
+
+	BannerVersions []media.AssetVersion `db:"banner_versions"`
+}
+
+type postRow struct {
+	ID         blog.PostID   `db:"id"`
+	BlogID     blog.BlogID   `db:"blog_id"`
+	Slug       string        `db:"slug"`
+	Title      string        `db:"title"`
+	Summary    string        `db:"summary"`
+	Content    string        `db:"content"`
+	BannerID   blog.MediaID  `db:"banner_id"`
+	BannerPath string        `db:"banner_path"`
+	CreatedAt  time.Time     `db:"created_at"`
+	UpdatedAt  time.Time     `db:"updated_at"`
+	AuthorID   blog.AuthorID `db:"author_id"`
+	AuthorName string        `db:"author_name"`
+
+	BannerVersions []media.AssetVersion `db:"banner_versions"`
 }
 
 type memoryPost struct {
