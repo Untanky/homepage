@@ -7,6 +7,8 @@ import (
 	"log"
 	"mime"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/untanky/homepage/internal/media"
 )
@@ -33,9 +35,15 @@ func Handler(assetRepo AssetRepository) http.Handler {
 
 func (c *controller) serveAssetVersion(writer http.ResponseWriter, request *http.Request) {
 	requestPath := request.URL.Path
-	var path, ext string
-	var width uint
-	_, err := fmt.Sscanf(requestPath, "/%s-%d.%s", &path, &width, &ext)
+	trimmed := strings.TrimPrefix(requestPath, "/")
+	dotIdx := strings.LastIndex(trimmed, ".")
+	dashIdx := strings.LastIndex(trimmed, "-")
+	if dotIdx < 0 || dashIdx < 0 || dashIdx > dotIdx {
+		// invalid format
+	}
+	path := trimmed[:dashIdx]
+	ext := trimmed[dotIdx:]
+	width, err := strconv.ParseUint(trimmed[dashIdx+1:dotIdx], 10, 0)
 	if err != nil {
 		http.NotFound(writer, request)
 		return
@@ -43,7 +51,7 @@ func (c *controller) serveAssetVersion(writer http.ResponseWriter, request *http
 
 	mimetype := mime.TypeByExtension(ext)
 
-	mediaVersion, err := c.assetRepo.GetVersion(request.Context(), path, mimetype, width)
+	mediaVersion, err := c.assetRepo.GetVersion(request.Context(), path, mimetype, uint(width))
 	if err != nil {
 		http.Error(writer, "could not get asset version", http.StatusInternalServerError)
 		return
@@ -51,6 +59,7 @@ func (c *controller) serveAssetVersion(writer http.ResponseWriter, request *http
 
 	writer.Header().Add("Content-Type", mimetype)
 	writer.Header().Add("Content-Length", fmt.Sprintf("%d", mediaVersion.Size))
+	writer.Header().Add("Cache-Control", "public, max-age=604800, immutable")
 	_, err = io.Copy(writer, mediaVersion.Content)
 	if err != nil {
 		log.Println("failed to send media content", err)

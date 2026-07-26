@@ -31,7 +31,8 @@ CREATE SCHEMA IF NOT EXISTS media;
 
 CREATE TABLE IF NOT EXISTS media.assets ( 
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  name VARCHAR NOT NULL,
+  path VARCHAR NOT NULL,
+  alt VARCHAR NOT NULL DEFAULT '',
   width SMALLINT NOT NULL,
   height SMALLINT NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
@@ -39,8 +40,9 @@ CREATE TABLE IF NOT EXISTS media.assets (
 
 CREATE TABLE IF NOT EXISTS media.asset_versions (
   asset_id UUID NOT NULL REFERENCES media.assets(id) ON DELETE CASCADE,
-  scale REAL NOT NULL,
   mimetype VARCHAR NOT NULL,
+  width SMALLINT NOT NULL,
+  height SMALLINT NOT NULL,
   data BYTEA NOT NULL,
-  PRIMARY KEY (asset_id, scale, mimetype)
+  PRIMARY KEY (asset_id, width, mimetype)
 );

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/untanky/homepage/blog"
-	"github.com/untanky/homepage/internal/media"
 )
 
 type blogRow struct {
@@ -32,19 +31,18 @@ type postMetadataRow struct {
 }
 
 type postRow struct {
-	ID         blog.PostID   `db:"id"`
-	BlogID     blog.BlogID   `db:"blog_id"`
-	Slug       string        `db:"slug"`
-	Title      string        `db:"title"`
-	Summary    string        `db:"summary"`
-	Content    string        `db:"content"`
-	BannerID   blog.MediaID  `db:"banner_id"`
-	BannerPath string        `db:"banner_path"`
-	CreatedAt  time.Time     `db:"created_at"`
-	UpdatedAt  time.Time     `db:"updated_at"`
+	ID        blog.PostID  `db:"id"`
+	BlogID    blog.BlogID  `db:"blog_id"`
+	Slug      string       `db:"slug"`
+	Title     string       `db:"title"`
+	Summary   string       `db:"summary"`
+	Content   string       `db:"content"`
+	BannerID  blog.MediaID `db:"banner_id"`
+	CreatedAt time.Time    `db:"created_at"`
+	UpdatedAt time.Time    `db:"updated_at"`
 
-	AuthorID   blog.AuthorID `db:"author_id"`
-	AuthorName string        `db:"author_name"`
+	AuthorID        blog.AuthorID `db:"author_id"`
+	AuthorName      string        `db:"author_name"`
 	AuthorPictureID blog.MediaID  `db:"author_picture_id"`
 }
 

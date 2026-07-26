@@ -67,7 +67,7 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 		FROM posts p
 		JOIN authors au ON p.author_id = au.id
 		WHERE p.blog_id = $1
-		GROUP BY p.id, au.id, ass.id
+		GROUP BY p.id, au.id
 	`
 
 	result, err := repo.db.Query(ctx, getAllMetadataSQL, blogID)
@@ -122,7 +122,7 @@ func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, pos
 		FROM posts p
 		JOIN authors au ON p.author_id = au.id
 		WHERE p.blog_id = $1 and p.id = $2
-		GROUP BY p.id, au.id, ass.id
+		GROUP BY p.id, au.id
 		LIMIT 1
 	`
 

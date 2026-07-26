@@ -24,7 +24,7 @@ type versionRow struct {
 	Mimetype string        `db:"mimetype"`
 	Width    uint          `db:"width"`
 	Height   uint          `db:"height"`
-	Content  []byte        `db:"content"`
+	Data     []byte        `db:"data"`
 }
 
 type MediaRepository struct {
@@ -44,6 +44,7 @@ func (repo *MediaRepository) GetAsset(ctx context.Context, assetID media.AssetID
 		FROM media.assets a
 		JOIN media.asset_versions av ON a.id = av.asset_id
 		WHERE a.id = $1
+		GROUP BY a.id
 	`
 
 	result, err := repo.db.Query(ctx, getAssetSQL, assetID)
@@ -68,10 +69,10 @@ func (repo *MediaRepository) GetAsset(ctx context.Context, assetID media.AssetID
 
 func (repo *MediaRepository) GetVersion(ctx context.Context, path string, mimetype string, width uint) (media.Version, error) {
 	const getVersionSQL = `
-		SELECT a.id as asset_id, av.mimetype, av.width, av.height, av.content
+		SELECT a.id as asset_id, av.mimetype, av.width, av.height, av.data
 		FROM media.assets a
 		JOIN media.asset_versions av ON a.id = av.asset_id
-		WHERE a.path = $1 AND av.mimetype = $2 AND width = $3
+		WHERE a.path = $1 AND av.mimetype = $2 AND av.width = $3
 	`
 
 	result, err := repo.db.Query(ctx, getVersionSQL, path, mimetype, width)
@@ -91,7 +92,38 @@ func (repo *MediaRepository) GetVersion(ctx context.Context, path string, mimety
 			Width:    row.Width,
 			Height:   row.Height,
 		},
-		Size:    len(row.Content),
-		Content: bytes.NewReader(row.Content),
+		Size:    len(row.Data),
+		Content: bytes.NewReader(row.Data),
 	}, nil
+}
+
+func (repo *MediaRepository) Create(ctx context.Context, asset media.Asset, versions []media.Version) error {
+	const (
+		insertAssetSql        = `INSERT INTO media.assets (id, path, alt, width, height) VALUES ($1, $2, $3, $4, $5)`
+		insertAssetVersionSql = `INSERT INTO media.asset_versions (asset_id, mimetype, width, height, data) VALUES ($1, $2, $3, $4, $5)`
+	)
+
+	batch := new(pgx.Batch)
+
+	batch.Queue(insertAssetSql, asset.ID, asset.Path, asset.Alt, asset.Width, asset.Height)
+
+	for _, version := range versions {
+		data := make([]byte, version.Size)
+		_, err := version.Content.Read(data)
+		if err != nil {
+			return err
+		}
+
+		batch.Queue(insertAssetVersionSql, asset.ID, version.Mimetype, version.Width, version.Height, data)
+	}
+
+	results := repo.db.SendBatch(ctx, batch)
+
+	for i := 0; i < batch.Len(); i++ {
+		if _, err := results.Exec(); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

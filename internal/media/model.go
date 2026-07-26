@@ -42,14 +42,14 @@ type Source struct {
 }
 
 func Sources(asset Asset, pathPrefix string, width uint) []Source {
-	basePath := fmt.Sprintf("/%s/%s", pathPrefix, asset.Path)
-	sizes := fmt.Sprintf("(min-width: %dpx) %dpx, 100vw")
+	basePath := fmt.Sprintf("%s/%s", pathPrefix, asset.Path)
+	sizes := fmt.Sprintf("(min-width: %dpx) %dpx, 100vw", asset.Width, asset.Width)
 
 	srcSets := make(map[string][]string, 3)
 
 	for _, version := range asset.Versions {
 		extension, _ := mime.ExtensionsByType(version.Mimetype)
-		srcSets[version.Mimetype] = append(srcSets[version.Mimetype], fmt.Sprintf("%s-@%d%s %dw", basePath, version.Width, extension[0], version.Width))
+		srcSets[version.Mimetype] = append(srcSets[version.Mimetype], fmt.Sprintf("%s-%d%s %dw", basePath, version.Width, extension[0], version.Width))
 	}
 
 	sources := make([]Source, 0, 3)
