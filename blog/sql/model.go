@@ -10,29 +10,25 @@ import (
 )
 
 type blogRow struct {
-	ID             blog.BlogID  `db:"id"`
-	Title          string       `db:"title"`
-	Summary        string       `db:"summary"`
-	BannerID       blog.MediaID `db:"banner_id"`
-	BannerPath     string       `db:"banner_path"`
-	BannerScale    float64      `db:"banner_scale"`
-	BannerMimetype string       `db:"banner_mimetype"`
+	ID       blog.BlogID  `db:"id"`
+	Title    string       `db:"title"`
+	Summary  string       `db:"summary"`
+	BannerID blog.MediaID `db:"banner_id"`
 }
 
 type postMetadataRow struct {
-	ID         blog.PostID   `db:"id"`
-	BlogID     blog.BlogID   `db:"blog_id"`
-	Slug       string        `db:"slug"`
-	Title      string        `db:"title"`
-	Summary    string        `db:"summary"`
-	BannerID   blog.MediaID  `db:"banner_id"`
-	BannerPath string        `db:"banner_path"`
-	CreatedAt  time.Time     `db:"created_at"`
-	UpdatedAt  time.Time     `db:"updated_at"`
-	AuthorID   blog.AuthorID `db:"author_id"`
-	AuthorName string        `db:"author_name"`
+	ID        blog.PostID  `db:"id"`
+	BlogID    blog.BlogID  `db:"blog_id"`
+	Slug      string       `db:"slug"`
+	Title     string       `db:"title"`
+	Summary   string       `db:"summary"`
+	BannerID  blog.MediaID `db:"banner_id"`
+	CreatedAt time.Time    `db:"created_at"`
+	UpdatedAt time.Time    `db:"updated_at"`
 
-	BannerVersions []media.AssetVersion `db:"banner_versions"`
+	AuthorID        blog.AuthorID `db:"author_id"`
+	AuthorName      string        `db:"author_name"`
+	AuthorPictureID blog.MediaID  `db:"author_picture_id"`
 }
 
 type postRow struct {
@@ -46,10 +42,10 @@ type postRow struct {
 	BannerPath string        `db:"banner_path"`
 	CreatedAt  time.Time     `db:"created_at"`
 	UpdatedAt  time.Time     `db:"updated_at"`
+
 	AuthorID   blog.AuthorID `db:"author_id"`
 	AuthorName string        `db:"author_name"`
-
-	BannerVersions []media.AssetVersion `db:"banner_versions"`
+	AuthorPictureID blog.MediaID  `db:"author_picture_id"`
 }
 
 type memoryPost struct {

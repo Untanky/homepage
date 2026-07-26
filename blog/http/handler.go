@@ -24,11 +24,10 @@ type AssetRepository interface {
 	GetAsset(ctx context.Context, id media.AssetID) (media.Asset, error)
 }
 
-func Handler(blogRepo Repository, postRepo PostRepository, assetRepo AssetRepository) http.Handler {
+func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
 	ctrl := new(controller{
 		blogRepo:  blogRepo,
 		postRepo:  postRepo,
-		assetRepo: assetRepo,
 	})
 
 	mux := http.NewServeMux()
@@ -42,7 +41,6 @@ func Handler(blogRepo Repository, postRepo PostRepository, assetRepo AssetReposi
 type controller struct {
 	blogRepo  Repository
 	postRepo  PostRepository
-	assetRepo AssetRepository
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {

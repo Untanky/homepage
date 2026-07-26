@@ -9,6 +9,24 @@ import (
 	"github.com/untanky/homepage/internal/media"
 )
 
+type assetRow struct {
+	ID     media.AssetID `db:"id"`
+	Path   string        `db:"path"`
+	Alt    string        `db:"alt"`
+	Width  uint          `db:"width"`
+	Height uint          `db:"height"`
+
+	Versions []media.VersionMetadata `db:"versions"`
+}
+
+type versionRow struct {
+	AssetID  media.AssetID `db:"asset_id"`
+	Mimetype string        `db:"mimetype"`
+	Width    uint          `db:"width"`
+	Height   uint          `db:"height"`
+	Content  []byte        `db:"content"`
+}
+
 type MediaRepository struct {
 	db database.Client
 }
@@ -19,101 +37,61 @@ func NewMediaRepository(db database.Client) *MediaRepository {
 	})
 }
 
-func (repo *MediaRepository) GetAsset(ctx context.Context, id media.AssetID) (media.Asset, error) {
-	const (
-		queryAsset = `
-			SELECT a.name, a.width, a.height
-			FROM media.assets a
-			WHERE a.id = $1
-			LIMIT 1
-		`
-		queryAssetVersion = `
-			SELECT av.scale, av.mimetype
-			FROM media.asset_versions av
-			WHERE av.asset_id = $1
-		`
-	)
+func (repo *MediaRepository) GetAsset(ctx context.Context, assetID media.AssetID) (media.Asset, error) {
+	const getAssetSQL = `
+		SELECT a.id, a.path, a.alt, a.width, a.height,
+		       json_agg(json_build_object('Mimetype', av.mimetype, 'Width', av.width, 'Height', av.height)) as versions
+		FROM media.assets a
+		JOIN media.asset_versions av ON a.id = av.asset_id
+		WHERE a.id = $1
+	`
 
-	asset := media.Asset{}
-
-	row := repo.db.QueryRow(ctx, queryAsset, id)
-
-	if err := row.Scan(&asset.Name, &asset.Width, &asset.Height); err != nil {
-		return media.Asset{}, err
-	}
-
-	result, err := repo.db.Query(ctx, queryAssetVersion, id)
+	result, err := repo.db.Query(ctx, getAssetSQL, assetID)
 	if err != nil {
 		return media.Asset{}, err
 	}
 
-	for result.Next() {
-		assetVersion := media.AssetVersion{}
-		if err := result.Scan(&assetVersion.Scale, &assetVersion.MediaType); err != nil {
-			return media.Asset{}, err
-		}
-
-		asset.Versions = append(asset.Versions, assetVersion)
+	row, err := pgx.CollectExactlyOneRow(result, pgx.RowToAddrOfStructByName[assetRow])
+	if err != nil {
+		return media.Asset{}, err
 	}
 
-	return asset, nil
-}
-
-func (repo *MediaRepository) GetAssetVersion(ctx context.Context, path string, scale float64, mimetype string) (media.AssetVersion, error) {
-	const queryAssetVersion = `
-    SELECT av.data
-    FROM media.asset_versions av
-    JOIN media.assets a ON av.asset_id = a.id
-    WHERE a.name = $1
-      AND av.scale = $2
-      AND av.mimetype = $3
-    LIMIT 1
-	`
-
-	row := repo.db.QueryRow(ctx, queryAssetVersion, path, scale, mimetype)
-
-	data := []byte{}
-
-	if err := row.Scan(&data); err != nil {
-		return media.AssetVersion{}, err
-	}
-
-	return media.AssetVersion{
-		Scale:     scale,
-		MediaType: mimetype,
-		Buffer:    bytes.NewBuffer(data),
+	return media.Asset{
+		ID:       row.ID,
+		Path:     row.Path,
+		Alt:      row.Alt,
+		Width:    row.Width,
+		Height:   row.Height,
+		Versions: row.Versions,
 	}, nil
 }
 
-func (repo *MediaRepository) Create(ctx context.Context, asset media.Asset) error {
-	const (
-		insertAssetQuery = `
-			INSERT INTO media.assets (id, name, width, height)
-			VALUES ($1, $2, $3, $4)
-		`
-		insertAssetVersionQuery = `
-			INSERT INTO media.asset_versions (asset_id, scale, mimetype, data)
-			VALUES ($1, $2, $3, $4)
-		`
-	)
+func (repo *MediaRepository) GetVersion(ctx context.Context, path string, mimetype string, width uint) (media.Version, error) {
+	const getVersionSQL = `
+		SELECT a.id as asset_id, av.mimetype, av.width, av.height, av.content
+		FROM media.assets a
+		JOIN media.asset_versions av ON a.id = av.asset_id
+		WHERE a.path = $1 AND av.mimetype = $2 AND width = $3
+	`
 
-	batch := new(pgx.Batch)
-
-	batch.Queue(insertAssetQuery, asset.ID, asset.Name, asset.Width, asset.Height)
-
-	for _, version := range asset.Versions {
-		batch.Queue(insertAssetVersionQuery, asset.ID, version.Scale, version.MediaType, version.Buffer.Bytes())
+	result, err := repo.db.Query(ctx, getVersionSQL, path, mimetype, width)
+	if err != nil {
+		return media.Version{}, err
 	}
 
-	results := repo.db.SendBatch(ctx, batch)
-	defer results.Close()
-
-	// Iterate to check errors
-	for i := 0; i < batch.Len(); i++ {
-		if _, err := results.Exec(); err != nil {
-			return err
-		}
+	row, err := pgx.CollectExactlyOneRow(result, pgx.RowToAddrOfStructByName[versionRow])
+	if err != nil {
+		return media.Version{}, err
 	}
 
-	return nil
+	return media.Version{
+		AssetID: row.AssetID,
+		VersionMetadata: media.VersionMetadata{
+			Mimetype: row.Mimetype,
+			Width:    row.Width,
+			Height:   row.Height,
+		},
+		Size:    len(row.Content),
+		Content: bytes.NewReader(row.Content),
+	}, nil
 }

@@ -3,7 +3,6 @@ package sql
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
@@ -13,49 +12,49 @@ import (
 	"github.com/untanky/homepage/internal/media"
 )
 
-type BlogRepository struct {
-	db database.Client
+type AssetRepository interface {
+	GetAsset(ctx context.Context, assetID media.AssetID) (media.Asset, error)
 }
 
-func NewBlogRepository(db database.Client) *BlogRepository {
+type BlogRepository struct {
+	db        database.Client
+	assetRepo AssetRepository
+}
+
+func NewBlogRepository(db database.Client, assetRepo AssetRepository) *BlogRepository {
 	return &BlogRepository{
-		db: db,
+		db:        db,
+		assetRepo: assetRepo,
 	}
 }
 
 func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error) {
 	const getBlogSQL = `
-		SELECT b.id, b.title, b.summary, b.banner_id, a.name as banner_path, av.scale as banner_scale, av.mimetype as banner_mimetype
+		SELECT b.id, b.title, b.summary, b.banner_id
 		FROM blogs b
-		JOIN media.assets a ON b.banner_id = a.id
-		JOIN media.asset_versions av ON b.banner_id = av.asset_id 
 		WHERE b.id = $1
 	`
 
 	result, err := repo.db.Query(ctx, getBlogSQL, blogID)
 	if err != nil {
-		return blog.Blog{}, fmt.Errorf("querying blogs: %w", handleErr(err))
+		return blog.Blog{}, fmt.Errorf("querying blogs: %w", err)
 	}
 
-	rows, err := pgx.CollectRows(result, pgx.RowToStructByName[blogRow])
+	row, err := pgx.CollectExactlyOneRow(result, pgx.RowToStructByName[blogRow])
 	if err != nil {
-		return blog.Blog{}, fmt.Errorf("reading rows: %w", myerrors.InternalServerError(err))
+		return blog.Blog{}, fmt.Errorf("reading rows: %w", err)
 	}
 
-	blg := blog.Blog{}
-	for idx, row := range rows {
-		if idx == 0 {
-			blg.ID = blog.BlogID(row.ID)
-			blg.Title = row.Title
-			blg.Summary = row.Summary
-			blg.Banner.ID = blog.MediaID(row.BannerID)
-			blg.Banner.Name = row.BannerPath
-		}
+	banner, err := repo.assetRepo.GetAsset(ctx, row.BannerID)
+	if err != nil {
+		return blog.Blog{}, fmt.Errorf("finding banner: %w", err)
+	}
 
-		blg.Banner.Versions = append(blg.Banner.Versions, media.AssetVersion{
-			Scale:     row.BannerScale,
-			MediaType: row.BannerMimetype,
-		})
+	blg := blog.Blog{
+		ID:      row.ID,
+		Title:   row.Title,
+		Summary: row.Summary,
+		Banner:  banner,
 	}
 
 	return blg, nil
@@ -63,23 +62,17 @@ func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (bl
 
 func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.BlogID) ([]*blog.PostMetadata, error) {
 	const getAllMetadataSQL = `
-		SELECT p.id, p.blog_id, p.title, p.slug, p.summary, ass.id as banner_id, ass.name as banner_path, p.created_at, p.updated_at,
-					 au.id as author_id, au.name as author_name, json_agg(json_build_object('Scale', av.scale, 'Mediatype', av.mimetype)) as banner_versions
+		SELECT p.id, p.blog_id, p.title, p.slug, p.summary, p.banner_id, p.created_at, p.updated_at,
+					 au.id as author_id, au.name as author_name, au.picture_id as author_picture_id
 		FROM posts p
 		JOIN authors au ON p.author_id = au.id
-		JOIN media.assets ass ON p.banner_id = ass.id
-		JOIN media.asset_versions av ON p.banner_id = av.asset_id
 		WHERE p.blog_id = $1
 		GROUP BY p.id, au.id, ass.id
 	`
 
 	result, err := repo.db.Query(ctx, getAllMetadataSQL, blogID)
 	if err != nil {
-		if errors.Is(err, pgx.ErrNoRows) {
-			return []*blog.PostMetadata{}, nil
-		}
-
-		return nil, fmt.Errorf("querying all metadata: %w", handleErr(err))
+		return nil, fmt.Errorf("querying all metadata: %w", err)
 	}
 
 	rows, err := pgx.CollectRows(result, pgx.RowToStructByName[postMetadataRow])
@@ -89,6 +82,16 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 
 	posts := make([]*blog.PostMetadata, len(rows))
 	for idx, row := range rows {
+		banner, err := repo.assetRepo.GetAsset(ctx, row.BannerID)
+		if err != nil {
+			return nil, fmt.Errorf("getting banner: %w", myerrors.InternalServerError(err))
+		}
+
+		authorPicture, err := repo.assetRepo.GetAsset(ctx, row.AuthorPictureID)
+		if err != nil {
+			return nil, fmt.Errorf("getting author picture: %w", myerrors.InternalServerError(err))
+		}
+
 		posts[idx] = new(blog.PostMetadata{
 			BlogID: row.BlogID,
 			ID:     row.ID,
@@ -96,15 +99,12 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 
 			Title:   row.Title,
 			Summary: row.Summary,
-			Banner: media.Asset{
-				ID:       row.BannerID,
-				Name:     row.BannerPath,
-				Versions: row.BannerVersions,
-			},
+			Banner:  banner,
 
 			Author: blog.Author{
-				ID:   row.AuthorID,
-				Name: row.AuthorName,
+				ID:      row.AuthorID,
+				Name:    row.AuthorName,
+				Picture: authorPicture,
 			},
 
 			CreatedAt: row.CreatedAt,
@@ -117,13 +117,10 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 
 func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, postID blog.PostID) (blog.Post, error) {
 	const getPostSQL = `
-		SELECT p.id, p.blog_id, p.title, p.slug, p.summary, p.content, ass.id as banner_id, ass.name as banner_path, p.created_at, p.updated_at,
-					 au.id as author_id, au.name as author_name,
-					 json_agg(json_build_object('Scale', av.scale, 'Mediatype', av.mimetype)) as banner_versions
+		SELECT p.id, p.blog_id, p.title, p.slug, p.summary, p.content, p.banner_id as banner_id, p.created_at, p.updated_at,
+					 au.id as author_id, au.name as author_name, au.picture_id as author_picture_id
 		FROM posts p
 		JOIN authors au ON p.author_id = au.id
-		JOIN media.assets ass ON p.banner_id = ass.id
-		JOIN media.asset_versions av ON p.banner_id = av.asset_id
 		WHERE p.blog_id = $1 and p.id = $2
 		GROUP BY p.id, au.id, ass.id
 		LIMIT 1
@@ -134,9 +131,19 @@ func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, pos
 		return nil, fmt.Errorf("querying posts: %w", handleErr(err))
 	}
 
-	row, err := pgx.CollectOneRow(result, pgx.RowToStructByName[postRow])
+	row, err := pgx.CollectExactlyOneRow(result, pgx.RowToStructByName[postRow])
 	if err != nil {
 		return nil, fmt.Errorf("reading rows: %w", myerrors.InternalServerError(err))
+	}
+
+	banner, err := repo.assetRepo.GetAsset(ctx, row.BannerID)
+	if err != nil {
+		return nil, fmt.Errorf("getting banner: %w", myerrors.InternalServerError(err))
+	}
+
+	authorPicture, err := repo.assetRepo.GetAsset(ctx, row.AuthorPictureID)
+	if err != nil {
+		return nil, fmt.Errorf("getting author picture: %w", myerrors.InternalServerError(err))
 	}
 
 	metadata := blog.PostMetadata{
@@ -146,15 +153,12 @@ func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, pos
 
 		Title:   row.Title,
 		Summary: row.Summary,
-		Banner: media.Asset{
-			ID:       row.BannerID,
-			Name:     row.BannerPath,
-			Versions: row.BannerVersions,
-		},
+		Banner:  banner,
 
 		Author: blog.Author{
-			ID:   row.AuthorID,
-			Name: row.AuthorName,
+			ID:      row.AuthorID,
+			Name:    row.AuthorName,
+			Picture: authorPicture,
 		},
 
 		CreatedAt: row.CreatedAt,

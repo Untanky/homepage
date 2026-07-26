@@ -62,15 +62,15 @@ func run(ctx context.Context) error {
 }
 
 func buildHandler(conn database.Client) http.Handler {
-	repo := sql.NewBlogRepository(conn)
 	mediaRepo := mediasql.NewMediaRepository(conn)
+	repo := sql.NewBlogRepository(conn, mediaRepo)
 
 	mux := http.NewServeMux()
 
 	assetHandler := http.FileServer(http.Dir("./tmp/web"))
 	mux.Handle("/assets/{a...}", http.StripPrefix("/assets", assetHandler))
 	mux.Handle("/media/{a...}", http.StripPrefix("/media", mediahttp.Handler(mediaRepo)))
-	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo, mediaRepo))
+	mux.Handle("/{a...}", bloghttp.Handler(blog.NewBlogRepositoryCache(repo), repo))
 
 	return mux
 }

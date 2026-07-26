@@ -3,18 +3,16 @@ package http
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"mime"
 	"net/http"
-	"path"
-	"strconv"
-	"strings"
 
 	"github.com/untanky/homepage/internal/media"
 )
 
 type AssetRepository interface {
-	GetAssetVersion(ctx context.Context, path string, scale float64, mimetype string) (media.AssetVersion, error)
+	GetVersion(ctx context.Context, path string, mimetype string, width uint) (media.Version, error)
 }
 
 type controller struct {
@@ -35,38 +33,27 @@ func Handler(assetRepo AssetRepository) http.Handler {
 
 func (c *controller) serveAssetVersion(writer http.ResponseWriter, request *http.Request) {
 	requestPath := request.URL.Path
-	extension := path.Ext(requestPath)
-	if extension == "" {
-		http.Error(writer, "no externsion found", http.StatusBadRequest)
-		return
-	}
-
-	requestPath, _ = strings.CutSuffix(requestPath, extension)
-
-	parts := strings.Split(requestPath, "@")
-	if len(parts) != 2 {
-		http.Error(writer, "more than one quality marker found", http.StatusBadRequest)
-		return
-	}
-	name, rawScale := parts[0], parts[1]
-
-	mimetype := mime.TypeByExtension(extension)
-	scale, err := strconv.ParseFloat(rawScale, 64)
+	var path, ext string
+	var width uint
+	_, err := fmt.Sscanf(requestPath, "/%s-%d.%s", &path, &width, &ext)
 	if err != nil {
-		http.Error(writer, "could not parse float", http.StatusBadRequest)
+		http.NotFound(writer, request)
 		return
 	}
 
-	fmt.Println(strings.TrimPrefix(name, "/"), scale, mimetype)
+	mimetype := mime.TypeByExtension(ext)
 
-	assetVersion, err := c.assetRepo.GetAssetVersion(request.Context(), strings.TrimPrefix(name, "/"), scale, mimetype)
+	mediaVersion, err := c.assetRepo.GetVersion(request.Context(), path, mimetype, width)
 	if err != nil {
 		http.Error(writer, "could not get asset version", http.StatusInternalServerError)
-		log.Println(err)
 		return
 	}
 
 	writer.Header().Add("Content-Type", mimetype)
-	writer.Header().Add("Content-Length", fmt.Sprintf("%d", assetVersion.Buffer.Len()))
-	assetVersion.WriterTo(writer)
+	writer.Header().Add("Content-Length", fmt.Sprintf("%d", mediaVersion.Size))
+	_, err = io.Copy(writer, mediaVersion.Content)
+	if err != nil {
+		log.Println("failed to send media content", err)
+		return
+	}
 }
