@@ -121,14 +121,31 @@ templ PostPage(data PostData, options ...PageOption) {
       <div class="bg-blue-500/25 aspect-3/1 w-full">
         @image(metadata.Banner, 840)
       </div>
-      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
+      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-4">
         <h1 class="text-5xl font-bold">
           {metadata.Title}
         </h1>
+        @postMetadata(metadata)
       </div>
       <article class="prose mx-auto mt-8 space-y-8">
         @post(data.Post)
       </article>
     </main>
   }
+}
+
+templ postMetadata(metadata blog.PostMetadata) {
+  <div class="flex flex-row items-center space-x-2">
+    <div class="size-12">
+      @image(metadata.Author.Picture, 48)
+    </div>
+    <div>
+      <div class="text-lg font-medium">
+        {metadata.Author.Name}
+      </div>
+      <div class="text-sm text-black/75">
+        {metadata.CreatedAt.Format("02.01.2006")}
+      </div>
+    </div>
+  </div>
 }
