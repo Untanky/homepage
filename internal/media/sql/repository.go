@@ -37,6 +37,42 @@ func NewMediaRepository(db database.Client) *MediaRepository {
 	})
 }
 
+func (repo *MediaRepository) ListAssets(ctx context.Context, filter string) ([]media.Asset, error) {
+	const listAssetsSQL = `
+		SELECT a.id, a.path, a.alt, a.width, a.height,
+		       json_agg(json_build_object('Mimetype', av.mimetype, 'Width', av.width, 'Height', av.height)) as versions
+		FROM media.assets a
+		JOIN media.asset_versions av ON a.id = av.asset_id
+		WHERE starts_with(a.path, $1)
+		GROUP BY a.id
+	`
+
+	result, err := repo.db.Query(ctx, listAssetsSQL, filter)
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := pgx.CollectRows(result, pgx.RowToAddrOfStructByName[assetRow])
+	if err != nil {
+		return nil, err
+	}
+
+	assets := make([]media.Asset, len(rows))
+
+	for idx, row := range rows {
+		assets[idx] = media.Asset{
+			ID:       row.ID,
+			Path:     row.Path,
+			Alt:      row.Alt,
+			Width:    row.Width,
+			Height:   row.Height,
+			Versions: row.Versions,
+		}
+	}
+
+	return assets, nil
+}
+
 func (repo *MediaRepository) GetAsset(ctx context.Context, assetID media.AssetID) (media.Asset, error) {
 	const getAssetSQL = `
 		SELECT a.id, a.path, a.alt, a.width, a.height,
