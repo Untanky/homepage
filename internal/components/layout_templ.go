@@ -179,7 +179,7 @@ func BlogPage(data BlogListData, options ...PageOption) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = image(data.Blog.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = Image(data.Blog.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -270,7 +270,7 @@ func postList(data BlogListData) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = image(post.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = Image(post.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -355,7 +355,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = image(metadata.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
+			templ_7745c5c3_Err = Image(metadata.Banner, 840).Render(ctx, templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -427,7 +427,7 @@ func postMetadata(metadata blog.PostMetadata) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = image(metadata.Author.Picture, 48).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = Image(metadata.Author.Picture, 48).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

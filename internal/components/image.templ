@@ -4,7 +4,7 @@ import (
   "github.com/untanky/homepage/internal/media"
 )
 
-templ image(asset media.Asset, width uint) {
+templ Image(asset media.Asset, width uint) {
   {{ sets := media.Sources(asset, "/media", width) }}
   <picture class="w-full h-full">
     for _, set := range sets {
