@@ -1,73 +1,65 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"text/tabwriter"
 
+	"github.com/alecthomas/kong"
 	"github.com/google/uuid"
-	"github.com/spf13/cobra"
 	"github.com/untanky/homepage/internal/components"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media"
 	"github.com/untanky/homepage/internal/media/sql"
 )
 
-var (
-	html bool
-)
-
-func init() {
-	getCmd.Flags().BoolVar(&html, "html", false, "Output the image as HTML")
-
-	rootCmd.AddCommand(getCmd)
+type getCommand struct {
+	ID   string `arg:"" help:"The id of the image"`
+	Html bool   `help:"Output the image as HTML"`
 }
 
-var getCmd = &cobra.Command{
-	Use:   "get",
-	Short: "Get an images",
-	Args:  cobra.ExactArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		ctx := cmd.Context()
+func (cmd *getCommand) Run(ctx *kong.Context) error {
+	runtimeContext := context.Background()
 
-		databaseClient, err := database.Setup(ctx, database.Config{
-			Username: "postgres",
-			Password: "postgres",
-			Host:     "localhost",
-			Port:     5432,
-			Database: "postgres",
-		})
-		if err != nil {
-			return fmt.Errorf("setting up database: %w", err)
-		}
+	databaseClient, err := database.Setup(runtimeContext, database.Config{
+		Username: "postgres",
+		Password: "postgres",
+		Host:     "localhost",
+		Port:     5432,
+		Database: "postgres",
+	})
+	if err != nil {
+		return fmt.Errorf("setting up database: %w", err)
+	}
 
-		repo := sql.NewMediaRepository(databaseClient)
+	repo := sql.NewMediaRepository(databaseClient)
 
-		filter, err := uuid.Parse(args[0])
-		if err != nil {
-			return err
-		}
+	filter, err := uuid.Parse(cmd.ID)
+	if err != nil {
+		return err
+	}
 
-		asset, err := repo.GetAsset(ctx, media.AssetID(filter))
-		if err != nil {
-			return fmt.Errorf("list images: %w", err)
-		}
+	asset, err := repo.GetAsset(runtimeContext, media.AssetID(filter))
+	if err != nil {
+		return fmt.Errorf("list images: %w", err)
+	}
 
-		if html {
-			return components.Image(asset, 10).Render(ctx, cmd.OutOrStdout())
-		}
+	if cmd.Html {
+		return components.Image(asset, 10).Render(runtimeContext, ctx.Stdout)
+	}
 
-		fmt.Fprintf(cmd.OutOrStdout(), "ID: %s'\n", uuid.UUID(asset.ID))
-		fmt.Fprintf(cmd.OutOrStdout(), "Path: %s\n", asset.Path)
-		fmt.Fprintf(cmd.OutOrStdout(), "Alt: %s\n", asset.Alt)
-		fmt.Fprintf(cmd.OutOrStdout(), "Versions:\n")
-		w := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
-		fmt.Fprintln(w, "MIMETYPE\tDIMENSIONS")
-		for _, version := range asset.Versions {
-			fmt.Fprintf(w, "%s\t%dx%d\n", version.Mimetype, version.Width, version.Height)
-		}
+	fmt.Fprintf(ctx.Stdout, "ID: %s'\n", uuid.UUID(asset.ID))
+	fmt.Fprintf(ctx.Stdout, "Path: %s\n", asset.Path)
+	fmt.Fprintf(ctx.Stdout, "Alt: %s\n", asset.Alt)
+	fmt.Fprintf(ctx.Stdout, "Versions:\n")
+	w := tabwriter.NewWriter(ctx.Stdout, 0, 0, 2, ' ', 0)
+	fmt.Fprintln(w, "MIMETYPE\tDIMENSIONS")
+	for _, version := range asset.Versions {
+		fmt.Fprintf(w, "%s\t%dx%d\n", version.Mimetype, version.Width, version.Height)
+	}
 
-		w.Flush()
+	w.Flush()
 
-		return nil
-	},
+	return nil
+
 }

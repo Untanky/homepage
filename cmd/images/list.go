@@ -1,57 +1,49 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"text/tabwriter"
 
+	"github.com/alecthomas/kong"
 	"github.com/google/uuid"
-	"github.com/spf13/cobra"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media/sql"
 )
 
-func init() {
-	rootCmd.AddCommand(listCmd)
+type listCommand struct {
+	Filter string `arg:"" optional:"" help:"filter the listed image by path prefix"`
 }
 
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List all images",
-	Args:  cobra.MaximumNArgs(1),
-	RunE: func(cmd *cobra.Command, args []string) error {
-		ctx := cmd.Context()
+func (cmd *listCommand) Run(ctx *kong.Context) error {
+	runtimeContext := context.Background()
 
-		databaseClient, err := database.Setup(ctx, database.Config{
-			Username: "postgres",
-			Password: "postgres",
-			Host:     "localhost",
-			Port:     5432,
-			Database: "postgres",
-		})
-		if err != nil {
-			return fmt.Errorf("setting up database: %w", err)
-		}
+	databaseClient, err := database.Setup(runtimeContext, database.Config{
+		Username: "postgres",
+		Password: "postgres",
+		Host:     "localhost",
+		Port:     5432,
+		Database: "postgres",
+	})
+	if err != nil {
+		return fmt.Errorf("setting up database: %w", err)
+	}
 
-		repo := sql.NewMediaRepository(databaseClient)
+	repo := sql.NewMediaRepository(databaseClient)
 
-		filter := ""
-		if len(args) == 1 {
-			filter = args[0]
-		}
+	assets, err := repo.ListAssets(runtimeContext, cmd.Filter)
+	if err != nil {
+		return fmt.Errorf("list images: %w", err)
+	}
 
-		assets, err := repo.ListAssets(ctx, filter)
-		if err != nil {
-			return fmt.Errorf("list images: %w", err)
-		}
+	w := tabwriter.NewWriter(ctx.Stdout, 0, 0, 2, ' ', 0)
+	fmt.Fprintln(w, "ID\tPATH\tALT\tVERSIONS")
+	for _, asset := range assets {
+		fmt.Fprintf(w, "%s\t%s\t%s\t%d\n", uuid.UUID(asset.ID), asset.Path, asset.Alt, len(asset.Versions))
+	}
 
-		w := tabwriter.NewWriter(cmd.OutOrStdout(), 0, 0, 2, ' ', 0)
-		fmt.Fprintln(w, "ID\tPATH\tALT\tVERSIONS")
-		for _, asset := range assets {
-			fmt.Fprintf(w, "%s\t%s\t%s\t%d\n", uuid.UUID(asset.ID), asset.Path, asset.Alt, len(asset.Versions))
-		}
+	w.Flush()
 
-		w.Flush()
+	return nil
 
-		return nil
-	},
 }

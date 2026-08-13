@@ -2,19 +2,23 @@ package main
 
 import (
 	"fmt"
-	"os"
 
-	"github.com/spf13/cobra"
+	"github.com/alecthomas/kong"
 )
 
-var rootCmd = &cobra.Command{
-	Use:   "images",
-	Short: "A CLI for managing images",
+var CLI struct {
+	Get    getCommand    `cmd:"" help:"Get an images"`
+	List   listCommand   `cmd:"" help:"List images"`
+	Create createCommand `cmd:"" help:"Create an image"`
 }
 
 func main() {
-	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	ctx := kong.Parse(&CLI,
+		kong.Name("images"),
+		kong.Description("Manage images"),
+	)
+
+	if err := ctx.Run(ctx); err != nil {
+		fmt.Fprintf(ctx.Stderr, "Error: %v", err)
 	}
 }
