@@ -6,7 +6,6 @@ import (
 	"image"
 	"os"
 
-	"github.com/alecthomas/kong"
 	"github.com/google/uuid"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media"
@@ -20,9 +19,7 @@ type createCommand struct {
 	MediaTypes []string `help:"The mediatypes to produce"`
 }
 
-func (cmd *createCommand) Run(ctx *kong.Context) error {
-	runtimeContext := context.Background()
-
+func (cmd *createCommand) Run(runtimeContext context.Context) error {
 	img, err := readImage(cmd.Source)
 	if err != nil {
 		return fmt.Errorf("reading image: %w", err)

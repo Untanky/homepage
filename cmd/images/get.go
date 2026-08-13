@@ -18,9 +18,7 @@ type getCommand struct {
 	Html bool   `help:"Output the image as HTML"`
 }
 
-func (cmd *getCommand) Run(ctx *kong.Context) error {
-	runtimeContext := context.Background()
-
+func (cmd *getCommand) Run(ctx *kong.Context, runtimeContext context.Context) error {
 	databaseClient, err := database.Setup(runtimeContext, database.Config{
 		Username: "postgres",
 		Password: "postgres",

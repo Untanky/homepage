@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 
 	"github.com/alecthomas/kong"
@@ -13,12 +14,15 @@ var CLI struct {
 }
 
 func main() {
+	runtimeCtx := context.Background()
+
 	ctx := kong.Parse(&CLI,
 		kong.Name("images"),
 		kong.Description("Manage images"),
+		kong.BindTo(runtimeCtx, (*context.Context)(nil)),
 	)
 
-	if err := ctx.Run(ctx); err != nil {
-		fmt.Fprintf(ctx.Stderr, "Error: %v", err)
+	if err := ctx.Run(); err != nil {
+		fmt.Fprintf(ctx.Stderr, "Error: %v\n", err)
 	}
 }

@@ -15,9 +15,7 @@ type listCommand struct {
 	Filter string `arg:"" optional:"" help:"filter the listed image by path prefix"`
 }
 
-func (cmd *listCommand) Run(ctx *kong.Context) error {
-	runtimeContext := context.Background()
-
+func (cmd *listCommand) Run(ctx *kong.Context, runtimeContext context.Context) error {
 	databaseClient, err := database.Setup(runtimeContext, database.Config{
 		Username: "postgres",
 		Password: "postgres",
