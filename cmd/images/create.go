@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/google/uuid"
+	"github.com/untanky/homepage/internal/config"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media"
 	"github.com/untanky/homepage/internal/media/sql"
@@ -19,7 +20,7 @@ type createCommand struct {
 	MediaTypes []string `help:"The mediatypes to produce"`
 }
 
-func (cmd *createCommand) Run(runtimeContext context.Context) error {
+func (cmd *createCommand) Run(runtimeContext context.Context, cfg config.Config) error {
 	img, err := readImage(cmd.Source)
 	if err != nil {
 		return fmt.Errorf("reading image: %w", err)
@@ -53,13 +54,7 @@ func (cmd *createCommand) Run(runtimeContext context.Context) error {
 		Height: uint(img.Bounds().Dy()),
 	}
 
-	databaseClient, err := database.Setup(runtimeContext, database.Config{
-		Username: "postgres",
-		Password: "postgres",
-		Host:     "localhost",
-		Port:     5432,
-		Database: "postgres",
-	})
+	databaseClient, err := database.Setup(runtimeContext, cfg.Database)
 	if err != nil {
 		return fmt.Errorf("setting up database: %w", err)
 	}

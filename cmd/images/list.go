@@ -7,6 +7,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"github.com/google/uuid"
+	"github.com/untanky/homepage/internal/config"
 	"github.com/untanky/homepage/internal/database"
 	"github.com/untanky/homepage/internal/media/sql"
 )
@@ -15,14 +16,8 @@ type listCommand struct {
 	Filter string `arg:"" optional:"" help:"filter the listed image by path prefix"`
 }
 
-func (cmd *listCommand) Run(ctx *kong.Context, runtimeContext context.Context) error {
-	databaseClient, err := database.Setup(runtimeContext, database.Config{
-		Username: "postgres",
-		Password: "postgres",
-		Host:     "localhost",
-		Port:     5432,
-		Database: "postgres",
-	})
+func (cmd *listCommand) Run(ctx *kong.Context, runtimeContext context.Context, cfg config.Config) error {
+	databaseClient, err := database.Setup(runtimeContext, cfg.Database)
 	if err != nil {
 		return fmt.Errorf("setting up database: %w", err)
 	}
