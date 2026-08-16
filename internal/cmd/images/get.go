@@ -1,4 +1,4 @@
-package main
+package images
 
 import (
 	"context"
@@ -14,12 +14,12 @@ import (
 	"github.com/untanky/homepage/internal/media/sql"
 )
 
-type getCommand struct {
+type GetCommand struct {
 	ID   string `arg:"" help:"The id of the image"`
 	Html bool   `help:"Output the image as HTML"`
 }
 
-func (cmd *getCommand) Run(ctx *kong.Context, runtimeContext context.Context, cfg config.Config) error {
+func (cmd *GetCommand) Run(ctx *kong.Context, runtimeContext context.Context, cfg config.Config) error {
 	databaseClient, err := database.Setup(runtimeContext, cfg.Database)
 	if err != nil {
 		return fmt.Errorf("setting up database: %w", err)

@@ -1,4 +1,4 @@
-package main
+package images
 
 import (
 	"context"
@@ -13,14 +13,14 @@ import (
 	"github.com/untanky/homepage/internal/media/sql"
 )
 
-type createCommand struct {
+type CreateCommand struct {
 	Source     string   `help:"The path to the source of the image"`
 	Path       string   `help:"The path under which the image will be accessible"`
 	Widths     []uint   `help:"The widths of the image to produce; can be used multiple times, or a comma separated list"`
 	MediaTypes []string `help:"The mediatypes to produce"`
 }
 
-func (cmd *createCommand) Run(runtimeContext context.Context, cfg config.Config) error {
+func (cmd *CreateCommand) Run(runtimeContext context.Context, cfg config.Config) error {
 	img, err := readImage(cmd.Source)
 	if err != nil {
 		return fmt.Errorf("reading image: %w", err)

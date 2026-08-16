@@ -1,4 +1,4 @@
-package main
+package images
 
 import (
 	"context"
@@ -12,11 +12,11 @@ import (
 	"github.com/untanky/homepage/internal/media/sql"
 )
 
-type listCommand struct {
+type ListCommand struct {
 	Filter string `arg:"" optional:"" help:"filter the listed image by path prefix"`
 }
 
-func (cmd *listCommand) Run(ctx *kong.Context, runtimeContext context.Context, cfg config.Config) error {
+func (cmd *ListCommand) Run(ctx *kong.Context, runtimeContext context.Context, cfg config.Config) error {
 	databaseClient, err := database.Setup(runtimeContext, cfg.Database)
 	if err != nil {
 		return fmt.Errorf("setting up database: %w", err)

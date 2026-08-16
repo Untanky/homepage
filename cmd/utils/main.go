@@ -6,22 +6,25 @@ import (
 	"os"
 
 	"github.com/alecthomas/kong"
+	"github.com/untanky/homepage/internal/cmd/images"
 	"github.com/untanky/homepage/internal/config"
 )
 
 var CLI struct {
-	Config string        `help:"Path to the config path" type:"existingFile"`
-	Get    getCommand    `cmd:"" help:"Get an images"`
-	List   listCommand   `cmd:"" help:"List images"`
-	Create createCommand `cmd:"" help:"Create an image"`
+	Config string `help:"Path to the config path" type:"existingFile"`
+	Images struct {
+		Get    images.GetCommand    `cmd:"" help:"Get an images"`
+		List   images.ListCommand   `cmd:"" help:"List images"`
+		Create images.CreateCommand `cmd:"" help:"Create an image"`
+	} `cmd:"" group:"images" help:"Manage images"`
 }
 
 func main() {
 	runtimeCtx := context.Background()
 
 	ctx := kong.Parse(&CLI,
-		kong.Name("images"),
-		kong.Description("Manage images"),
+		kong.Name("utils"),
+		kong.Description("Handle utilities for the homepage server"),
 		kong.BindTo(runtimeCtx, (*context.Context)(nil)),
 	)
 
