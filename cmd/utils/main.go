@@ -7,6 +7,7 @@ import (
 
 	"github.com/alecthomas/kong"
 	"github.com/untanky/homepage/internal/cmd/images"
+	"github.com/untanky/homepage/internal/cmd/migrate"
 	"github.com/untanky/homepage/internal/config"
 )
 
@@ -16,7 +17,10 @@ var CLI struct {
 		Get    images.GetCommand    `cmd:"" help:"Get an images"`
 		List   images.ListCommand   `cmd:"" help:"List images"`
 		Create images.CreateCommand `cmd:"" help:"Create an image"`
-	} `cmd:"" group:"images" help:"Manage images"`
+	} `cmd:"" group:"Images" help:"Manage images"`
+	Migrations struct {
+		Up migrate.Up `cmd:"" help:"Run up migrations"`
+	} `cmd:"" group:"Migrations" help:"Manage database migrations"`
 }
 
 func main() {
