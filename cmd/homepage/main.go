@@ -8,6 +8,7 @@ import (
 	"github.com/alecthomas/kong"
 	"github.com/untanky/homepage/internal/cmd/images"
 	"github.com/untanky/homepage/internal/cmd/migrate"
+	"github.com/untanky/homepage/internal/cmd/posts"
 	"github.com/untanky/homepage/internal/cmd/server"
 	"github.com/untanky/homepage/internal/config"
 )
@@ -22,6 +23,7 @@ var CLI struct {
 	Migrations struct {
 		Up migrate.Up `cmd:"" help:"Run up migrations"`
 	} `cmd:"" group:"Migrations" help:"Manage database migrations"`
+	Posts posts.Group         `cmd:"" group:"Posts" help:"Manage blog posts"`
 	Serve server.ServeCommand `cmd:"" help:"Start the homepage server"`
 }
 

@@ -170,3 +170,33 @@ func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, pos
 		content:  bytes.NewBufferString(row.Content),
 	}, nil
 }
+
+func (repo *BlogRepository) Create(ctx context.Context, post blog.Post) error {
+	const createBlogPost = `
+		INSERT INTO posts (id, blog_id, author_id, slug, title, summary, content, banner_id, created_at, updated_at)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+	`
+	metadata := post.Metadata()
+
+	buffer := bytes.NewBuffer(nil)
+	if _, err := post.WriteTo(buffer); err != nil {
+		return fmt.Errorf("reading post: %w", err)
+	}
+
+	if _, err := repo.db.Exec(ctx, createBlogPost,
+		metadata.ID,
+		metadata.BlogID,
+		metadata.Author.ID,
+		metadata.Slug,
+		metadata.Title,
+		metadata.Slug,
+		buffer.String(),
+		metadata.Banner.ID,
+		metadata.CreatedAt,
+		metadata.UpdatedAt,
+	); err != nil {
+		return fmt.Errorf("inserting blog post: %w", err)
+	}
+
+	return nil
+}
