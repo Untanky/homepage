@@ -87,5 +87,6 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 	writer.WriteHeader(http.StatusOK)
 	components.PostPage(data,
 		components.WithStylesheet("/assets/main.css"),
+		components.WithScript("/assets/share.js"),
 	).Render(request.Context(), writer)
 }

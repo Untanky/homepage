@@ -14,3 +14,9 @@
     @apply max-w-(--text-width) mx-auto px-4;
   }
 }
+
+@layer components {
+  .share {
+    @apply px-2 py-0.5 border-2 border-black hover:bg-gray-200 cursor-pointer;
+  }
+}
