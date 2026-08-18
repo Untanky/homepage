@@ -191,7 +191,7 @@ func (repo *BlogRepository) Create(ctx context.Context, post blog.Post) error {
 		metadata.Author.ID,
 		metadata.Slug,
 		metadata.Title,
-		metadata.Slug,
+		metadata.Summary,
 		buffer.String(),
 		metadata.Banner.ID,
 		metadata.CreatedAt,
