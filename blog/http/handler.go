@@ -7,6 +7,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/untanky/homepage/blog"
+	"github.com/untanky/homepage/blog/sql"
 	"github.com/untanky/homepage/internal/components"
 	"github.com/untanky/homepage/internal/media"
 )
@@ -17,7 +18,7 @@ type Repository interface {
 
 type PostRepository interface {
 	GetAllMetadata(ctx context.Context, blogID blog.BlogID) ([]*blog.PostMetadata, error)
-	GetPost(ctx context.Context, blogID blog.BlogID, postID blog.PostID) (blog.Post, error)
+	GetPost(ctx context.Context, blogID blog.BlogID, filter sql.Filter) (blog.Post, error)
 }
 
 type AssetRepository interface {
@@ -26,8 +27,8 @@ type AssetRepository interface {
 
 func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
 	ctrl := new(controller{
-		blogRepo:  blogRepo,
-		postRepo:  postRepo,
+		blogRepo: blogRepo,
+		postRepo: postRepo,
 	})
 
 	mux := http.NewServeMux()
@@ -39,8 +40,8 @@ func Handler(blogRepo Repository, postRepo PostRepository) http.Handler {
 }
 
 type controller struct {
-	blogRepo  Repository
-	postRepo  PostRepository
+	blogRepo Repository
+	postRepo PostRepository
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
@@ -70,7 +71,9 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {
-	post, err := c.postRepo.GetPost(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")), blog.PostID(uuid.MustParse("a3264d4c-6e85-4009-9431-e12c132b37cb")))
+	slug := request.PathValue("slug")
+
+	post, err := c.postRepo.GetPost(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")), sql.MatchSlug(slug))
 	if err != nil {
 		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
 		writer.WriteHeader(http.StatusInternalServerError)

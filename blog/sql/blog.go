@@ -115,18 +115,20 @@ func (repo *BlogRepository) GetAllMetadata(ctx context.Context, blogID blog.Blog
 	return posts, nil
 }
 
-func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, postID blog.PostID) (blog.Post, error) {
+func (repo *BlogRepository) GetPost(ctx context.Context, blogID blog.BlogID, filter Filter) (blog.Post, error) {
 	const getPostSQL = `
 		SELECT p.id, p.blog_id, p.title, p.slug, p.summary, p.content, p.banner_id as banner_id, p.created_at, p.updated_at,
 					 au.id as author_id, au.name as author_name, au.picture_id as author_picture_id
 		FROM posts p
 		JOIN authors au ON p.author_id = au.id
-		WHERE p.blog_id = $1 and p.id = $2
+		WHERE p.blog_id = $1 and %s
 		GROUP BY p.id, au.id
 		LIMIT 1
 	`
 
-	result, err := repo.db.Query(ctx, getPostSQL, blogID, postID)
+	args := append([]any{blogID}, filter.Args()...)
+
+	result, err := repo.db.Query(ctx, fmt.Sprintf(getPostSQL, filter.Condition()), args...)
 	if err != nil {
 		return nil, fmt.Errorf("querying posts: %w", handleErr(err))
 	}
