@@ -6,12 +6,21 @@
   :host {
     --content-width: calc(var(--spacing) * 210);
     --text-width: calc(var(--spacing) * 150);
+
   }
 }
 
 @layer utilities {
   .prose > *:not(img) {
     @apply max-w-(--text-width) mx-auto px-4;
+  }
+
+  .prose > h1 {
+    @apply text-6xl font-bold mb-[0.625em];
+  }
+
+  .prose > h2 {
+    @apply text-5xl font-bold mb-[0.75em];
   }
 }
 

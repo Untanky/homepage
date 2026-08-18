@@ -184,7 +184,7 @@ func BlogPage(data BlogListData, options ...PageOption) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-5xl font-bold\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-2\"><h1 class=\"text-6xl font-bold mb-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -360,7 +360,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-4\"><h1 class=\"text-5xl font-bold\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 20, "</div><div class=\"max-w-(--text-width) px-4 mx-auto mt-6 space-y-8\"><h1 class=\"text-6xl font-bold\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

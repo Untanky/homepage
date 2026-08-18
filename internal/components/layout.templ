@@ -72,7 +72,7 @@ templ BlogPage(data BlogListData, options ...PageOption) {
         @Image(data.Blog.Banner, 840)
       </div>
       <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
-        <h1 class="text-5xl font-bold">
+        <h1 class="text-6xl font-bold mb-4">
           {data.Blog.Title}
         </h1>
         <p class="text-gray-700 text-lg">
@@ -122,8 +122,8 @@ templ PostPage(data PostData, options ...PageOption) {
       <div class="bg-blue-500/25 aspect-3/1 w-full">
         @Image(metadata.Banner, 840)
       </div>
-      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-4">
-        <h1 class="text-5xl font-bold">
+      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-8">
+        <h1 class="text-6xl font-bold">
           {metadata.Title}
         </h1>
         @postMetadata(metadata)
