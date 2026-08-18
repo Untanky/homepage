@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS posts (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-CREATE INDEX IF NOT EXISTS idx_posts_blog_id   ON posts(blog_id);
+ALTER TABLE my_table
+ADD CONSTRAINT my_table_foreign_key_foo_key UNIQUE (foreign_key, foo);
 CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
 
 CREATE SCHEMA IF NOT EXISTS media;
