@@ -6,10 +6,10 @@ import (
 
 templ Image(asset media.Asset, width uint) {
   {{ sets := media.Sources(asset, "/media", width) }}
-  <picture class="w-full h-full">
+  <picture class="block w-full h-full">
     for _, set := range sets {
       <source srcset={set.SourceSet} type={set.Type} sizes={set.Sizes} />
     }
-    <img src="">
+    <img src="" class="w-full h-full object-cover">
   </picture>
 }

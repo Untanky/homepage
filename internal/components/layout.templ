@@ -5,6 +5,7 @@ import (
   "fmt"
 
   "github.com/untanky/homepage/blog"
+  "github.com/untanky/homepage/internal/media"
 )
 
 type pageConfig struct {
@@ -68,9 +69,7 @@ templ BlogPage(data BlogListData, options ...PageOption) {
 
   @html(cfg) {
     <main class="max-w-(--content-width) mx-auto">
-      <div class="bg-red-500/25 aspect-3/1 w-full">
-        @Image(data.Blog.Banner, 840)
-      </div>
+      @pageHeader(data.Blog.Banner)
       <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
         <h1 class="text-6xl font-bold mb-4">
           {data.Blog.Title}
@@ -89,7 +88,7 @@ templ BlogPage(data BlogListData, options ...PageOption) {
 templ postList(data BlogListData) {
   for _, post := range data.Posts {
     <a href={data.Blog.PostURL(*post)} class="block border-2 border-black/75">
-      <div class="bg-blue-500/25 aspect-3/1 w-full">
+      <div class="aspect-3/1 w-full overflow-hidden">
         @Image(post.Banner, 840)
       </div>
       <div class="px-4 pt-2 pb-3 space-y-1">
@@ -157,6 +156,12 @@ templ postMetadata(metadata blog.PostMetadata) {
       }}
       @shareButton(shareInfo)
     </div>
+  </div>
+}
+
+templ pageHeader(image media.Asset) {
+  <div class="aspect-3/1 w-full overflow-hidden border-2 border-black">
+    @Image(image, 840)
   </div>
 }
 
