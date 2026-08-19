@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"mime"
+	"slices"
 	"strings"
 
 	"github.com/google/uuid"
@@ -41,6 +42,13 @@ type Source struct {
 	SourceSet string
 }
 
+var mimetypeOrder = map[string]int{
+	"image/avif": -4,
+	"image/webp": -3,
+	"image/png":  -2,
+	"image/jpeg": -1,
+}
+
 func Sources(asset Asset, pathPrefix string, width uint) []Source {
 	basePath := fmt.Sprintf("%s/%s", pathPrefix, asset.Path)
 	sizes := fmt.Sprintf("(min-width: %dpx) %dpx, 100vw", asset.Width, asset.Width)
@@ -61,6 +69,10 @@ func Sources(asset Asset, pathPrefix string, width uint) []Source {
 			SourceSet: strings.Join(sourceSet, ", "),
 		})
 	}
+
+	slices.SortFunc(sources, func(a Source, b Source) int {
+		return mimetypeOrder[a.Type] - mimetypeOrder[b.Type]
+	})
 
 	return sources
 }
