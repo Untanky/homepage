@@ -1,39 +1,10 @@
 package components
 
 import (
-  "context"
-
-"github.com/untanky/homepage/internal/media"
+  "github.com/untanky/homepage/internal/media"
 )
 
-type pageConfig struct {
-  title string
-
-  scripts     []string
-  stylesheets []string
-}
-
-type PageOption func(ctx context.Context, cfg *pageConfig)
-
-func WithTitle(title string) PageOption {
-  return func(ctx context.Context, cfg *pageConfig) {
-     cfg.title = title
-  }
-}
-
-func WithScript(scriptURL string) PageOption {
-  return func(ctx context.Context, cfg *pageConfig) {
-     cfg.scripts = append(cfg.scripts, scriptURL)
-  }
-}
-
-func WithStylesheet(stylesheetURL string) PageOption {
-  return func(ctx context.Context, cfg *pageConfig) {
-     cfg.stylesheets = append(cfg.stylesheets, stylesheetURL)
-  }
-}
-
-templ html(cfg pageConfig) {
+templ html(cfg HtmlPage) {
   <html>
     <head>
       <title>{cfg.title}</title>

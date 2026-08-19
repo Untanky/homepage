@@ -2,6 +2,7 @@ package http
 
 import (
 	"context"
+	"fmt"
 	"log/slog"
 	"net/http"
 
@@ -65,15 +66,24 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 	}
 
 	writer.WriteHeader(http.StatusOK)
-	components.BlogPage(blogListData,
+	components.Page(
+		components.WithChild(components.BlogPage(blogListData)),
+		components.WithTitle(blg.Title),
 		components.WithStylesheet("/assets/main.css"),
 	).Render(request.Context(), writer)
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {
+	blg, err := c.blogRepo.GetBlog(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")))
+	if err != nil {
+		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
+		writer.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	slug := request.PathValue("slug")
 
-	post, err := c.postRepo.GetPost(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")), sql.MatchSlug(slug))
+	post, err := c.postRepo.GetPost(request.Context(), blg.ID, sql.MatchSlug(slug))
 	if err != nil {
 		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
 		writer.WriteHeader(http.StatusInternalServerError)
@@ -84,9 +94,11 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 		Post: post,
 	}
 
-	writer.WriteHeader(http.StatusOK)
-	components.PostPage(data,
+	
+		writer.WriteHeader(http.StatusOK)
+	components.Page(
+		components.WithChild(components.PostPage(data)),
+		components.WithTitle(fmt.Sprintf("%s - %s", post.Metadata().Title, blg.Title)),
 		components.WithStylesheet("/assets/main.css"),
-		components.WithScript("/assets/share.js"),
 	).Render(request.Context(), writer)
 }

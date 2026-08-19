@@ -11,30 +11,21 @@ type BlogListData struct {
   Posts []*blog.PostMetadata
 }
 
-templ BlogPage(data BlogListData, options ...PageOption) {
-  {{
-    cfg := pageConfig{}
-    for _, opt := range options {
-      opt(ctx, &cfg)
-    }
-  }}
-
-  @html(cfg) {
-    <main class="max-w-(--content-width) mx-auto">
-      @pageHeader(data.Blog.Banner)
-      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
-        <h1 class="text-6xl font-bold mb-4">
-          {data.Blog.Title}
-        </h1>
-        <p class="text-gray-700 text-lg">
-          {data.Blog.Summary}
-        </p>
-      </div>
-      <div class="max-w-(--text-width) mx-auto mt-8 mb-32 space-y-4">
-        @postList(data)
-      </div>
-    </main>
-  }
+templ BlogPage(data BlogListData) {
+  <main class="max-w-(--content-width) mx-auto">
+    @pageHeader(data.Blog.Banner)
+    <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-2">
+      <h1 class="text-6xl font-bold mb-4">
+        {data.Blog.Title}
+      </h1>
+      <p class="text-gray-700 text-lg">
+        {data.Blog.Summary}
+      </p>
+    </div>
+    <div class="max-w-(--text-width) mx-auto mt-8 mb-32 space-y-4">
+      @postList(data)
+    </div>
+  </main>
 }
 
 templ postList(data BlogListData) {
@@ -61,27 +52,21 @@ type PostData struct {
 
 templ PostPage(data PostData, options ...PageOption) {
   {{
-    cfg := pageConfig{}
-    for _, opt := range options {
-      opt(ctx, &cfg)
-    }
     metadata := data.Post.Metadata()
   }}
 
-  @html(cfg) {
-    <main class="max-w-(--content-width) mx-auto">
-      @pageHeader(metadata.Banner) 
-      <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-8">
-        <h1 class="text-6xl font-bold">
-          {metadata.Title}
-        </h1>
-        @postMetadata(metadata)
-      </div>
-      <article class="prose mx-auto mt-8 space-y-8">
-        @post(data.Post)
-      </article>
-    </main>
-  }
+  <main class="max-w-(--content-width) mx-auto">
+    @pageHeader(metadata.Banner) 
+    <div class="max-w-(--text-width) px-4 mx-auto mt-6 space-y-8">
+      <h1 class="text-6xl font-bold">
+        {metadata.Title}
+      </h1>
+      @postMetadata(metadata)
+    </div>
+    <article class="prose mx-auto mt-8 space-y-8">
+      @post(data.Post)
+    </article>
+  </main>
 }
 
 templ postMetadata(metadata blog.PostMetadata) {
