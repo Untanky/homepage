@@ -8,7 +8,8 @@ import (
 )
 
 type HtmlPage struct {
-	title string
+	title    string
+	metadata PageMetadata
 
 	scripts     []string
 	stylesheets []string
@@ -21,6 +22,12 @@ type PageOption func(cfg *HtmlPage)
 func WithTitle(title string) PageOption {
 	return func(cfg *HtmlPage) {
 		cfg.title = title
+	}
+}
+
+func WithMetadata(md PageMetadata) PageOption {
+	return func(page *HtmlPage) {
+		page.metadata = md
 	}
 }
 

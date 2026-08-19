@@ -94,11 +94,12 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 		Post: post,
 	}
 
-	
-		writer.WriteHeader(http.StatusOK)
+	writer.WriteHeader(http.StatusOK)
 	components.Page(
 		components.WithChild(components.PostPage(data)),
 		components.WithTitle(fmt.Sprintf("%s - %s", post.Metadata().Title, blg.Title)),
+		components.WithMetadata(components.NewMetadataFromPostMetadata(post.Metadata(), blg)),
+		components.WithScript("/assets/share.js"),
 		components.WithStylesheet("/assets/main.css"),
 	).Render(request.Context(), writer)
 }
