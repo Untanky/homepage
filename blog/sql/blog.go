@@ -30,7 +30,7 @@ func NewBlogRepository(db database.Client, assetRepo AssetRepository) *BlogRepos
 
 func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error) {
 	const getBlogSQL = `
-		SELECT b.id, b.title, b.summary, b.banner_id
+		SELECT b.id, b.title, b.summary, b.banner_id, b.authority
 		FROM blogs b
 		WHERE b.id = $1
 	`
@@ -51,10 +51,11 @@ func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (bl
 	}
 
 	blg := blog.Blog{
-		ID:      row.ID,
-		Title:   row.Title,
-		Summary: row.Summary,
-		Banner:  banner,
+		ID:        row.ID,
+		Title:     row.Title,
+		Summary:   row.Summary,
+		Banner:    banner,
+		Authority: row.Authority,
 	}
 
 	return blg, nil

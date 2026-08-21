@@ -169,6 +169,7 @@ func postList(data BlogListData) templ.Component {
 }
 
 type PostData struct {
+	Blog blog.Blog
 	Post blog.Post
 }
 
@@ -209,7 +210,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(metadata.Title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 62, Col: 23}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 63, Col: 23}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {
@@ -219,7 +220,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = postMetadata(metadata).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = postMetadata(metadata, data.Blog.Authority).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -239,7 +240,7 @@ func PostPage(data PostData, options ...PageOption) templ.Component {
 	})
 }
 
-func postMetadata(metadata blog.PostMetadata) templ.Component {
+func postMetadata(metadata blog.PostMetadata, authority string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -275,7 +276,7 @@ func postMetadata(metadata blog.PostMetadata) templ.Component {
 		var templ_7745c5c3_Var11 string
 		templ_7745c5c3_Var11, templ_7745c5c3_Err = templ.JoinStringErrs(metadata.Author.Name)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 79, Col: 29}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 80, Col: 29}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var11))
 		if templ_7745c5c3_Err != nil {
@@ -288,7 +289,7 @@ func postMetadata(metadata blog.PostMetadata) templ.Component {
 		var templ_7745c5c3_Var12 string
 		templ_7745c5c3_Var12, templ_7745c5c3_Err = templ.JoinStringErrs(metadata.CreatedAt.Format("02.01.2006"))
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 82, Col: 48}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `internal/components/blog.templ`, Line: 83, Col: 48}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var12))
 		if templ_7745c5c3_Err != nil {
@@ -300,7 +301,7 @@ func postMetadata(metadata blog.PostMetadata) templ.Component {
 		}
 		shareInfo := ShareData{
 			Title: metadata.Title,
-			URL:   fmt.Sprintf("http://localhost:8081/%s", metadata.Slug),
+			URL:   fmt.Sprintf("%s/%s", authority, metadata.Slug),
 		}
 		templ_7745c5c3_Err = shareButton(shareInfo).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {

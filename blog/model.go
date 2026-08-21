@@ -18,14 +18,15 @@ type (
 )
 
 type Blog struct {
-	ID      BlogID
-	Banner  media.Asset
-	Title   string
-	Summary string
+	ID        BlogID
+	Banner    media.Asset
+	Title     string
+	Summary   string
+	Authority string
 }
 
 func (blog Blog) PostURL(metadata PostMetadata) string {
-	return fmt.Sprintf("/%s", metadata.Slug)
+	return fmt.Sprintf("%s/%s", blog.Authority, metadata.Slug)
 }
 
 type Author struct {

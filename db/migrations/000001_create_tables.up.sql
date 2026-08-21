@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS blogs (
   title VARCHAR(128) NOT NULL,
   summary TEXT,
   banner_id UUID NOT NULL,
+  authority VARCHAR() NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts (

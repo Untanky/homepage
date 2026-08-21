@@ -9,10 +9,11 @@ import (
 )
 
 type blogRow struct {
-	ID       blog.BlogID  `db:"id"`
-	Title    string       `db:"title"`
-	Summary  string       `db:"summary"`
-	BannerID blog.MediaID `db:"banner_id"`
+	ID        blog.BlogID  `db:"id"`
+	Title     string       `db:"title"`
+	Summary   string       `db:"summary"`
+	BannerID  blog.MediaID `db:"banner_id"`
+	Authority string       `db:"authority"`
 }
 
 type postMetadataRow struct {

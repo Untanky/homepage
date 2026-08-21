@@ -47,6 +47,7 @@ templ postList(data BlogListData) {
 }
 
 type PostData struct {
+  Blog blog.Blog
   Post blog.Post
 }
 
@@ -61,7 +62,7 @@ templ PostPage(data PostData, options ...PageOption) {
       <h1 class="text-6xl font-bold">
         {metadata.Title}
       </h1>
-      @postMetadata(metadata)
+      @postMetadata(metadata, data.Blog.Authority)
     </div>
     <article class="prose mx-auto mt-8 space-y-8">
       @post(data.Post)
@@ -69,7 +70,7 @@ templ PostPage(data PostData, options ...PageOption) {
   </main>
 }
 
-templ postMetadata(metadata blog.PostMetadata) {
+templ postMetadata(metadata blog.PostMetadata, authority string) {
   <div class="flex flex-row items-center border-2 border-black space-x-2">
     <div class="w-14.5 h-14 border-r-2 border-black">
       @Image(metadata.Author.Picture, 48)
@@ -86,7 +87,7 @@ templ postMetadata(metadata blog.PostMetadata) {
       {{
         shareInfo := ShareData {
           Title: metadata.Title,
-          URL: fmt.Sprintf("http://localhost:8081/%s", metadata.Slug),
+          URL: fmt.Sprintf("%s/%s", authority, metadata.Slug),
         }
       }}
       @shareButton(shareInfo)

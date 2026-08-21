@@ -24,11 +24,11 @@ func NewMetadataFromPostMetadata(metadata blog.PostMetadata, blg blog.Blog) Page
 	return PageMetadata{
 		Title:        metadata.Title,
 		Description:  metadata.Summary,
-		CanonicalURL: fmt.Sprintf("http://localhost:8081/%s", metadata.Slug),
+		CanonicalURL: fmt.Sprintf("%s/%s", blg.Authority, metadata.Slug),
 		Robots:       "index, follow",
 		Author:       metadata.Author.Name,
 		Type:         "article",
-		Image:        fmt.Sprintf("http://localhost:8081/%s", metadata.Banner.FallbackURL(pathPrefix)),
+		Image:        fmt.Sprintf("%s%s", blg.Authority, metadata.Banner.FallbackURL(pathPrefix)),
 		Site:         blg.Title,
 		PublishedAt:  metadata.CreatedAt,
 		EditedAt:     metadata.UpdatedAt,
