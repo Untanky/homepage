@@ -5,6 +5,7 @@ import (
 	"io"
 	"mime"
 	"slices"
+	"sort"
 	"strings"
 
 	"github.com/google/uuid"
@@ -75,4 +76,24 @@ func Sources(asset Asset, pathPrefix string, width uint) []Source {
 	})
 
 	return sources
+}
+
+func (asset Asset) FallbackURL(pathPrefix string) string {
+	if len(asset.Versions) == 0 {
+		return ""
+	}
+
+	sorted := make([]VersionMetadata, len(asset.Versions))
+	copy(sorted, asset.Versions)
+
+	sort.Slice(sorted, func(i, j int) bool {
+		pi, pj := mimetypeOrder[sorted[i].Mimetype], mimetypeOrder[sorted[j].Mimetype]
+		if pi != pj {
+			return pi < pj
+		}
+		return sorted[i].Width < sorted[i].Height
+	})
+
+	extension, _ := mime.ExtensionsByType(sorted[0].Mimetype)
+	return fmt.Sprintf("%s/%s-%d%s", pathPrefix, asset.Path, sorted[0].Width, extension[0])
 }

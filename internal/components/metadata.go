@@ -22,12 +22,13 @@ type PageMetadata struct {
 
 func NewMetadataFromPostMetadata(metadata blog.PostMetadata, blg blog.Blog) PageMetadata {
 	return PageMetadata{
+		Title:        metadata.Title,
 		Description:  metadata.Summary,
 		CanonicalURL: fmt.Sprintf("http://localhost:8081/%s", metadata.Slug),
 		Robots:       "index, follow",
 		Author:       metadata.Author.Name,
 		Type:         "article",
-		Image:        "",
+		Image:        fmt.Sprintf("http://localhost:8081/%s", metadata.Banner.FallbackURL(pathPrefix)),
 		Site:         blg.Title,
 		PublishedAt:  metadata.CreatedAt,
 		EditedAt:     metadata.UpdatedAt,
