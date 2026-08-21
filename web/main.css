@@ -1,12 +1,23 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
+@font-face {
+  font-family: "Space Grotesk";
+  src: url("./fonts/space-grotesk.ttf") format("truetype");
+  font-weight: 300 700;
+  font-style: normal;
+}
+
+@theme {
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans--font-feature-settings: "aalt", "zero"; 
+}
+
 @layer theme {
   :root,
   :host {
     --content-width: calc(var(--spacing) * 210);
     --text-width: calc(var(--spacing) * 150);
-
   }
 }
 

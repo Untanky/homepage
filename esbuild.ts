@@ -8,6 +8,9 @@ await esbuild.build({
   ],
   outdir: "tmp/web",
   bundle: true,
+  loader: {
+    '.ttf': 'file',
+  },
   plugins: [
     tailwindPlugin({
       /* options */
