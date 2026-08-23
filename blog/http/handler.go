@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/google/uuid"
 	"github.com/untanky/homepage/blog"
 	"github.com/untanky/homepage/blog/sql"
 	"github.com/untanky/homepage/internal/components"
@@ -15,6 +14,7 @@ import (
 
 type Repository interface {
 	GetBlog(ctx context.Context, blogID blog.BlogID) (blog.Blog, error)
+	GetBlogByHost(ctx context.Context, host string) (blog.Blog, error)
 }
 
 type PostRepository interface {
@@ -46,7 +46,7 @@ type controller struct {
 }
 
 func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Request) {
-	blg, err := c.blogRepo.GetBlog(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")))
+	blg, err := c.getBlog(request)
 	if err != nil {
 		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
 		writer.WriteHeader(http.StatusInternalServerError)
@@ -74,7 +74,7 @@ func (c *controller) renderPostList(writer http.ResponseWriter, request *http.Re
 }
 
 func (c *controller) renderPost(writer http.ResponseWriter, request *http.Request) {
-	blg, err := c.blogRepo.GetBlog(request.Context(), blog.BlogID(uuid.MustParse("5e1da57f-f1cb-44cc-88cd-815b996042cf")))
+	blg, err := c.getBlog(request)
 	if err != nil {
 		slog.ErrorContext(request.Context(), "failed request", slog.Any("error", err))
 		writer.WriteHeader(http.StatusInternalServerError)
@@ -102,4 +102,15 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 		components.WithScript("/assets/share.js"),
 		components.WithStylesheet("/assets/main.css"),
 	).Render(request.Context(), writer)
+}
+
+func (c *controller) getBlog(request *http.Request) (blog.Blog, error) {
+	blg, err := c.blogRepo.GetBlogByHost(request.Context(), request.Host)
+	if err != nil {
+		return blog.Blog{}, err
+	}
+
+	slog.Info("found blog", "blog", blg)
+
+	return blg, nil
 }
