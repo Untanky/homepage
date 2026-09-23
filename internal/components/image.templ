@@ -8,10 +8,10 @@ const pathPrefix = "/media"
 
 templ Image(asset media.Asset, width uint) {
   {{ sets := media.Sources(asset, pathPrefix, width) }}
-  <picture class="block w-full h-full">
+  <picture class="block w-full h-full min-h-full object-cover">
     for _, set := range sets {
       <source srcset={set.SourceSet} type={set.Type} sizes={set.Sizes} />
     }
-    <img src={asset.FallbackURL(pathPrefix)} class="w-full h-full object-cover">
+    <img src={asset.FallbackURL(pathPrefix)} class="object-cover">
   </picture>
 }
