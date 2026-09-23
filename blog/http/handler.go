@@ -107,10 +107,8 @@ func (c *controller) renderPost(writer http.ResponseWriter, request *http.Reques
 func (c *controller) getBlog(request *http.Request) (blog.Blog, error) {
 	blg, err := c.blogRepo.GetBlogByHost(request.Context(), request.Host)
 	if err != nil {
-		return blog.Blog{}, err
+		return blog.Blog{}, fmt.Errorf("finding blog for '%s': %w", err)
 	}
-
-	slog.Info("found blog", "blog", blg)
 
 	return blg, nil
 }

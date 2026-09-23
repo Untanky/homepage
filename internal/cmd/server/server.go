@@ -36,7 +36,7 @@ func (cmd *ServeCommand) Run(ctx context.Context, cfg config.Config) error {
 	logger.InfoContext(ctx, "setting up server")
 
 	server := new(http.Server{
-		Addr:    ":8080",
+		Addr:    "0.0.0.0:8080",
 		Handler: telemetry.NewHandler(buildHandler(databaseClient), logger),
 	})
 

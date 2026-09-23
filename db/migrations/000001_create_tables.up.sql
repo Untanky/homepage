@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS blogs (
   title VARCHAR(128) NOT NULL,
   summary TEXT,
   banner_id UUID NOT NULL,
-  authority VARCHAR() NOT NULL
+  authority VARCHAR NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS posts (
@@ -25,8 +25,8 @@ CREATE TABLE IF NOT EXISTS posts (
   updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now()
 );
 
-ALTER TABLE my_table
-ADD CONSTRAINT my_table_foreign_key_foo_key UNIQUE (foreign_key, foo);
+ALTER TABLE posts 
+ADD CONSTRAINT posts_blog_id_slug_key UNIQUE (blog_id, slug);
 CREATE INDEX IF NOT EXISTS idx_posts_author_id ON posts(author_id);
 
 CREATE SCHEMA IF NOT EXISTS media;

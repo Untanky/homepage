@@ -6,6 +6,8 @@ generate/templ:
 build/web:
 	@node ./esbuild.ts
 
+build: generate build/web
+
 watch/build: generate build/web
 	@go build -o ./tmp/homepage ./cmd/homepage
 

@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"log/slog"
 
 	"github.com/jackc/pgx/v5"
 	"github.com/untanky/homepage/blog"
@@ -35,8 +34,6 @@ func (repo *BlogRepository) GetBlog(ctx context.Context, blogID blog.BlogID) (bl
 		FROM blogs b
 		WHERE b.id = $1
 	`
-
-	slog.Info(fmt.Sprintf("%%%s\n", blogID))
 
 	result, err := repo.db.Query(ctx, getBlogSQL, blogID)
 	if err != nil {
@@ -70,8 +67,6 @@ func (repo *BlogRepository) GetBlogByHost(ctx context.Context, host string) (blo
 		FROM blogs b
 		WHERE b.authority ilike $1
 	`
-
-	slog.Info(fmt.Sprintf("%%%s\n", host))
 
 	result, err := repo.db.Query(ctx, getBlogByHostSQL, fmt.Sprintf("%%%s", host))
 	if err != nil {
