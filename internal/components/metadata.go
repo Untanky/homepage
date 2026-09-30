@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/untanky/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog"
 )
 
 type PageMetadata struct {

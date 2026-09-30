@@ -1,6 +1,6 @@
 package config
 
-import "github.com/untanky/homepage/internal/database"
+import "go.lukasgrimm.me/homepage/internal/database"
 
 type Config struct {
 	Database database.Config `yaml:"database"`

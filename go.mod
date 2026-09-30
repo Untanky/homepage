@@ -1,4 +1,4 @@
-module github.com/untanky/homepage
+module go.lukasgrimm.me/homepage
 
 go 1.26.4
 

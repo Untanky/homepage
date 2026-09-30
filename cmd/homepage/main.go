@@ -6,11 +6,11 @@ import (
 	"os"
 
 	"github.com/alecthomas/kong"
-	"github.com/untanky/homepage/internal/cmd/images"
-	"github.com/untanky/homepage/internal/cmd/migrate"
-	"github.com/untanky/homepage/internal/cmd/posts"
-	"github.com/untanky/homepage/internal/cmd/server"
-	"github.com/untanky/homepage/internal/config"
+	"go.lukasgrimm.me/homepage/internal/cmd/images"
+	"go.lukasgrimm.me/homepage/internal/cmd/migrate"
+	"go.lukasgrimm.me/homepage/internal/cmd/posts"
+	"go.lukasgrimm.me/homepage/internal/cmd/server"
+	"go.lukasgrimm.me/homepage/internal/config"
 )
 
 var CLI struct {

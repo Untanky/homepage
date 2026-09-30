@@ -1,6 +1,6 @@
 package sql
 
-import "github.com/untanky/homepage/blog"
+import "go.lukasgrimm.me/homepage/blog"
 
 type Filter interface {
 	Condition() string

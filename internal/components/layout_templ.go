@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"time"
 
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 func html(cfg HtmlPage) templ.Component {

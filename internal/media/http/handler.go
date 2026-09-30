@@ -10,7 +10,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 type AssetRepository interface {

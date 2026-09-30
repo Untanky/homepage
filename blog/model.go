@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 type (

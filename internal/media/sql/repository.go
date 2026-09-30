@@ -5,8 +5,8 @@ import (
 	"context"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/untanky/homepage/internal/database"
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/database"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 type assetRow struct {

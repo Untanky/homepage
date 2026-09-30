@@ -6,10 +6,10 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/untanky/homepage/blog"
-	"github.com/untanky/homepage/blog/sql"
-	"github.com/untanky/homepage/internal/components"
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog/sql"
+	"go.lukasgrimm.me/homepage/internal/components"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 type Repository interface {

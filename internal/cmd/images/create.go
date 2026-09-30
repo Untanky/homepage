@@ -7,10 +7,10 @@ import (
 	"os"
 
 	"github.com/google/uuid"
-	"github.com/untanky/homepage/internal/config"
-	"github.com/untanky/homepage/internal/database"
-	"github.com/untanky/homepage/internal/media"
-	"github.com/untanky/homepage/internal/media/sql"
+	"go.lukasgrimm.me/homepage/internal/config"
+	"go.lukasgrimm.me/homepage/internal/database"
+	"go.lukasgrimm.me/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/media/sql"
 )
 
 type CreateCommand struct {

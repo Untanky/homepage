@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/untanky/homepage/blog"
-	bloghttp "github.com/untanky/homepage/blog/http"
-	"github.com/untanky/homepage/blog/sql"
-	"github.com/untanky/homepage/internal/config"
-	"github.com/untanky/homepage/internal/database"
-	mediahttp "github.com/untanky/homepage/internal/media/http"
-	mediasql "github.com/untanky/homepage/internal/media/sql"
-	"github.com/untanky/homepage/internal/telemetry"
+	"go.lukasgrimm.me/homepage/blog"
+	bloghttp "go.lukasgrimm.me/homepage/blog/http"
+	"go.lukasgrimm.me/homepage/blog/sql"
+	"go.lukasgrimm.me/homepage/internal/config"
+	"go.lukasgrimm.me/homepage/internal/database"
+	mediahttp "go.lukasgrimm.me/homepage/internal/media/http"
+	mediasql "go.lukasgrimm.me/homepage/internal/media/sql"
+	"go.lukasgrimm.me/homepage/internal/telemetry"
 )
 
 type ServeCommand struct{}

@@ -11,7 +11,7 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 
-	"github.com/untanky/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog"
 )
 
 type BlogListData struct {

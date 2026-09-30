@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/jackc/pgx/v5"
-	myerrors "github.com/untanky/homepage/internal/errors"
+	myerrors "go.lukasgrimm.me/homepage/internal/errors"
 )
 
 func handleErr(err error) error {

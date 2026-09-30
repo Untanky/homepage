@@ -9,7 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 const pathPrefix = "/media"

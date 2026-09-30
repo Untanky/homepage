@@ -8,7 +8,7 @@ import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/pgx/v5"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
-	"github.com/untanky/homepage/internal/config"
+	"go.lukasgrimm.me/homepage/internal/config"
 )
 
 type Up struct {

@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/untanky/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog"
 )
 
 type blogRow struct {

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/untanky/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog"
 )
 
 type writerToComponent struct {

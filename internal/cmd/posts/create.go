@@ -8,12 +8,12 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/untanky/homepage/blog"
-	"github.com/untanky/homepage/blog/sql"
-	"github.com/untanky/homepage/internal/config"
-	"github.com/untanky/homepage/internal/database"
-	"github.com/untanky/homepage/internal/media"
-	mediasql "github.com/untanky/homepage/internal/media/sql"
+	"go.lukasgrimm.me/homepage/blog"
+	"go.lukasgrimm.me/homepage/blog/sql"
+	"go.lukasgrimm.me/homepage/internal/config"
+	"go.lukasgrimm.me/homepage/internal/database"
+	"go.lukasgrimm.me/homepage/internal/media"
+	mediasql "go.lukasgrimm.me/homepage/internal/media/sql"
 	"go.yaml.in/yaml/v3"
 )
 

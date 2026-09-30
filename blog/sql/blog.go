@@ -6,10 +6,10 @@ import (
 	"fmt"
 
 	"github.com/jackc/pgx/v5"
-	"github.com/untanky/homepage/blog"
-	"github.com/untanky/homepage/internal/database"
-	myerrors "github.com/untanky/homepage/internal/errors"
-	"github.com/untanky/homepage/internal/media"
+	"go.lukasgrimm.me/homepage/blog"
+	"go.lukasgrimm.me/homepage/internal/database"
+	myerrors "go.lukasgrimm.me/homepage/internal/errors"
+	"go.lukasgrimm.me/homepage/internal/media"
 )
 
 type AssetRepository interface {
