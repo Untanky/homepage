@@ -1,4 +1,5 @@
-ARG GO_VERSION=1.26.4
+ARG GO_VERSION=1.27.1
+ARG PNPM_VERSION=11.11.0  # match the packageManager field in package.json
 
 # ---- Build stage ----
 FROM golang:${GO_VERSION}-alpine AS builder
@@ -13,7 +14,7 @@ RUN apk add --no-cache \
     make \
     nodejs \
     npm \
-    && npm install --global pnpm
+    && npm install --global pnpm@${PNPM_VERSION}
 
 # Cache dependency downloads
 COPY go.mod go.sum ./
